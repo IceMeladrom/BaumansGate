@@ -33,6 +33,7 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "Application.Main.executor": "Run",
     "Attach to process.pid 13076.executor": "ProcessAttachDebug",
     "Attach to process.pid 13932.executor": "ProcessAttachDebug",

@@ -10,16 +10,13 @@ import Exceptions.NotEnoughCoins;
 import Exceptions.UnitDoesNotExist;
 import Grid.Grid;
 import Players.Player;
-import Utilities.Constants.GridSize;
 import Utilities.Constants.MyRandom;
 import Utilities.Constants.MyScanner;
 
-import java.util.InputMismatchException;
 import java.util.Random;
 import java.util.Scanner;
 
 import static Utilities.Constants.Colors.*;
-import static Utilities.Constants.Colors.ANSI_GREEN;
 import static Utilities.Utils.isCoordsValid;
 
 public class Menu {

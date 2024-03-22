@@ -1,23 +1,13 @@
 package Players.Players;
 
 import Entities.Builds.Town;
-import Entities.Units.Creator.UnitFactory;
 import Entities.Units.Units.Unit;
-import Entities.Units.Units.UnitTypes;
-import Exceptions.AlliedUnitAtTheCeil;
-import Exceptions.NotEnoughEnergy;
-import Exceptions.UnitHasAlreadyAttacked;
 import Grid.Grid;
 import Players.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.InputMismatchException;
 import java.util.Random;
-import java.util.Scanner;
-
-import static Utilities.Constants.Colors.*;
-import static Utilities.Utils.isCoordsValid;
 
 public class Bot implements Player {
     private ArrayList<Unit> units;

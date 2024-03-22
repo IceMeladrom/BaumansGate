@@ -1,6 +1,5 @@
 package Entities.Units.Units;
 
-import Grid.Grid;
 import Players.Player;
 
 abstract public class UnitClass implements Unit {

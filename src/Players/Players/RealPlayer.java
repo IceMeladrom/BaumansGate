@@ -1,20 +1,16 @@
 package Players.Players;
 
 import Entities.Builds.Town;
-import Entities.Units.Creator.UnitFactory;
 import Entities.Units.Units.Unit;
-import Entities.Units.Units.UnitTypes;
 import Exceptions.AlliedUnitAtTheCeil;
 import Exceptions.NotEnoughEnergy;
 import Exceptions.NotYourTown;
 import Exceptions.UnitHasAlreadyAttacked;
 import Grid.Grid;
-import Menu.Menu;
 import Players.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 

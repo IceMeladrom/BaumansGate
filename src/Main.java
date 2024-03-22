@@ -1,21 +1,25 @@
 import Entities.Builds.Town;
+import Entities.Units.Creator.UnitFactory;
 import Entities.Units.Units.Unit;
 import Entities.Units.Units.UnitTypes;
-import Exceptions.UnitDoesNotExist;
 import Grid.Grid;
 import Menu.Menu;
 import Players.Player;
 import Players.Players.Bot;
 import Players.Players.RealPlayer;
-import Entities.Units.Creator.UnitFactory;
 
 import java.util.Random;
 
-import static Utilities.Constants.Colors.*;
+import static Utilities.Constants.Colors.ANSI_GREEN;
+import static Utilities.Constants.Colors.ANSI_RED;
 
 public class Main {
     public static void main(String[] args) {
-        boolean DEBUG = false;
+
+
+        boolean DEBUG = true;
+
+
         Grid grid = Grid.getInstance();
         RealPlayer me = new RealPlayer("Robert", 999999, ANSI_GREEN);
         Bot bot = new Bot("Botinok", 50, ANSI_RED);

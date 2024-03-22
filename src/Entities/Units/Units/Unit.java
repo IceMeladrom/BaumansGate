@@ -1,7 +1,7 @@
 package Entities.Units.Units;
 
-import Exceptions.NotEnoughEnergy;
 import Exceptions.AlliedUnitAtTheCeil;
+import Exceptions.NotEnoughEnergy;
 import Exceptions.NotYourTown;
 import Exceptions.UnitHasAlreadyAttacked;
 import Grid.Grid;

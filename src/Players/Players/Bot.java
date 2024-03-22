@@ -4,25 +4,23 @@ import Entities.Builds.Town;
 import Entities.Units.Units.Unit;
 import Grid.Grid;
 import Players.Player;
+import Utilities.Constants.MyRandom;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Random;
 
 public class Bot implements Player {
-    private ArrayList<Unit> units;
+    private ArrayList<Unit> units = new ArrayList<>();
     private int coins;
-    private String name;
-    private String color;
-    private Random random;
+    private String name, color;
+    private static final Random random = MyRandom.getRandom();
     private Town town;
 
     public Bot(String name, int coins, String color) {
         this.name = name;
         this.coins = coins;
         this.color = color;
-        units = new ArrayList<>();
-        random = new Random();
     }
 
     @Override
@@ -121,14 +119,15 @@ public class Bot implements Player {
 
     }
 
-    public void move(Grid grid) {
+    public void move() {
+        Grid grid = Grid.getInstance();
         int row, col;
         for (Unit unit : units) {
             while (true) {
                 col = unit.getCol() + random.nextInt(-(int) unit.getEnergy(), (int) unit.getEnergy() + 1);
                 row = unit.getRow() + random.nextInt(-(int) unit.getEnergy(), (int) unit.getEnergy() + 1);
                 try {
-                    unit.walk(grid, row, col);
+                    unit.walk(row, col);
                 } catch (Exception e) {
                     continue;
                 }

@@ -18,17 +18,15 @@ import static Utilities.Constants.Colors.*;
 import static Utilities.Utils.isCoordsValid;
 
 public class RealPlayer implements Player {
-    private ArrayList<Unit> units;
+    private ArrayList<Unit> units = new ArrayList<>();
     private Town town;
     private int coins;
-    private String name;
-    private String color;
+    private String name, color;
 
     public RealPlayer(String name, int coins, String color) {
         this.name = name;
         this.coins = coins;
         this.color = color;
-        units = new ArrayList<>();
     }
 
     public boolean needConsole() {
@@ -133,7 +131,8 @@ public class RealPlayer implements Player {
         System.out.println();
     }
 
-    public void move(Grid grid) {
+    public void move() {
+        Grid grid = Grid.getInstance();
         Scanner scanner = new Scanner(System.in);
         boolean endOfMove = false, showInfo = false;
         int row, col;
@@ -210,7 +209,7 @@ public class RealPlayer implements Player {
 //                    if (grid.getCeil(row, col).getTown() != null)
 
                     try {
-                        unit.walk(grid, row, col);
+                        unit.walk(row, col);
                     } catch (NotEnoughEnergy | AlliedUnitAtTheCeil | UnitHasAlreadyAttacked | NotYourTown e) {
                         err = e.getMessage();
                         continue;

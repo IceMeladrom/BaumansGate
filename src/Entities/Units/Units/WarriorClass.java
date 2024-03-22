@@ -25,7 +25,8 @@ public class WarriorClass extends UnitClass implements Walkable, MeleeAttackable
     }
 
     @Override
-    public void walk(@NotNull Grid grid, int endRow, int endCol) throws NotEnoughEnergy, AlliedUnitAtTheCeil, UnitHasAlreadyAttacked, NotYourTown {
+    public void walk(int endRow, int endCol) throws NotEnoughEnergy, AlliedUnitAtTheCeil, UnitHasAlreadyAttacked, NotYourTown {
+        Grid grid = Grid.getInstance();
         int currentRow = getRow(), currentCol = getCol();
         int finalEndRow = endRow, finalEndCol = endCol;
         if (currentRow == endRow && currentCol == endCol)

@@ -44,8 +44,8 @@ public class Main {
 
             // Players do their move
             grid.show();
-            me.move(grid);
-            bot.move(grid);
+            me.move();
+            bot.move();
         }
         System.out.println("\n\nGAME IS OVER\n\n");
     }

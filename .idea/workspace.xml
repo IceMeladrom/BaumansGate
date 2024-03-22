@@ -5,34 +5,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a1877fdd-6f1b-44f8-928e-18ee44e3910a" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/Exceptions/AnotherEntityAtTheCeil.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Exceptions/NoUnitAtTheCeil.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Exceptions/NotEnoughCoins.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Exceptions/UnitDoesNotExist.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Menu/Menu.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Utilities/Constants/GridSize.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Utilities/Constants/MyRandom.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Utilities/Constants/MyScanner.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Baumans Gate/Entities/Units/Creator/UnitFactory$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Baumans Gate/Entities/Units/Creator/UnitFactory$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Baumans Gate/Entities/Units/Creator/UnitFactory.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Baumans Gate/Entities/Units/Creator/UnitFactory.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Baumans Gate/Entities/Units/Units/UnitTypes.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Baumans Gate/Entities/Units/Units/UnitTypes.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Baumans Gate/Exceptions/UnitDoesntExist.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Baumans Gate/Grid/Grid.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Baumans Gate/Grid/Grid.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Baumans Gate/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Baumans Gate/Main.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Baumans Gate/Players/Player.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Baumans Gate/Players/Player.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Baumans Gate/Players/Players/Bot.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Baumans Gate/Players/Players/Bot.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/Baumans Gate/Players/Players/RealPlayer.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Baumans Gate/Players/Players/RealPlayer.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Baumans Gate/Utilities/Utils.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Baumans Gate/Utilities/Utils.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Entities/Units/Creator/UnitFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entities/Units/Creator/UnitFactory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Entities/Units/Units/UnitTypes.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entities/Units/Units/UnitTypes.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Exceptions/UnitDoesntExist.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Grid/Grid.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Grid/Grid.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Entities/Actions/Saddleable.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entities/Actions/Saddleable.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Entities/Actions/Walkable.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entities/Actions/Walkable.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Entities/Units/Units/ArcherClass.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entities/Units/Units/ArcherClass.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Entities/Units/Units/RiderClass.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entities/Units/Units/RiderClass.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Entities/Units/Units/Unit.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entities/Units/Units/Unit.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Entities/Units/Units/WarriorClass.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entities/Units/Units/WarriorClass.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Players/Player.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Players/Player.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Players/Players/Bot.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Players/Players/Bot.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Players/Players/RealPlayer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Players/Players/RealPlayer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Utilities/Utils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Utilities/Utils.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

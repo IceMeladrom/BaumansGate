@@ -5,10 +5,11 @@ import Entities.Units.Units.ArcherClass;
 import Entities.Units.Units.RiderClass;
 import Entities.Units.Units.Unit;
 import Entities.Units.Units.WarriorClass;
+import Exceptions.UnitDoesNotExist;
 import Players.Player;
 
 public class UnitFactory {
-    public Unit createUnit(UnitTypes unitTypes, int row, int col, Player player) {
+    public static Unit createUnit(UnitTypes unitTypes, int row, int col, Player player) throws IllegalArgumentException {
         switch (unitTypes) {
             case Swordsman -> {
                 return new WarriorClass("Swordsman", 50, 5, 1, 8, 3, 10, "S", row, col, player);
@@ -43,7 +44,7 @@ public class UnitFactory {
             case GodRange -> {
                 return new WarriorClass("GodRange", 999, 999, 999, 999, 999, 999, "G", row, col, player);
             }
-            default -> throw new NullPointerException("Unit type " + unitTypes.name() + " does not exist.");
+            default -> throw new IllegalArgumentException("You tried to choose non existed unit!");
         }
     }
 }

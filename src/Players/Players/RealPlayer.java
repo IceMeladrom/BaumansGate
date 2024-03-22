@@ -9,6 +9,7 @@ import Exceptions.NotEnoughEnergy;
 import Exceptions.NotYourTown;
 import Exceptions.UnitHasAlreadyAttacked;
 import Grid.Grid;
+import Menu.Menu;
 import Players.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -32,6 +33,10 @@ public class RealPlayer implements Player {
         this.coins = coins;
         this.color = color;
         units = new ArrayList<>();
+    }
+
+    public boolean needConsole() {
+        return true;
     }
 
     public ArrayList<Unit> getUnits() {
@@ -99,202 +104,12 @@ public class RealPlayer implements Player {
             coins = 0;
     }
 
-    public void placeTown(Grid grid) {
-        Scanner scanner = new Scanner(System.in);
-        boolean myTownIsPlaced = false;
-        String err = "", cmd = "";
-        int row, col;
-
-        while (!myTownIsPlaced) {
-            grid.show();
-
-            if (!err.isEmpty()) {
-                System.out.println(ANSI_RED + err + " Try again." + ANSI_RESET);
-                err = "";
-            }
-
-            System.out.println("Enter the coordinates where you want to place your Town.");
-            try {
-                System.out.print("Row: ");
-                row = Integer.parseInt(scanner.nextLine()) - 1;
-                System.out.print("Column: ");
-                col = Integer.parseInt(scanner.nextLine()) - 1;
-            } catch (InputMismatchException e) {
-                err = "You enter invalid value.";
-                continue;
-            } catch (NumberFormatException e) {
-                err = "You enter values in wrong format.";
-                continue;
-            }
-
-            if (!isCoordsValid(row, col, grid.getSize()-1)) {
-                err = "You enter invalid coordinates.";
-                continue;
-            }
-            System.out.println("Enter the name of town.");
-            System.out.print("Town's name: ");
-            String townsName = scanner.nextLine();
-            town = new Town(this, townsName, "T", row, col);
-            grid.placeTown(this, town);
-            myTownIsPlaced = true;
-        }
-
+    public Town getTown() {
+        return town;
     }
 
-
-    public void placeUnits(Grid grid, UnitFactory unitCreator) {
-        Scanner scanner = new Scanner(System.in);
-        boolean myUnitsArePlaced = false, showInfo = false;
-        String isBought = "";
-        Unit unit;
-        int row, col;
-        String cmd = "", err = "";
-
-        while (!myUnitsArePlaced) {
-            grid.show();
-
-            if (!err.isEmpty()) {
-                System.out.println(ANSI_RED + err + " Try again." + ANSI_RESET);
-                err = "";
-            }
-
-            if (!isBought.isEmpty()) {
-                System.out.println(ANSI_GREEN + "You successfully bought " + isBought + "." + ANSI_RESET);
-                isBought = "";
-            }
-
-            if (showInfo) {
-                showPlayerInfo();
-                showInfo = false;
-            }
-
-            System.out.println("Enter number of option you want to choose.\n1. Place a new Unit.\n2. Sell the unit.\n3. Show my info.\n4. Start the game.\n");
-            System.out.print("I choose option: ");
-
-            cmd = scanner.nextLine();
-
-            switch (cmd) {
-                case "1":
-                    System.out.println("Enter the coordinates where you want to place your Unit.");
-                    try {
-                        System.out.print("Row: ");
-                        row = Integer.parseInt(scanner.nextLine()) - 1;
-                        System.out.print("Column: ");
-                        col = Integer.parseInt(scanner.nextLine()) - 1;
-                    } catch (InputMismatchException e) {
-                        err = "You enter invalid value.";
-                        continue;
-                    } catch (NumberFormatException e) {
-                        err = "You enter values in wrong format.";
-                        continue;
-                    }
-
-                    if (!isCoordsValid(row, col, grid.getSize()-1)) {
-                        err = "You enter invalid coordinates.";
-                        continue;
-                    }
-
-                    if (grid.isEntityAtCeil(row, col)) {
-                        err = "You tried to place a new unit on an already placed unit.";
-                        continue;
-                    }
-
-                    unit = chooseUnit(grid, unitCreator, row, col);
-                    if (unit == null) {
-                        err = "You tried to choose invalid unit.";
-                        continue;
-                    }
-                    if (!buyUnit(unit)) {
-                        err = "Not enough coins to buy " + unit.getName() + ".";
-                        continue;
-                    }
-                    grid.placeUnit(this, unit);
-                    isBought = unit.getName();
-                    break;
-
-                case "2":
-                    System.out.println("Enter the coordinates where your Unit.");
-                    try {
-                        System.out.print("Row: ");
-                        row = Integer.parseInt(scanner.nextLine()) - 1;
-                        System.out.print("Column: ");
-                        col = Integer.parseInt(scanner.nextLine()) - 1;
-                    } catch (InputMismatchException e) {
-                        err = "You enter invalid value.";
-                        continue;
-                    } catch (NumberFormatException e) {
-                        err = "You enter values in wrong format.";
-                        continue;
-                    }
-                    if (!isCoordsValid(row, col, grid.getSize()-1)) {
-                        err = "You enter invalid values or in the wrong format.";
-                        continue;
-                    }
-
-                    unit = grid.getUnit(row, col);
-                    if (!grid.isUnitAtCeil(row, col)) {
-                        err = "There is no unit on this ceil.\n";
-                        continue;
-                    }
-
-                    sellUnit(unit);
-                    grid.deleteUnit(row, col);
-                    System.out.println(ANSI_GREEN + "You successfully sold " + unit.getName() + "." + ANSI_RESET);
-                    break;
-
-                case "3":
-                    showInfo = true;
-                    break;
-                case "4":
-                    myUnitsArePlaced = true;
-                    break;
-                default:
-                    err = "You tried to choose invalid option.";
-                    continue;
-            }
-        }
-    }
-
-
-    public Unit chooseUnit(Grid grid, UnitFactory unitCreator, int row, int col) {
-        Scanner scanner = new Scanner(System.in);
-        boolean unitSelected = false, err = false;
-        Unit unit = null;
-        String cmd = "";
-        while (!unitSelected) {
-            if (err)
-                System.out.println(ANSI_RED + "You enter invalid value! Try again." + ANSI_RESET);
-            err = false;
-
-            String leftAlignment = "| %-14s | %-6s | %-6s | %-12s | %-7s | %-6s | %-4s |%n";
-            System.out.println("\n" + ANSI_PURPLE + "You have " + coins + " coins" + ANSI_RESET);
-            System.out.println("Choose a unit");
-            System.out.format("+----------------+--------+--------+--------------+---------+--------+------+%n");
-            System.out.format("|      Name      | Health | Attack | Attack Range | Defence | Energy | Cost |%n");
-            System.out.format("+----------------+--------+--------+--------------+---------+--------+------+%n");
-            for (UnitTypes unitType : UnitTypes.values()) {
-                System.out.format(leftAlignment, unitType.name, unitType.hp, unitType.damage,
-                        unitType.attackRange, unitType.defence, unitType.energy, unitType.cost);
-            }
-            System.out.format("+----------------+--------+--------+--------------+---------+--------+------+%n");
-
-            System.out.println("\nEnter the unit's name to buy it.\nOr type " + ANSI_RED + "Exit" + ANSI_RESET + ".");
-            cmd = scanner.nextLine();
-
-            if (cmd.equals("Exit")) {
-                return null;
-            }
-
-            try {
-                unit = unitCreator.createUnit(UnitTypes.valueOf(cmd), row, col, this);
-                unitSelected = true;
-            } catch (IllegalArgumentException e) {
-                err = true;
-                continue;
-            }
-        }
-
-        return unit;
+    public void setTown(Town town) {
+        this.town = town;
     }
 
     public boolean canUnitMove(@NotNull Grid grid, int row, int col) {
@@ -361,7 +176,7 @@ public class RealPlayer implements Player {
                         err = "You enter values in wrong format.";
                         continue;
                     }
-                    if (!isCoordsValid(row, col, grid.getSize()-1)) {
+                    if (!isCoordsValid(row, col)) {
                         err = "You enter invalid values or in the wrong format.";
                         continue;
                     }
@@ -391,7 +206,7 @@ public class RealPlayer implements Player {
                         err = "You enter values in wrong format.";
                         continue;
                     }
-                    if (!isCoordsValid(row, col, grid.getSize()-1)) {
+                    if (!isCoordsValid(row, col)) {
                         err = "You enter invalid values or in the wrong format.";
                         continue;
                     }

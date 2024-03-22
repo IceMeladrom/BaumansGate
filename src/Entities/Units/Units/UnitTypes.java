@@ -43,4 +43,16 @@ public enum UnitTypes {
         return units[random.nextInt(units.length)];
     }
 
+    public static void showUnitsShop(){
+        String leftAlignment = "| %-14s | %-6s | %-6s | %-12s | %-7s | %-6s | %-4s |%n";
+        System.out.format("+----------------+--------+--------+--------------+---------+--------+------+%n");
+        System.out.format("|      Name      | Health | Attack | Attack Range | Defence | Energy | Cost |%n");
+        System.out.format("+----------------+--------+--------+--------------+---------+--------+------+%n");
+        for (UnitTypes unitType : UnitTypes.values()) {
+            System.out.format(leftAlignment, unitType.name, unitType.hp, unitType.damage,
+                    unitType.attackRange, unitType.defence, unitType.energy, unitType.cost);
+        }
+        System.out.format("+----------------+--------+--------+--------------+---------+--------+------+%n");
+    }
+
 }

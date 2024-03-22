@@ -3,6 +3,7 @@ package Grid;
 import Entities.Builds.Town;
 import Entities.Units.Units.Unit;
 import Players.Player;
+import Utilities.Constants.GridSize;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -12,10 +13,18 @@ import static Utilities.Utils.clearConsole;
 
 public class Grid {
     private int size;
+    private static Grid instance;
     ArrayList<ArrayList<Ceil>> grid = new ArrayList<>(size);
 
-    public Grid(int size) {
-        this.size = size;
+    public static Grid getInstance() {
+        if (instance == null) {
+            instance = new Grid();
+        }
+        return instance;
+    }
+
+    private Grid() {
+        this.size = GridSize.size;
         Random rand = new Random();
         for (int i = 0; i < size; i++) {
             grid.add(new ArrayList<>(size));
@@ -58,10 +67,6 @@ public class Grid {
                 System.out.format("----+");
         }
         System.out.println();
-
-//        System.out.format("+-----+--------+---+---+---+---+---+---+---+---+---+----+----+----+----+----+----+%n");
-//        System.out.format("|     | Column | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 |%n");
-//        System.out.format("+-----+--------+---+---+---+---+---+---+---+---+---+----+----+----+----+----+----+%n");
 
         System.out.format(leftAlignment, "Row", "");
         for (int i = 0; i < size; i++) {

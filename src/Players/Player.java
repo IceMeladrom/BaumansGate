@@ -1,5 +1,6 @@
 package Players;
 
+import Entities.Builds.Town;
 import Entities.Units.Creator.UnitFactory;
 import Entities.Units.Units.Unit;
 import Grid.Grid;
@@ -7,6 +8,8 @@ import Grid.Grid;
 import java.util.ArrayList;
 
 public interface Player {
+    public boolean needConsole();
+
     public ArrayList<Unit> getUnits();
 
     public boolean buyUnit(Unit unit);
@@ -35,14 +38,14 @@ public interface Player {
 
     public void checkCoins();
 
-    public void placeTown(Grid grid);
+    public void setTown(Town town);
 
-    public Unit chooseUnit(Grid grid, UnitFactory unitCreator, int row, int col);
-
-    public void placeUnits(Grid grid, UnitFactory unitCreator);
+    public Town getTown();
 
     public boolean canUnitMove(Grid grid, int row, int col);
 
     public void energize();
+
+    public void showPlayerInfo();
 
 }

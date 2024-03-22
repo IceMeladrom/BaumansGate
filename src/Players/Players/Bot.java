@@ -35,6 +35,11 @@ public class Bot implements Player {
         random = new Random();
     }
 
+    @Override
+    public boolean needConsole() {
+        return false;
+    }
+
     public ArrayList<Unit> getUnits() {
         return units;
     }
@@ -100,49 +105,14 @@ public class Bot implements Player {
             coins = 0;
     }
 
-    public void placeTown(Grid grid) {
-        int row = 0, col = 0;
-        boolean validCoords = false;
-
-        while (!validCoords) {
-            row = random.nextInt(0, grid.getSize());
-            col = random.nextInt(0, grid.getSize());
-            if (grid.isEntityAtCeil(row, col) || grid.isTownAtCeil(row, col))
-                continue;
-            validCoords = true;
-        }
-        town = new Town(this, "Mordor", "M", row, col);
-        grid.placeTown(this, town);
-    }
-
-    public Unit chooseUnit(Grid grid, UnitFactory unitCreator, int row, int col) {
-        UnitTypes unitName;
-        Unit unit;
-        while (true) {
-            unitName = UnitTypes.randomUnit();
-            if (unitName.cost <= getCoins()) {
-                unit = unitCreator.createUnit(unitName, row, col, this);
-                break;
-            }
-        }
-        return unit;
+    @Override
+    public void setTown(Town town) {
 
     }
 
-    public void placeUnits(@NotNull Grid grid, UnitFactory unitCreator) {
-        Unit unit;
-        int row = 0, col = 0;
-        while (true) {
-            do {
-                row = random.nextInt(0, grid.getSize());
-                col = random.nextInt(0, grid.getSize());
-            } while (grid.isEntityAtCeil(row, col));
-            if (getCoins() < 10)
-                break;
-            unit = chooseUnit(grid, unitCreator, row, col);
-            buyUnit(unit);
-            grid.placeUnit(this, unit);
-        }
+    @Override
+    public Town getTown() {
+        return null;
     }
 
 
@@ -156,6 +126,10 @@ public class Bot implements Player {
             unit.energyRecharge();
     }
 
+    @Override
+    public void showPlayerInfo() {
+
+    }
 
     public void move(Grid grid) {
         int row, col;

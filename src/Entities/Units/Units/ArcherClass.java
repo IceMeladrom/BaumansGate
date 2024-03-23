@@ -2,8 +2,10 @@ package Entities.Units.Units;
 
 import Entities.Actions.Archerable;
 import Entities.Actions.Walkable;
+import Entities.Builds.Town;
 import Exceptions.AlliedUnitAtTheCeil;
 import Exceptions.NotEnoughEnergy;
+import Exceptions.NotYourTown;
 import Exceptions.UnitHasAlreadyAttacked;
 import Grid.Grid;
 import Players.Player;
@@ -22,18 +24,26 @@ public class ArcherClass extends UnitClass implements Walkable, Archerable {
     }
 
     @Override
-    public void walk(int endRow, int endCol) throws NotEnoughEnergy, AlliedUnitAtTheCeil, UnitHasAlreadyAttacked {
+    public void walk(int endRow, int endCol) throws NotEnoughEnergy, AlliedUnitAtTheCeil, UnitHasAlreadyAttacked, NotYourTown {
         Grid grid = Grid.getInstance();
         int currentRow = getRow(), currentCol = getCol();
         int finalEndRow = endRow, finalEndCol = endCol;
         if (currentRow == endRow && currentCol == endCol)
             return;
 
+        Town town = grid.getCeil(endRow, endCol).getTown();
+        if (town != null) {
+            // If Town yours
+            if (town.getPlayer() != getPlayer())
+                throw new NotYourTown(this);
+        }
+        // If your unit want to go to the ceil with unit.
         if (grid.getCeil(endRow, endCol).getUnit() != null) {
             // If your unit want to go to the ceil with allied unit.
             if (getPlayer().getUnits().contains(grid.getUnit(endRow, endCol))) {
                 throw new AlliedUnitAtTheCeil(currentRow, currentCol, endRow, endCol);
             }
+
             // If your unit want to go to the ceil with enemy unit.
 
             // Check if your unit can do range attack
@@ -85,6 +95,8 @@ public class ArcherClass extends UnitClass implements Walkable, Archerable {
             setRow(endRow);
             setCol(endCol);
             grid.getCeil(getRow(), getCol()).setUnit(this);
+            if (town != null)
+                town.healUnit(this);
         }
     }
 

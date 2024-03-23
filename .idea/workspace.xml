@@ -5,19 +5,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a1877fdd-6f1b-44f8-928e-18ee44e3910a" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Baumans Gate/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Baumans Gate/Main.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Baumans Gate/Players/Players/Bot.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Baumans Gate/Players/Players/Bot.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/Baumans Gate/Players/Players/RealPlayer.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Baumans Gate/Players/Players/RealPlayer.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Baumans Gate/Entities/Actions/Saddleable.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Baumans Gate/Entities/Actions/Saddleable.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Baumans Gate/Entities/Units/Units/ArcherClass.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Baumans Gate/Entities/Units/Units/ArcherClass.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Baumans Gate/Entities/Units/Units/RiderClass.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Baumans Gate/Entities/Units/Units/RiderClass.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Entities/Actions/Saddleable.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entities/Actions/Saddleable.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Entities/Actions/Walkable.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entities/Actions/Walkable.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Entities/Units/Units/ArcherClass.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entities/Units/Units/ArcherClass.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Entities/Units/Units/RiderClass.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entities/Units/Units/RiderClass.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Entities/Units/Units/Unit.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entities/Units/Units/Unit.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Entities/Units/Units/WarriorClass.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entities/Units/Units/WarriorClass.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Players/Players/Bot.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Players/Players/Bot.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Players/Players/RealPlayer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Players/Players/RealPlayer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Entities/Units/Units/UnitClass.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Entities/Units/Units/UnitClass.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -64,6 +60,7 @@
     "Repository.Attach.Sources": "false",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "main",
     "kotlin-language-version-configured": "true",
     "last_opened_file_path": "C:/Users/Robert/Documents/Учеба/Java/Learning/Baumans Gate",
     "run.code.analysis.last.selected.profile": "pProject Default",

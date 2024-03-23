@@ -182,7 +182,4 @@ abstract public class UnitClass implements Unit {
     public void setDidAttack(boolean didAttack) {
         this.didAttack = didAttack;
     }
-
-
-
 }

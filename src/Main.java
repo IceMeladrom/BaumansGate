@@ -1,6 +1,6 @@
 import Entities.Builds.Town;
-import Entities.Units.Creator.UnitFactory;
-import Entities.Units.Units.Unit;
+import Entities.Units.Creator.TempUnitFactory;
+import Entities.Units.Units.IUnit;
 import Entities.Units.Units.UnitTypes;
 import Grid.Grid;
 import Menu.Menu;
@@ -56,12 +56,12 @@ public class Main {
         grid.placeTown(me, new Town(me, "Whiterun", "T", random.nextInt(0, grid.getSize()), random.nextInt(0, grid.getSize())));
         grid.placeTown(bot, new Town(bot, "Mordor", "M", random.nextInt(0, grid.getSize()), random.nextInt(0, grid.getSize())));
         int row, col;
-        Unit unit;
+        IUnit unit;
         do {
             row = random.nextInt(0, grid.getSize());
             col = random.nextInt(0, grid.getSize());
         } while (grid.isEntityAtCeil(row, col));
-        unit = UnitFactory.createUnit(UnitTypes.Swordsman, random.nextInt(0, grid.getSize()), random.nextInt(0, grid.getSize()), me);
+        unit = TempUnitFactory.createUnit(UnitTypes.Swordsman, random.nextInt(0, grid.getSize()), random.nextInt(0, grid.getSize()), me);
         me.buyUnit(unit);
         grid.placeUnit(me, unit);
 
@@ -69,7 +69,7 @@ public class Main {
             row = random.nextInt(0, grid.getSize());
             col = random.nextInt(0, grid.getSize());
         } while (grid.isEntityAtCeil(row, col));
-        unit = UnitFactory.createUnit(UnitTypes.Swordsman, random.nextInt(0, grid.getSize()), random.nextInt(0, grid.getSize()), me);
+        unit = TempUnitFactory.createUnit(UnitTypes.Swordsman, random.nextInt(0, grid.getSize()), random.nextInt(0, grid.getSize()), me);
         me.buyUnit(unit);
         grid.placeUnit(me, unit);
 
@@ -77,7 +77,7 @@ public class Main {
             row = random.nextInt(0, grid.getSize());
             col = random.nextInt(0, grid.getSize());
         } while (grid.isEntityAtCeil(row, col));
-        unit = UnitFactory.createUnit(UnitTypes.Knight, random.nextInt(0, grid.getSize()), random.nextInt(0, grid.getSize()), me);
+        unit = TempUnitFactory.createUnit(UnitTypes.Knight, random.nextInt(0, grid.getSize()), random.nextInt(0, grid.getSize()), me);
         me.buyUnit(unit);
         grid.placeUnit(me, unit);
 
@@ -85,7 +85,7 @@ public class Main {
             row = random.nextInt(0, grid.getSize());
             col = random.nextInt(0, grid.getSize());
         } while (grid.isEntityAtCeil(row, col));
-        unit = UnitFactory.createUnit(UnitTypes.Crossbowman, random.nextInt(0, grid.getSize()), random.nextInt(0, grid.getSize()), bot);
+        unit = TempUnitFactory.createUnit(UnitTypes.Crossbowman, random.nextInt(0, grid.getSize()), random.nextInt(0, grid.getSize()), bot);
         bot.buyUnit(unit);
         grid.placeUnit(bot, unit);
 
@@ -93,7 +93,7 @@ public class Main {
             row = random.nextInt(0, grid.getSize());
             col = random.nextInt(0, grid.getSize());
         } while (grid.isEntityAtCeil(row, col));
-        unit = UnitFactory.createUnit(UnitTypes.Spearman, random.nextInt(0, grid.getSize()), random.nextInt(0, grid.getSize()), bot);
+        unit = TempUnitFactory.createUnit(UnitTypes.Spearman, random.nextInt(0, grid.getSize()), random.nextInt(0, grid.getSize()), bot);
         bot.buyUnit(unit);
         grid.placeUnit(bot, unit);
     }

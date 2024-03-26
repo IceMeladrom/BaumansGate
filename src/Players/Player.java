@@ -1,7 +1,7 @@
 package Players;
 
 import Entities.Builds.Town;
-import Entities.Units.Units.Unit;
+import Entities.Units.Units.IUnit;
 import Grid.Grid;
 
 import java.util.ArrayList;
@@ -9,15 +9,15 @@ import java.util.ArrayList;
 public interface Player {
     public boolean needConsole();
 
-    public ArrayList<Unit> getUnits();
+    public ArrayList<IUnit> getUnits();
 
-    public boolean buyUnit(Unit unit);
+    public boolean buyUnit(IUnit unit);
 
-    public void sellUnit(Unit unit);
+    public void sellUnit(IUnit unit);
 
-    public void addUnit(Unit unit);
+    public void addUnit(IUnit unit);
 
-    public void deleteUnit(Unit unit);
+    public void deleteUnit(IUnit unit);
 
     public String getName();
 

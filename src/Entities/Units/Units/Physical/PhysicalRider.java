@@ -1,9 +1,12 @@
-package Entities.Units.Units;
+package Entities.Units.Units.Physical;
 
 import Entities.Actions.Archerable;
 import Entities.Actions.MeleeAttackable;
 import Entities.Actions.Saddleable;
 import Entities.Builds.Town;
+import Entities.Units.Units.IRider;
+import Entities.Units.Units.IUnit;
+import Entities.Units.Units.UnitClass;
 import Exceptions.AlliedUnitAtTheCeil;
 import Exceptions.NotEnoughEnergy;
 import Exceptions.NotYourTown;
@@ -14,10 +17,10 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 
-public class RiderClass extends UnitClass implements MeleeAttackable, Archerable, Saddleable {
+public class PhysicalRider extends UnitClass implements IRider {
     private HashMap<String, Float> terrains = new HashMap<>();
 
-    public RiderClass(String name, int hp, int damage, int attackRange, int defence, float energy, int cost, String symbol, int row, int col, Player player) {
+    public PhysicalRider(String name, int hp, int damage, int attackRange, int defence, float energy, int cost, String symbol, int row, int col, Player player) {
         super(name, hp, damage, attackRange, defence, energy, cost, symbol, row, col, player);
         terrains.put("*", 1F);
         terrains.put("#", 2.2F);
@@ -49,7 +52,7 @@ public class RiderClass extends UnitClass implements MeleeAttackable, Archerable
             // If your unit want to go to the ceil with enemy unit.
 
             // Check if your unit can do range attack
-            Unit enemy = grid.getUnit(finalEndRow, finalEndCol);
+            IUnit enemy = grid.getUnit(finalEndRow, finalEndCol);
             if (getAttackRange() != 1 && getAttackRange() >= (endRow - getRow() + endCol - getCol())) {
                 attack(enemy);
                 if (!enemy.isAlive()) {
@@ -104,7 +107,7 @@ public class RiderClass extends UnitClass implements MeleeAttackable, Archerable
 
 
     @Override
-    public void attack(@NotNull Unit enemy) throws UnitHasAlreadyAttacked {
+    public void attack(@NotNull IUnit enemy) throws UnitHasAlreadyAttacked {
         if (!getDidAttack()) {
             if (enemy.getDefence() >= getDamage())
                 enemy.setDefence(enemy.getDefence() - getDamage());

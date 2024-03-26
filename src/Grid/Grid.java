@@ -1,7 +1,7 @@
 package Grid;
 
 import Entities.Builds.Town;
-import Entities.Units.Units.Unit;
+import Entities.Units.Units.IUnit;
 import Players.Player;
 import Utilities.Constants.GridSize;
 
@@ -118,7 +118,7 @@ public class Grid {
         return isUnitAtCeil(row, col) || isTownAtCeil(row, col);
     }
 
-    public Unit getUnit(int row, int col) {
+    public IUnit getUnit(int row, int col) {
         return grid.get(row).get(col).getUnit();
     }
 
@@ -145,7 +145,7 @@ public class Grid {
         return ceil.getColor() + ceil.getUnit().getSymbol() + ANSI_RESET;
     }
 
-    public void placeUnit(Player player, Unit unit) {
+    public void placeUnit(Player player, IUnit unit) {
         int row = unit.getRow(), col = unit.getCol();
         Ceil ceil = grid.get(row).get(col);
         ceil.setUnit(unit);

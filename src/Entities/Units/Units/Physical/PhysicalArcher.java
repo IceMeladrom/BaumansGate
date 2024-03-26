@@ -1,8 +1,11 @@
-package Entities.Units.Units;
+package Entities.Units.Units.Physical;
 
-import Entities.Actions.MeleeAttackable;
+import Entities.Actions.Archerable;
 import Entities.Actions.Walkable;
 import Entities.Builds.Town;
+import Entities.Units.Units.IArcher;
+import Entities.Units.Units.IUnit;
+import Entities.Units.Units.UnitClass;
 import Exceptions.AlliedUnitAtTheCeil;
 import Exceptions.NotEnoughEnergy;
 import Exceptions.NotYourTown;
@@ -13,15 +16,15 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 
-public class WarriorClass extends UnitClass implements Walkable, MeleeAttackable {
+public class PhysicalArcher extends UnitClass implements IArcher {
     private HashMap<String, Float> terrains = new HashMap<>();
 
-    public WarriorClass(String name, int hp, int damage, int attackRange, int defence, float energy, int cost, String symbol, int row, int col, Player player) {
+    public PhysicalArcher(String name, int hp, int damage, int attackRange, int defence, float energy, int cost, String symbol, int row, int col, Player player) {
         super(name, hp, damage, attackRange, defence, energy, cost, symbol, row, col, player);
         terrains.put("*", 1F);
-        terrains.put("#", 1.5F);
-        terrains.put("@", 2F);
-        terrains.put("!", 1.2F);
+        terrains.put("#", 1.8F);
+        terrains.put("@", 2.2F);
+        terrains.put("!", 1F);
     }
 
     @Override
@@ -48,7 +51,7 @@ public class WarriorClass extends UnitClass implements Walkable, MeleeAttackable
             // If your unit want to go to the ceil with enemy unit.
 
             // Check if your unit can do range attack
-            Unit enemy = grid.getUnit(finalEndRow, finalEndCol);
+            IUnit enemy = grid.getUnit(finalEndRow, finalEndCol);
             if (getAttackRange() != 1 && getAttackRange() >= (endRow - getRow() + endCol - getCol())) {
                 attack(enemy);
                 if (!enemy.isAlive()) {
@@ -102,7 +105,7 @@ public class WarriorClass extends UnitClass implements Walkable, MeleeAttackable
     }
 
     @Override
-    public void attack(@NotNull Unit enemy) throws UnitHasAlreadyAttacked {
+    public void attack(@NotNull IUnit enemy) throws UnitHasAlreadyAttacked {
         if (!getDidAttack()) {
             if (enemy.getDefence() >= getDamage())
                 enemy.setDefence(enemy.getDefence() - getDamage());
@@ -115,8 +118,8 @@ public class WarriorClass extends UnitClass implements Walkable, MeleeAttackable
         } else {
             throw new UnitHasAlreadyAttacked(this);
         }
-    }
 
+    }
 
     private float spentEnergy(Grid grid, int currentRow, int endRow, int currentCol, int endCol) {
         float totalSpendEnergy = 0;

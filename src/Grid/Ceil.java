@@ -1,18 +1,18 @@
 package Grid;
 
 import Entities.Builds.Town;
-import Entities.Units.Units.Unit;
+import Entities.Units.Units.IUnit;
 import Players.Player;
 
 import static Utilities.Constants.Colors.ANSI_RESET;
 
 public class Ceil {
-    private Unit unit;
+    private IUnit unit;
     private Town town;
     private String terrain;
     private Player player;
 
-    public Ceil(Unit unit, String terrain) {
+    public Ceil(IUnit unit, String terrain) {
         this.unit = unit;
         this.terrain = terrain;
         if (unit == null)
@@ -21,7 +21,7 @@ public class Ceil {
             player = unit.getPlayer();
     }
 
-    public Unit getUnit() {
+    public IUnit getUnit() {
         return unit;
     }
 
@@ -29,7 +29,7 @@ public class Ceil {
         return terrain;
     }
 
-    public void setUnit(Unit unit) {
+    public void setUnit(IUnit unit) {
         if (unit == null) {
             if (town == null)
                 this.player = null;

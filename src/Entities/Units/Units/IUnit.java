@@ -4,10 +4,9 @@ import Exceptions.AlliedUnitAtTheCeil;
 import Exceptions.NotEnoughEnergy;
 import Exceptions.NotYourTown;
 import Exceptions.UnitHasAlreadyAttacked;
-import Grid.Grid;
 import Players.Player;
 
-public interface Unit {
+public interface IUnit {
     public Player getPlayer();
 
     public void setPlayer(Player player);
@@ -68,7 +67,7 @@ public interface Unit {
 
     public void walk(int row, int col) throws NotEnoughEnergy, AlliedUnitAtTheCeil, UnitHasAlreadyAttacked, NotYourTown;
 
-    public void attack(Unit enemy) throws UnitHasAlreadyAttacked;
+    public void attack(IUnit enemy) throws UnitHasAlreadyAttacked;
 
     public boolean getDidAttack();
 

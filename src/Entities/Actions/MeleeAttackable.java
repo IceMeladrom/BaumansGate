@@ -1,8 +1,8 @@
 package Entities.Actions;
 
-import Entities.Units.Units.Unit;
+import Entities.Units.Units.IUnit;
 import Exceptions.UnitHasAlreadyAttacked;
 
 public interface MeleeAttackable {
-    public void attack(Unit enemy) throws UnitHasAlreadyAttacked;
+    public void attack(IUnit enemy) throws UnitHasAlreadyAttacked;
 }

@@ -2,7 +2,7 @@ package Entities.Units.Units;
 
 import Players.Player;
 
-abstract public class UnitClass implements Unit {
+abstract public class UnitClass implements IUnit {
     public UnitClass(String name, int hp, int damage, int attackRange, int defence, float energy, int cost, String symbol, int row, int col, Player player) {
         this.hp = hp;
         this.damage = damage;

@@ -1,6 +1,6 @@
 package Entities.Builds;
 
-import Entities.Units.Units.Unit;
+import Entities.Units.Units.IUnit;
 import Players.Player;
 
 public class Town {
@@ -66,7 +66,7 @@ public class Town {
         this.col = col;
     }
 
-    public void healUnit(Unit unit) {
+    public void healUnit(IUnit unit) {
         unit.heal();
         unit.energyRecharge();
     }

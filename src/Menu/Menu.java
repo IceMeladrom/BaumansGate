@@ -1,8 +1,8 @@
 package Menu;
 
 import Entities.Builds.Town;
-import Entities.Units.Creator.UnitFactory;
-import Entities.Units.Units.Unit;
+import Entities.Units.Creator.TempUnitFactory;
+import Entities.Units.Units.IUnit;
 import Entities.Units.Units.UnitTypes;
 import Exceptions.AnotherEntityAtTheCeil;
 import Exceptions.NoUnitAtTheCeil;
@@ -144,7 +144,7 @@ public class Menu {
         } else {
             Random random = MyRandom.getRandom();
             Grid grid = Grid.getInstance();
-            Unit unit;
+            IUnit unit;
             int row = 0, col = 0;
             while (true) {
                 do {
@@ -180,7 +180,7 @@ public class Menu {
         if (grid.isEntityAtCeil(row, col))
             throw new AnotherEntityAtTheCeil();
 
-        Unit unit = chooseUnitFromShop(player, row, col);
+        IUnit unit = chooseUnitFromShop(player, row, col);
         if (unit == null)
             throw new UnitDoesNotExist();
         if (!player.buyUnit(unit)) {
@@ -191,11 +191,11 @@ public class Menu {
         return unit.getName();
     }
 
-    private static Unit chooseUnitFromShop(Player player, int row, int col) {
+    private static IUnit chooseUnitFromShop(Player player, int row, int col) {
         if (player.needConsole()) {
             Scanner scanner = MyScanner.getScanner();
             boolean unitSelected = false;
-            Unit unit = null;
+            IUnit unit = null;
             String cmd = "", err = "";
             while (!unitSelected) {
                 if (!err.isEmpty()) {
@@ -214,7 +214,7 @@ public class Menu {
                     return null;
 
                 try {
-                    unit = UnitFactory.createUnit(UnitTypes.valueOf(cmd), row, col, player);
+                    unit = TempUnitFactory.createUnit(UnitTypes.valueOf(cmd), row, col, player);
                     unitSelected = true;
                 } catch (IllegalArgumentException e) {
                     err = "You tried to choose non existed unit!";
@@ -224,11 +224,11 @@ public class Menu {
             return unit;
         } else {
             UnitTypes unitName;
-            Unit unit;
+            IUnit unit;
             while (true) {
                 unitName = UnitTypes.randomUnit();
                 if (unitName.cost <= player.getCoins()) {
-                    unit = UnitFactory.createUnit(unitName, row, col, player);
+                    unit = TempUnitFactory.createUnit(unitName, row, col, player);
                     break;
                 }
             }
@@ -253,7 +253,7 @@ public class Menu {
         if (!isCoordsValid(row, col))
             throw new IndexOutOfBoundsException("You enter invalid values or in the wrong format!");
 
-        Unit unit = grid.getUnit(row, col);
+        IUnit unit = grid.getUnit(row, col);
         if (!grid.isUnitAtCeil(row, col))
             throw new NoUnitAtTheCeil();
 

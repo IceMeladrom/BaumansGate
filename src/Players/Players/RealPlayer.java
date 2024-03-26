@@ -1,7 +1,7 @@
 package Players.Players;
 
 import Entities.Builds.Town;
-import Entities.Units.Units.Unit;
+import Entities.Units.Units.IUnit;
 import Exceptions.AlliedUnitAtTheCeil;
 import Exceptions.NotEnoughEnergy;
 import Exceptions.NotYourTown;
@@ -18,7 +18,7 @@ import static Utilities.Constants.Colors.*;
 import static Utilities.Utils.isCoordsValid;
 
 public class RealPlayer implements Player {
-    private ArrayList<Unit> units = new ArrayList<>();
+    private ArrayList<IUnit> units = new ArrayList<>();
     private Town town;
     private int coins;
     private String name, color;
@@ -33,11 +33,11 @@ public class RealPlayer implements Player {
         return true;
     }
 
-    public ArrayList<Unit> getUnits() {
+    public ArrayList<IUnit> getUnits() {
         return units;
     }
 
-    public boolean buyUnit(@NotNull Unit unit) {
+    public boolean buyUnit(@NotNull IUnit unit) {
         if (coins < unit.getCost())
             return false;
         addUnit(unit);
@@ -45,16 +45,16 @@ public class RealPlayer implements Player {
         return true;
     }
 
-    public void sellUnit(@NotNull Unit unit) {
+    public void sellUnit(@NotNull IUnit unit) {
         addCoins(unit.getCost());
         deleteUnit(unit);
     }
 
-    public void addUnit(Unit unit) {
+    public void addUnit(IUnit unit) {
         units.add(unit);
     }
 
-    public void deleteUnit(Unit unit) {
+    public void deleteUnit(IUnit unit) {
         units.remove(unit);
     }
 
@@ -107,7 +107,7 @@ public class RealPlayer implements Player {
     }
 
     public boolean canUnitMove(@NotNull Grid grid, int row, int col) {
-        Unit unit = grid.getUnit(row, col);
+        IUnit unit = grid.getUnit(row, col);
         return unit != null && units.contains(unit);
     }
 
@@ -118,7 +118,7 @@ public class RealPlayer implements Player {
             return;
         System.out.println();
         for (int i = 0; i < getUnits().size(); i++) {
-            Unit unitTemp = getUnits().get(i);
+            IUnit unitTemp = getUnits().get(i);
             System.out.println(i + 1 + ". " + unitTemp.getName() + "(" + getColor() + unitTemp.getSymbol() + ANSI_RESET + ")");
             System.out.println("\tCoords: row: " + (unitTemp.getRow() + 1) + " col: " + (unitTemp.getCol() + 1));
             System.out.println("\tHP: " + unitTemp.getHp() + "/" + unitTemp.getMaxHp());
@@ -137,7 +137,7 @@ public class RealPlayer implements Player {
         boolean endOfMove = false, showInfo = false;
         int row, col;
         String err = "", cmd = "";
-        Unit unit;
+        IUnit unit;
 
         while (!endOfMove) {
             grid.show();
@@ -229,7 +229,7 @@ public class RealPlayer implements Player {
     }
 
     public void energize() {
-        for (Unit unit : units) {
+        for (IUnit unit : units) {
             unit.energyRecharge();
             unit.setDidAttack(false);
         }

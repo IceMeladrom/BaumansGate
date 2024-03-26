@@ -1,7 +1,7 @@
 package Players.Players;
 
 import Entities.Builds.Town;
-import Entities.Units.Units.Unit;
+import Entities.Units.Units.IUnit;
 import Grid.Grid;
 import Players.Player;
 import Utilities.Constants.MyRandom;
@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class Bot implements Player {
-    private ArrayList<Unit> units = new ArrayList<>();
+    private ArrayList<IUnit> units = new ArrayList<>();
     private int coins;
     private String name, color;
     private static final Random random = MyRandom.getRandom();
@@ -28,11 +28,11 @@ public class Bot implements Player {
         return false;
     }
 
-    public ArrayList<Unit> getUnits() {
+    public ArrayList<IUnit> getUnits() {
         return units;
     }
 
-    public boolean buyUnit(@NotNull Unit unit) {
+    public boolean buyUnit(@NotNull IUnit unit) {
         if (coins < unit.getCost())
             return false;
         addUnit(unit);
@@ -40,16 +40,16 @@ public class Bot implements Player {
         return true;
     }
 
-    public void sellUnit(@NotNull Unit unit) {
+    public void sellUnit(@NotNull IUnit unit) {
         addCoins(unit.getCost());
         deleteUnit(unit);
     }
 
-    public void addUnit(Unit unit) {
+    public void addUnit(IUnit unit) {
         units.add(unit);
     }
 
-    public void deleteUnit(Unit unit) {
+    public void deleteUnit(IUnit unit) {
         units.remove(unit);
     }
 
@@ -105,12 +105,12 @@ public class Bot implements Player {
 
 
     public boolean canUnitMove(@NotNull Grid grid, int row, int col) {
-        Unit unit = grid.getUnit(row, col);
+        IUnit unit = grid.getUnit(row, col);
         return unit != null && units.contains(unit);
     }
 
     public void energize() {
-        for (Unit unit : units)
+        for (IUnit unit : units)
             unit.energyRecharge();
     }
 
@@ -122,7 +122,7 @@ public class Bot implements Player {
     public void move() {
         Grid grid = Grid.getInstance();
         int row, col;
-        for (Unit unit : units) {
+        for (IUnit unit : units) {
             while (true) {
                 col = unit.getCol() + random.nextInt(-(int) unit.getEnergy(), (int) unit.getEnergy() + 1);
                 row = unit.getRow() + random.nextInt(-(int) unit.getEnergy(), (int) unit.getEnergy() + 1);

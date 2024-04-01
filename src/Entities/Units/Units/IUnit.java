@@ -1,9 +1,7 @@
 package Entities.Units.Units;
 
-import Exceptions.AlliedUnitAtTheCeil;
-import Exceptions.NotEnoughEnergy;
-import Exceptions.NotYourTown;
-import Exceptions.UnitHasAlreadyAttacked;
+import Entities.Damage.IDamage;
+import Exceptions.*;
 import Players.Player;
 
 public interface IUnit {
@@ -19,9 +17,9 @@ public interface IUnit {
 
     public void setHp(int hp);
 
-    public int getDamage();
+    public IDamage getDamage();
 
-    public void setDamage(int damage);
+    public void setDamage(IDamage damage);
 
     public int getAttackRange();
 
@@ -65,12 +63,27 @@ public interface IUnit {
 
     public boolean isAlive();
 
-    public void walk(int row, int col) throws NotEnoughEnergy, AlliedUnitAtTheCeil, UnitHasAlreadyAttacked, NotYourTown;
+    public int getMovesUntilReadyToAttack();
 
-    public void attack(IUnit enemy) throws UnitHasAlreadyAttacked;
+    public void setMovesUntilReadyToAttack(int movesUntilReadyToAttack);
+
+    public void walk(int row, int col) throws NotEnoughEnergy, AlliedUnitAtTheCeil, UnitHasAlreadyAttacked, NotYourTown, UnitHasNotPreparedAnAttack;
+
+    public void attack(IUnit enemy) throws UnitHasAlreadyAttacked, UnitHasNotPreparedAnAttack;
+
+    int getMovesToPrepareAnAttack();
+
+    void setMovesToPrepareAnAttack(int movesToPrepareAnAttack);
+
+    public void prepareAttack();
 
     public boolean getDidAttack();
 
     public void setDidAttack(boolean didAttack);
 
+    boolean getIsAttackPrepared();
+
+    void setAttackPrepared(boolean attackPrepared);
+
+    public void preparing();
 }

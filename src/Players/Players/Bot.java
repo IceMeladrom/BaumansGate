@@ -110,17 +110,18 @@ public class Bot implements Player {
     }
 
     public void energize() {
-        for (IUnit unit : units)
+        for (IUnit unit : units) {
             unit.energyRecharge();
+            unit.setDidAttack(false);
+            unit.preparing();
+        }
     }
 
     @Override
     public void showPlayerInfo() {
-
     }
 
     public void move() {
-        Grid grid = Grid.getInstance();
         int row, col;
         for (IUnit unit : units) {
             while (true) {

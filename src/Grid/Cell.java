@@ -6,13 +6,14 @@ import Players.Player;
 
 import static Utilities.Constants.Colors.ANSI_RESET;
 
-public class Ceil {
+public class Cell {
     private IUnit unit;
     private Town town;
     private String terrain;
     private Player player;
+    private Boolean availableForUnit;
 
-    public Ceil(IUnit unit, String terrain) {
+    public Cell(IUnit unit, String terrain) {
         this.unit = unit;
         this.terrain = terrain;
         if (unit == null)
@@ -69,5 +70,13 @@ public class Ceil {
             return;
         }
         this.player = player;
+    }
+
+    public Boolean getAvailableForUnit() {
+        return availableForUnit;
+    }
+
+    public void setAvailableForUnit(Boolean availableForUnit) {
+        this.availableForUnit = availableForUnit;
     }
 }

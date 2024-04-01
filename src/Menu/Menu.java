@@ -1,9 +1,9 @@
 package Menu;
 
 import Entities.Builds.Town;
-import Entities.Units.Creator.TempUnitFactory;
+import Entities.Units.Creator.UnitFactory;
 import Entities.Units.Units.IUnit;
-import Entities.Units.Units.UnitTypes;
+import Entities.Units.Units.UnitType;
 import Exceptions.AnotherEntityAtTheCeil;
 import Exceptions.NoUnitAtTheCeil;
 import Exceptions.NotEnoughCoins;
@@ -71,7 +71,7 @@ public class Menu {
                     continue;
                 validCoords = true;
             }
-            Town town = new Town(player, "Mordor", "M", row, col);
+            Town town = new Town(player, "Mordor", "E", row, col);
             player.setTown(town);
             grid.placeTown(player, town);
         }
@@ -206,7 +206,7 @@ public class Menu {
                 System.out.println("\n" + ANSI_PURPLE + "You have " + player.getCoins() + " coins" + ANSI_RESET);
                 System.out.println("Choose a unit");
 
-                UnitTypes.showUnitsShop();
+                UnitType.showUnitsShop();
 
                 System.out.println("\nEnter the unit's name to buy it.\nOr type " + ANSI_RED + "Exit" + ANSI_RESET + ".");
                 cmd = scanner.nextLine();
@@ -214,7 +214,7 @@ public class Menu {
                     return null;
 
                 try {
-                    unit = TempUnitFactory.createUnit(UnitTypes.valueOf(cmd), row, col, player);
+                    unit = UnitFactory.createUnit(UnitType.valueOf(cmd), row, col, player);
                     unitSelected = true;
                 } catch (IllegalArgumentException e) {
                     err = "You tried to choose non existed unit!";
@@ -223,12 +223,12 @@ public class Menu {
 
             return unit;
         } else {
-            UnitTypes unitName;
+            UnitType unitName;
             IUnit unit;
             while (true) {
-                unitName = UnitTypes.randomUnit();
+                unitName = UnitType.randomUnit();
                 if (unitName.cost <= player.getCoins()) {
-                    unit = TempUnitFactory.createUnit(unitName, row, col, player);
+                    unit = UnitFactory.createUnit(unitName, row, col, player);
                     break;
                 }
             }

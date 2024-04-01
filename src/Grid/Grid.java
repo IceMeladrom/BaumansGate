@@ -14,7 +14,7 @@ import static Utilities.Utils.clearConsole;
 public class Grid {
     private int size;
     private static Grid instance;
-    ArrayList<ArrayList<Ceil>> grid = new ArrayList<>(size);
+    ArrayList<ArrayList<Cell>> grid = new ArrayList<>(size);
 
     public static Grid getInstance() {
         if (instance == null) {
@@ -29,7 +29,7 @@ public class Grid {
         for (int i = 0; i < size; i++) {
             grid.add(new ArrayList<>(size));
             for (int j = 0; j < size; j++) {
-                grid.get(i).add(new Ceil(
+                grid.get(i).add(new Cell(
                         null,
                         generate(rand)
                 ));
@@ -135,29 +135,29 @@ public class Grid {
         }
     }
 
-    private String getCeil(Ceil ceil) {
-        if (ceil.getUnit() == null && ceil.getTown() == null)
-            return ceil.getTerrain();
-        if (ceil.getTown() != null && ceil.getUnit() != null)
-            return ANSI_WHITE_BACKGROUND + ANSI_BOLD + ceil.getColor() + ceil.getUnit().getSymbol() + ANSI_RESET;
-        if (ceil.getTown() != null)
-            return ANSI_BOLD + ceil.getColor() + ceil.getTown().getSymbol() + ANSI_RESET;
-        return ceil.getColor() + ceil.getUnit().getSymbol() + ANSI_RESET;
+    private String getCeil(Cell cell) {
+        if (cell.getUnit() == null && cell.getTown() == null)
+            return cell.getTerrain();
+        if (cell.getTown() != null && cell.getUnit() != null)
+            return ANSI_WHITE_BACKGROUND + ANSI_BOLD + cell.getColor() + cell.getUnit().getSymbol() + ANSI_RESET;
+        if (cell.getTown() != null)
+            return ANSI_BOLD + cell.getColor() + cell.getTown().getSymbol() + ANSI_RESET;
+        return cell.getColor() + cell.getUnit().getSymbol() + ANSI_RESET;
     }
 
     public void placeUnit(Player player, IUnit unit) {
         int row = unit.getRow(), col = unit.getCol();
-        Ceil ceil = grid.get(row).get(col);
-        ceil.setUnit(unit);
-        ceil.setPlayer(player);
+        Cell cell = grid.get(row).get(col);
+        cell.setUnit(unit);
+        cell.setPlayer(player);
 //        ceil.setColor(player.getColor());
     }
 
     public void placeTown(Player player, Town town) {
         int row = town.getRow(), col = town.getCol();
-        Ceil ceil = grid.get(row).get(col);
-        ceil.setTown(town);
-        ceil.setPlayer(player);
+        Cell cell = grid.get(row).get(col);
+        cell.setTown(town);
+        cell.setPlayer(player);
 //        ceil.setColor(player.getColor());
     }
 
@@ -166,12 +166,12 @@ public class Grid {
     }
 
     public void deleteUnit(int row, int col) {
-        Ceil ceil = grid.get(row).get(col);
-        ceil.setUnit(null);
+        Cell cell = grid.get(row).get(col);
+        cell.setUnit(null);
 //        ceil.setColor(ANSI_RESET);
     }
 
-    public Ceil getCeil(int row, int col) {
+    public Cell getCeil(int row, int col) {
         return grid.get(row).get(col);
     }
 

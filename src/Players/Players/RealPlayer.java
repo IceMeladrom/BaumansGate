@@ -2,10 +2,7 @@ package Players.Players;
 
 import Entities.Builds.Town;
 import Entities.Units.Units.IUnit;
-import Exceptions.AlliedUnitAtTheCeil;
-import Exceptions.NotEnoughEnergy;
-import Exceptions.NotYourTown;
-import Exceptions.UnitHasAlreadyAttacked;
+import Exceptions.*;
 import Grid.Grid;
 import Players.Player;
 import org.jetbrains.annotations.NotNull;
@@ -21,7 +18,9 @@ public class RealPlayer implements Player {
     private ArrayList<IUnit> units = new ArrayList<>();
     private Town town;
     private int coins;
-    private String name, color;
+    private String name;
+    private String color;
+    private static String msg = "";
 
     public RealPlayer(String name, int coins, String color) {
         this.name = name;
@@ -123,10 +122,17 @@ public class RealPlayer implements Player {
             System.out.println("\tCoords: row: " + (unitTemp.getRow() + 1) + " col: " + (unitTemp.getCol() + 1));
             System.out.println("\tHP: " + unitTemp.getHp() + "/" + unitTemp.getMaxHp());
             System.out.println("\tDefence: " + unitTemp.getDefence() + "/" + unitTemp.getMaxDefence());
-            System.out.println("\tDamage: " + unitTemp.getDamage());
+            System.out.println("\tDamage: " + unitTemp.getDamage().getValue() + " " + unitTemp.getDamage().getDamageType());
             System.out.println("\tAttack Range: " + unitTemp.getAttackRange());
             System.out.println("\tEnergy: " + unitTemp.getEnergy() + "/" + unitTemp.getMaxEnergy());
-            System.out.println("\tCan Attack: " + (unitTemp.getDidAttack() ? (ANSI_RED + "NO") : (ANSI_GREEN + "YES")) + ANSI_RESET + "\n");
+            System.out.println("\tHas attack ability: " + (unitTemp.getDidAttack() ? (ANSI_RED + "NO") : (ANSI_GREEN + "YES")) + ANSI_RESET);
+            if (!unitTemp.getIsAttackPrepared()) {
+                if (unitTemp.getMovesUntilReadyToAttack() != -1)
+                    System.out.println("\tSpecial attack will be prepared until: " + ANSI_RED + unitTemp.getMovesUntilReadyToAttack() + " moves" + ANSI_RESET);
+                else
+                    System.out.println("\tSpecial attack " + ANSI_RED + "is not preparing" + ANSI_RESET);
+            } else
+                System.out.println("\tSpecial attack " + ANSI_GREEN + "prepared" + ANSI_RESET);
         }
         System.out.println();
     }
@@ -147,12 +153,17 @@ public class RealPlayer implements Player {
                 err = "";
             }
 
+            if (!msg.isEmpty()) {
+                System.out.println(msg);
+                msg = "";
+            }
+
             if (showInfo) {
                 showPlayerInfo();
                 showInfo = false;
             }
 
-            System.out.println("1. Choose Unit to move.\n2. Show info.\n3. End move");
+            System.out.println("1. Choose Unit to move.\n2. Prepare an attack\n3. Show info.\n4. End move");
             System.out.print("I choose option: ");
             cmd = scanner.nextLine();
 
@@ -210,15 +221,48 @@ public class RealPlayer implements Player {
 
                     try {
                         unit.walk(row, col);
-                    } catch (NotEnoughEnergy | AlliedUnitAtTheCeil | UnitHasAlreadyAttacked | NotYourTown e) {
+                    } catch (NotEnoughEnergy | AlliedUnitAtTheCeil | UnitHasAlreadyAttacked | NotYourTown |
+                             UnitHasNotPreparedAnAttack e) {
                         err = e.getMessage();
                         continue;
                     }
                     break;
                 case "2":
-                    showInfo = true;
+                    System.out.println("Enter the coordinates of your unit.");
+                    try {
+                        System.out.print("Row: ");
+                        row = Integer.parseInt(scanner.nextLine()) - 1;
+                        System.out.print("Column: ");
+                        col = Integer.parseInt(scanner.nextLine()) - 1;
+                    } catch (InputMismatchException e) {
+                        err = "You enter invalid value.";
+                        continue;
+                    } catch (NumberFormatException e) {
+                        err = "You enter values in wrong format.";
+                        continue;
+                    }
+                    if (!isCoordsValid(row, col)) {
+                        err = "You enter invalid values or in the wrong format.";
+                        continue;
+                    }
+
+                    if (!grid.isUnitAtCeil(row, col)) {
+                        err = "You tried to choose non-existent unit.";
+                        continue;
+                    }
+
+                    if (grid.isUnitAtCeil(row, col) && grid.getPlayerByCeil(row, col) != this) {
+                        err = "You tried to choose not your unit.";
+                        continue;
+                    }
+
+                    unit = grid.getUnit(row, col);
+                    unit.prepareAttack();
                     break;
                 case "3":
+                    showInfo = true;
+                    break;
+                case "4":
                     endOfMove = true;
                     break;
                 default:
@@ -232,7 +276,11 @@ public class RealPlayer implements Player {
         for (IUnit unit : units) {
             unit.energyRecharge();
             unit.setDidAttack(false);
+            unit.preparing();
         }
     }
 
+    public static void log(String msgtmp) {
+        msg = msgtmp;
+    }
 }

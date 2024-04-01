@@ -6,7 +6,7 @@ public enum DamageType {
     public static float attackMultiplier(DamageType myDamageType, DamageType enemyDamageType) {
         float koef = 1.0F;
         if (myDamageType == enemyDamageType)
-            return koef;
+            return 0.5F;
 
         switch (myDamageType) {
             case Physical -> koef = 1.0F;

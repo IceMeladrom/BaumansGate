@@ -17,7 +17,7 @@ public class Main {
     public static void main(String[] args) {
 
 
-        boolean DEBUG = false;
+        boolean DEBUG = true;
 
 
         Grid grid = Grid.getInstance();

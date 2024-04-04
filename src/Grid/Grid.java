@@ -29,10 +29,7 @@ public class Grid {
         for (int i = 0; i < size; i++) {
             grid.add(new ArrayList<>(size));
             for (int j = 0; j < size; j++) {
-                grid.get(i).add(new Cell(
-                        null,
-                        generate(rand)
-                ));
+                grid.get(i).add(new Cell(i, j, null, generate(rand)));
             }
         }
     }

@@ -12,14 +12,25 @@ public class Cell {
     private String terrain;
     private Player player;
     private Boolean availableForUnit;
+    private int row, col;
 
-    public Cell(IUnit unit, String terrain) {
+    public Cell(int row, int col, IUnit unit, String terrain) {
+        this.row = row;
+        this.col = col;
         this.unit = unit;
         this.terrain = terrain;
         if (unit == null)
             player = null;
         else
             player = unit.getPlayer();
+    }
+
+    public int getRow() {
+        return row;
+    }
+
+    public int getCol() {
+        return col;
     }
 
     public IUnit getUnit() {

@@ -4,7 +4,11 @@ import Entities.Damage.IDamage;
 import Exceptions.*;
 import Players.Player;
 
+import java.util.HashMap;
+
 public interface IUnit {
+    HashMap<String, Float> getTerrains();
+
     public Player getPlayer();
 
     public void setPlayer(Player player);

@@ -4,6 +4,7 @@ import Entities.Builds.Town;
 import Entities.Units.Units.IUnit;
 import Exceptions.*;
 import Grid.Grid;
+import Grid.Pathfinder;
 import Players.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -192,12 +193,15 @@ public class RealPlayer implements Player {
                         continue;
                     }
 
-                    if (grid.isUnitAtCeil(row, col) && grid.getPlayerByCeil(row, col) != this) {
+                    if (grid.isUnitAtCeil(row, col) && grid.getPlayerByCell(row, col) != this) {
                         err = "You tried to choose not your unit.";
                         continue;
                     }
 
                     unit = grid.getUnit(row, col);
+                    Pathfinder.availableCells(unit);
+                    Pathfinder.show();
+                    Pathfinder.reset();
 
                     System.out.println("Enter the coordinates where you want to go");
                     try {
@@ -251,7 +255,7 @@ public class RealPlayer implements Player {
                         continue;
                     }
 
-                    if (grid.isUnitAtCeil(row, col) && grid.getPlayerByCeil(row, col) != this) {
+                    if (grid.isUnitAtCeil(row, col) && grid.getPlayerByCell(row, col) != this) {
                         err = "You tried to choose not your unit.";
                         continue;
                     }

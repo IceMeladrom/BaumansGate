@@ -42,6 +42,7 @@ abstract public class Unit implements IUnit {
     private Player player;
     private boolean didAttack;
 
+    @Override
     public HashMap<String, Float> getTerrains() {
         return terrains;
     }
@@ -207,14 +208,14 @@ abstract public class Unit implements IUnit {
         if (currentRow == endRow && currentCol == endCol)
             return;
 
-        Town town = grid.getCeil(endRow, endCol).getTown();
+        Town town = grid.getCell(endRow, endCol).getTown();
         if (town != null) {
             // If Town yours
             if (town.getPlayer() != getPlayer())
                 throw new NotYourTown(this);
         }
         // If your unit want to go to the ceil with unit.
-        if (grid.getCeil(endRow, endCol).getUnit() != null) {
+        if (grid.getCell(endRow, endCol).getUnit() != null) {
             // If your unit want to go to the ceil with allied unit.
             if (getPlayer().getUnits().contains(grid.getUnit(endRow, endCol))) {
                 throw new AlliedUnitAtTheCeil(currentRow, currentCol, endRow, endCol);
@@ -227,7 +228,7 @@ abstract public class Unit implements IUnit {
             if (getAttackRange() != 1 && getAttackRange() >= (endRow - getRow() + endCol - getCol())) {
                 attack(enemy);
                 if (!enemy.isAlive()) {
-                    grid.getCeil(enemy.getRow(), enemy.getCol()).setUnit(null);
+                    grid.getCell(enemy.getRow(), enemy.getCol()).setUnit(null);
                     enemy.getPlayer().deleteUnit(enemy);
                 }
                 return;
@@ -249,16 +250,16 @@ abstract public class Unit implements IUnit {
             if (getEnergy() < totalSpendEnergy)
                 throw new NotEnoughEnergy(currentRow, currentCol, endRow, endCol, totalSpendEnergy);
             setEnergy(getEnergy() - totalSpendEnergy);
-            grid.getCeil(getRow(), getCol()).setUnit(null);
+            grid.getCell(getRow(), getCol()).setUnit(null);
             setRow(endRow);
             setCol(endCol);
-            grid.getCeil(getRow(), getCol()).setUnit(this);
+            grid.getCell(getRow(), getCol()).setUnit(this);
             attack(enemy);
             if (!enemy.isAlive()) {
-                grid.getCeil(getRow(), getCol()).setUnit(null);
+                grid.getCell(getRow(), getCol()).setUnit(null);
                 setRow(enemy.getRow());
                 setCol(enemy.getCol());
-                grid.getCeil(enemy.getRow(), enemy.getCol()).setUnit(this);
+                grid.getCell(enemy.getRow(), enemy.getCol()).setUnit(this);
                 enemy.getPlayer().deleteUnit(enemy);
             }
         } else {
@@ -267,10 +268,10 @@ abstract public class Unit implements IUnit {
             if (getEnergy() < totalSpendEnergy)
                 throw new NotEnoughEnergy(currentRow, currentCol, endRow, endCol, totalSpendEnergy);
             setEnergy(getEnergy() - totalSpendEnergy);
-            grid.getCeil(getRow(), getCol()).setUnit(null);
+            grid.getCell(getRow(), getCol()).setUnit(null);
             setRow(endRow);
             setCol(endCol);
-            grid.getCeil(getRow(), getCol()).setUnit(this);
+            grid.getCell(getRow(), getCol()).setUnit(this);
             if (town != null)
                 town.healUnit(this);
         }
@@ -282,14 +283,14 @@ abstract public class Unit implements IUnit {
         if (currentRow <= endRow) {
             currentRow += 1;
             for (; currentRow <= endRow; currentRow++) {
-                terrain = grid.getCeil(currentRow, currentCol).getTerrain();
+                terrain = grid.getCell(currentRow, currentCol).getTerrain();
                 totalSpendEnergy += terrains.get(terrain);
             }
             currentRow -= 1;
         } else {
             currentRow -= 1;
             for (; currentRow >= endRow; currentRow--) {
-                terrain = grid.getCeil(currentRow, currentCol).getTerrain();
+                terrain = grid.getCell(currentRow, currentCol).getTerrain();
                 totalSpendEnergy += terrains.get(terrain);
             }
             currentRow += 1;
@@ -298,14 +299,14 @@ abstract public class Unit implements IUnit {
         if (currentCol <= endCol) {
             currentCol += 1;
             for (; currentCol <= endCol; currentCol++) {
-                terrain = grid.getCeil(currentRow, currentCol).getTerrain();
+                terrain = grid.getCell(currentRow, currentCol).getTerrain();
                 totalSpendEnergy += terrains.get(terrain);
             }
             currentCol -= 1;
         } else {
             currentCol -= 1;
             for (; currentCol >= endCol; currentCol--) {
-                terrain = grid.getCeil(currentRow, currentCol).getTerrain();
+                terrain = grid.getCell(currentRow, currentCol).getTerrain();
                 totalSpendEnergy += terrains.get(terrain);
             }
             currentCol += 1;

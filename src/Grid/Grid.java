@@ -10,6 +10,7 @@ import java.util.Random;
 
 import static Utilities.Constants.Colors.*;
 import static Utilities.Utils.clearConsole;
+import static Utilities.Utils.isCoordsValid;
 
 public class Grid {
     private int size;
@@ -86,9 +87,9 @@ public class Grid {
             System.out.format(leftAlignment, i + 1, "");
             for (int j = 0; j < size; j++) {
                 if ((j + 1) / 10 == 0)
-                    System.out.format(space1Alignment, getCeil(grid.get(i).get(j)));
+                    System.out.format(space1Alignment, getCellWCheck(grid.get(i).get(j)));
                 else
-                    System.out.format(space2Alignment, getCeil(grid.get(i).get(j)));
+                    System.out.format(space2Alignment, getCellWCheck(grid.get(i).get(j)));
 
             }
             System.out.println();
@@ -132,7 +133,7 @@ public class Grid {
         }
     }
 
-    private String getCeil(Cell cell) {
+    private String getCellWCheck(Cell cell) {
         if (cell.getUnit() == null && cell.getTown() == null)
             return cell.getTerrain();
         if (cell.getTown() != null && cell.getUnit() != null)
@@ -158,7 +159,7 @@ public class Grid {
 //        ceil.setColor(player.getColor());
     }
 
-    public Player getPlayerByCeil(int row, int col) {
+    public Player getPlayerByCell(int row, int col) {
         return grid.get(row).get(col).getPlayer();
     }
 
@@ -168,7 +169,7 @@ public class Grid {
 //        ceil.setColor(ANSI_RESET);
     }
 
-    public Cell getCeil(int row, int col) {
+    public Cell getCell(int row, int col) {
         return grid.get(row).get(col);
     }
 

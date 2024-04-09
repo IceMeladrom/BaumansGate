@@ -11,7 +11,7 @@ public class Utils {
 
     public static boolean isCoordsValid(int row, int col) {
         int size = GridSize.size;
-        return (0 <= col && col <= size && 0 <= row && row <= size);
+        return (0 <= col && col < size && 0 <= row && row < size);
     }
 
 }

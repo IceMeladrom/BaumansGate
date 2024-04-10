@@ -82,8 +82,7 @@ public class Pathfinder {
 
     public static void reset() {
         for (ArrayList<Double> i : costs)
-            for (Double j : i)
-                j = null;
+            i.replaceAll(ignored -> null);
     }
 
     public static void availableCells(IUnit unit) {

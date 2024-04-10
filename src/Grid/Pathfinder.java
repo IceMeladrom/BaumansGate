@@ -26,6 +26,10 @@ public class Pathfinder {
         }
     }};
 
+    public static ArrayList<ArrayList<Double>> getCosts() {
+        return costs;
+    }
+
     public static void show() {
         String leftAlignment = "| %-3s | %-6s |";
         String space2Alignment = " %-1s |";
@@ -111,5 +115,22 @@ public class Pathfinder {
                 }
             }
         }
+    }
+
+    public static Cell nearestNeighbour(Cell endCell) {
+        Grid grid = Grid.getInstance();
+        int endRow = endCell.getRow();
+        int endCol = endCell.getCol();
+        Double minCost = costs.get(endRow).get(endCol);
+        Cell nearestCell = null;
+        for (int i = 0; i < 4; i++) {
+            int nextRow = endRow + dRow[i];
+            int nextCol = endCol + dCol[i];
+            if (costs.get(nextRow).get(nextCol) < minCost) {
+                minCost = costs.get(nextRow).get(nextCol);
+                nearestCell = grid.getCell(nextRow, nextCol);
+            }
+        }
+        return nearestCell;
     }
 }

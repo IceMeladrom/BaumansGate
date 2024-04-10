@@ -3,6 +3,7 @@ package Players.Players;
 import Entities.Builds.Town;
 import Entities.Units.Units.IUnit;
 import Grid.Grid;
+import Grid.Pathfinder;
 import Players.Player;
 import Utilities.Constants.MyRandom;
 import org.jetbrains.annotations.NotNull;
@@ -125,6 +126,8 @@ public class Bot implements Player {
         int row, col;
         for (IUnit unit : units) {
             while (true) {
+                Pathfinder.reset();
+                Pathfinder.availableCells(unit);
                 col = unit.getCol() + random.nextInt(-(int) unit.getEnergy(), (int) unit.getEnergy() + 1);
                 row = unit.getRow() + random.nextInt(-(int) unit.getEnergy(), (int) unit.getEnergy() + 1);
                 try {

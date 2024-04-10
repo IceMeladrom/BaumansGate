@@ -38,8 +38,6 @@ public class Grid {
     public void show() {
         clearConsole();
 
-        ArrayList<String> temp = new ArrayList<>();
-
         String leftAlignment = "| %-3s | %-6s |";
         String space1Alignment = " %-1s |";
         String space2Alignment = " %-1s  |";
@@ -104,6 +102,74 @@ public class Grid {
         }
     }
 
+    public void showWithAvailablePaths(IUnit unit) {
+        clearConsole();
+
+        ArrayList<ArrayList<Double>> costs = Pathfinder.getCosts();
+        String leftAlignment = "| %-3s | %-6s |";
+        String space1Alignment = " %-1s |";
+        String space2Alignment = " %-1s  |";
+
+        System.out.format("+-----+--------+");
+        for (int i = 0; i < size; i++) {
+            if ((i + 1) / 10 == 0)
+                System.out.format("---+");
+            else
+                System.out.format("----+");
+        }
+        System.out.println();
+        System.out.format("|     | Column |");
+        for (int i = 0; i < size; i++) {
+            System.out.format(" " + (i + 1) + " |");
+        }
+        System.out.println();
+        System.out.format("+-----+--------+");
+        for (int i = 0; i < size; i++) {
+            if ((i + 1) / 10 == 0)
+                System.out.format("---+");
+            else
+                System.out.format("----+");
+        }
+        System.out.println();
+
+        System.out.format(leftAlignment, "Row", "");
+        for (int i = 0; i < size; i++) {
+            if ((i + 1) / 10 == 0)
+                System.out.format(space1Alignment, "");
+            else
+                System.out.format(space2Alignment, "");
+        }
+        System.out.println();
+        System.out.format("+-----+--------+");
+        for (int i = 0; i < size; i++) {
+            if ((i + 1) / 10 == 0)
+                System.out.format("---+");
+            else
+                System.out.format("----+");
+        }
+        System.out.println();
+
+        for (int i = 0; i < size; i++) {
+            System.out.format(leftAlignment, i + 1, "");
+            for (int j = 0; j < size; j++) {
+                if ((j + 1) / 10 == 0)
+                    System.out.format(space1Alignment, getCellWCheckForAvailable(grid.get(i).get(j), unit, costs.get(i).get(j)));
+                else
+                    System.out.format(space2Alignment, getCellWCheckForAvailable(grid.get(i).get(j), unit, costs.get(i).get(j)));
+
+            }
+            System.out.println();
+            System.out.format("+-----+--------+");
+            for (int k = 0; k < size; k++) {
+                if ((k + 1) / 10 == 0)
+                    System.out.format("---+");
+                else
+                    System.out.format("----+");
+            }
+            System.out.println();
+        }
+    }
+
     public boolean isUnitAtCeil(int row, int col) {
         return grid.get(row).get(col).getUnit() != null;
     }
@@ -136,10 +202,30 @@ public class Grid {
     private String getCellWCheck(Cell cell) {
         if (cell.getUnit() == null && cell.getTown() == null)
             return cell.getTerrain();
-        if (cell.getTown() != null && cell.getUnit() != null)
-            return ANSI_WHITE_BACKGROUND + ANSI_BOLD + cell.getColor() + cell.getUnit().getSymbol() + ANSI_RESET;
+        if (cell.getTown() != null && cell.getUnit() != null) {
+            if (cell.getColor().equals(ANSI_GREEN))
+                return ANSI_GREEN_UNDERLINED + cell.getUnit().getSymbol() + ANSI_RESET;
+            else
+                return ANSI_RED_UNDERLINED + cell.getUnit().getSymbol() + ANSI_RESET;
+        }
         if (cell.getTown() != null)
             return ANSI_BOLD + cell.getColor() + cell.getTown().getSymbol() + ANSI_RESET;
+        return cell.getColor() + cell.getUnit().getSymbol() + ANSI_RESET;
+    }
+
+    private String getCellWCheckForAvailable(Cell cell, IUnit unit, Double cost) {
+        if (cell.getUnit() == null && cell.getTown() == null && cost != null && unit.getEnergy() >= cost)
+            return ANSI_YELLOW + cell.getTerrain() + ANSI_RESET;
+        if (cell.getUnit() == null && cell.getTown() == null)
+            return cell.getTerrain();
+        if (cell.getTown() != null && cell.getUnit() != null) {
+            if (cell.getColor().equals(ANSI_GREEN))
+                return ANSI_PURPLE_BRIGHT + cell.getUnit().getSymbol() + ANSI_RESET;
+            else
+                return ANSI_RED_UNDERLINED + cell.getUnit().getSymbol() + ANSI_RESET;
+        }
+        if (cell.getTown() != null)
+            return cell.getColor() + cell.getTown().getSymbol() + ANSI_RESET;
         return cell.getColor() + cell.getUnit().getSymbol() + ANSI_RESET;
     }
 

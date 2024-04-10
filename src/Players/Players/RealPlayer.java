@@ -21,7 +21,7 @@ public class RealPlayer implements Player {
     private int coins;
     private String name;
     private String color;
-    private static String msg = "";
+    private static ArrayList<String> msg = new ArrayList<>();
 
     public RealPlayer(String name, int coins, String color) {
         this.name = name;
@@ -155,8 +155,9 @@ public class RealPlayer implements Player {
             }
 
             if (!msg.isEmpty()) {
-                System.out.println(msg);
-                msg = "";
+                for (String s: msg)
+                    System.out.println(s);
+                msg.clear();
             }
 
             if (showInfo) {
@@ -199,9 +200,9 @@ public class RealPlayer implements Player {
                     }
 
                     unit = grid.getUnit(row, col);
-                    Pathfinder.availableCells(unit);
-                    Pathfinder.show();
                     Pathfinder.reset();
+                    Pathfinder.availableCells(unit);
+                    grid.showWithAvailablePaths(unit);
 
                     System.out.println("Enter the coordinates where you want to go");
                     try {
@@ -221,7 +222,6 @@ public class RealPlayer implements Player {
                         continue;
                     }
 
-//                    if (grid.getCeil(row, col).getTown() != null)
 
                     try {
                         unit.walk(row, col);
@@ -285,6 +285,6 @@ public class RealPlayer implements Player {
     }
 
     public static void log(String msgtmp) {
-        msg = msgtmp;
+        msg.add(msgtmp);
     }
 }

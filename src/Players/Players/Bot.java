@@ -128,8 +128,8 @@ public class Bot implements Player {
             while (true) {
                 Pathfinder.reset();
                 Pathfinder.availableCells(unit);
-                col = unit.getCol() + random.nextInt(-(int) unit.getEnergy(), (int) unit.getEnergy() + 1);
-                row = unit.getRow() + random.nextInt(-(int) unit.getEnergy(), (int) unit.getEnergy() + 1);
+                col = unit.getCol() + random.nextInt(-unit.getEnergy().intValue(), unit.getEnergy().intValue() + 1);
+                row = unit.getRow() + random.nextInt(-unit.getEnergy().intValue(), unit.getEnergy().intValue() + 1);
                 try {
                     unit.walk(row, col);
                 } catch (Exception e) {

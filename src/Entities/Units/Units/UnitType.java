@@ -27,7 +27,7 @@ public enum UnitType {
 
     public final String name;
     public final int hp, damage, attackRange, defence, cost;
-    public final float energy;
+    public final double energy;
 
     UnitType(String name, int hp, int damage, int attackRange, int defence, float energy, int cost) {
         this.hp = hp;

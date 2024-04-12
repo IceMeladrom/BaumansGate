@@ -4,12 +4,16 @@ import Entities.Builds.Town;
 import Entities.Damage.IDamage;
 import Exceptions.*;
 import Grid.Grid;
+import Grid.Cell;
+import Grid.Pathfinder;
 import Players.Player;
+import Utilities.Pair;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 abstract public class Unit implements IUnit {
-    public Unit(String name, int hp, IDamage damage, int attackRange, int defence, float energy, int cost, String symbol, int row, int col, Player player) {
+    public Unit(String name, int hp, IDamage damage, int attackRange, int defence, Double energy, int cost, String symbol, int row, int col, Player player) {
         this.hp = hp;
         this.damage = damage;
 //        this.movesToPrepareAnAttack = movesToPrepareAnAttack;
@@ -37,7 +41,7 @@ abstract public class Unit implements IUnit {
     private int hp, attackRange, defence, cost;
     private int row, col;
     private final int maxHp, maxDefence;
-    private float energy, maxEnergy;
+    private Double energy, maxEnergy;
     private String name, symbol;
     private Player player;
     private boolean didAttack;
@@ -111,12 +115,12 @@ abstract public class Unit implements IUnit {
     }
 
     @Override
-    public float getEnergy() {
+    public Double getEnergy() {
         return energy;
     }
 
     @Override
-    public void setEnergy(float energy) {
+    public void setEnergy(Double energy) {
         this.energy = energy;
     }
 
@@ -172,12 +176,12 @@ abstract public class Unit implements IUnit {
     }
 
     @Override
-    public float getMaxEnergy() {
+    public Double getMaxEnergy() {
         return maxEnergy;
     }
 
     @Override
-    public void setMaxEnergy(float maxEnergy) {
+    public void setMaxEnergy(Double maxEnergy) {
         this.maxEnergy = maxEnergy;
     }
 
@@ -203,118 +207,64 @@ abstract public class Unit implements IUnit {
 
     public void walk(int endRow, int endCol) throws NotEnoughEnergy, AlliedUnitAtTheCeil, UnitHasAlreadyAttacked, NotYourTown, UnitHasNotPreparedAnAttack {
         Grid grid = Grid.getInstance();
+        ArrayList<ArrayList<Pair>> costs = Pathfinder.getCosts();
         int currentRow = getRow(), currentCol = getCol();
-        int finalEndRow = endRow, finalEndCol = endCol;
+        boolean wantToAttack = false;
+
         if (currentRow == endRow && currentCol == endCol)
             return;
 
         Town town = grid.getCell(endRow, endCol).getTown();
         if (town != null) {
-            // If Town yours
+            // If the Town is not yours
             if (town.getPlayer() != getPlayer())
                 throw new NotYourTown(this);
         }
+
         // If your unit want to go to the ceil with unit.
-        if (grid.getCell(endRow, endCol).getUnit() != null) {
+        IUnit enemy = grid.getUnit(endRow, endCol);
+        if (enemy != null) {
             // If your unit want to go to the ceil with allied unit.
-            if (getPlayer().getUnits().contains(grid.getUnit(endRow, endCol))) {
+            if (enemy.getPlayer() == getPlayer())
                 throw new AlliedUnitAtTheCeil(currentRow, currentCol, endRow, endCol);
-            }
 
             // If your unit want to go to the ceil with enemy unit.
-
-            // Check if your unit can do range attack
-            IUnit enemy = grid.getUnit(finalEndRow, finalEndCol);
-            if (getAttackRange() != 1 && getAttackRange() >= (endRow - getRow() + endCol - getCol())) {
-                attack(enemy);
-                if (!enemy.isAlive()) {
-                    grid.getCell(enemy.getRow(), enemy.getCol()).setUnit(null);
-                    enemy.getPlayer().deleteUnit(enemy);
-                }
-                return;
+            Pair previous = costs.get(endRow).get(endCol);
+            for (int i = 0; i < getAttackRange(); i++) {
+                previous = costs.get(previous.getRow()).get(previous.getCol()).getPrevious();
             }
+            endRow = previous.getRow();
+            endCol = previous.getCol();
+            wantToAttack = true;
+        }
 
-            if (currentRow == endRow) {
-                if (currentCol < endCol)
-                    endCol -= getAttackRange();
-                else
-                    endCol += getAttackRange();
-            } else {
-                if (currentRow < endRow)
-                    endRow -= getAttackRange();
-                else
-                    endRow += getAttackRange();
-            }
+        Double totalSpentEnergy = costs.get(endRow).get(endCol).getCost();
+        if (getEnergy() < totalSpentEnergy)
+            throw new NotEnoughEnergy(currentRow, currentCol, endRow, endCol, totalSpentEnergy);
+        setEnergy(getEnergy() - totalSpentEnergy);
+        grid.getCell(getRow(), getCol()).setUnit(null);
+        setRow(endRow);
+        setCol(endCol);
+        grid.getCell(getRow(), getCol()).setUnit(this);
 
-            float totalSpendEnergy = spentEnergy(grid, currentRow, endRow, currentCol, endCol);
-            if (getEnergy() < totalSpendEnergy)
-                throw new NotEnoughEnergy(currentRow, currentCol, endRow, endCol, totalSpendEnergy);
-            setEnergy(getEnergy() - totalSpendEnergy);
-            grid.getCell(getRow(), getCol()).setUnit(null);
-            setRow(endRow);
-            setCol(endCol);
-            grid.getCell(getRow(), getCol()).setUnit(this);
+        if (wantToAttack) {
             attack(enemy);
             if (!enemy.isAlive()) {
-                grid.getCell(getRow(), getCol()).setUnit(null);
-                setRow(enemy.getRow());
-                setCol(enemy.getCol());
-                grid.getCell(enemy.getRow(), enemy.getCol()).setUnit(this);
+                if (getAttackRange() == 1) {
+                    grid.getCell(getRow(), getCol()).setUnit(null);
+                    setRow(enemy.getRow());
+                    setCol(enemy.getCol());
+                    grid.getCell(enemy.getRow(), enemy.getCol()).setUnit(this);
+                } else {
+                    grid.getCell(enemy.getRow(), enemy.getCol()).setUnit(null);
+                }
                 enemy.getPlayer().deleteUnit(enemy);
             }
-        } else {
-            // If your unit have enough energy to go to the free ceil.
-            float totalSpendEnergy = spentEnergy(grid, currentRow, endRow, currentCol, endCol);
-            if (getEnergy() < totalSpendEnergy)
-                throw new NotEnoughEnergy(currentRow, currentCol, endRow, endCol, totalSpendEnergy);
-            setEnergy(getEnergy() - totalSpendEnergy);
-            grid.getCell(getRow(), getCol()).setUnit(null);
-            setRow(endRow);
-            setCol(endCol);
-            grid.getCell(getRow(), getCol()).setUnit(this);
-            if (town != null)
-                town.healUnit(this);
         }
+
+        if (town != null)
+            town.healUnit(this);
     }
-
-    private float spentEnergy(Grid grid, int currentRow, int endRow, int currentCol, int endCol) {
-        float totalSpendEnergy = 0;
-        String terrain = "";
-        if (currentRow <= endRow) {
-            currentRow += 1;
-            for (; currentRow <= endRow; currentRow++) {
-                terrain = grid.getCell(currentRow, currentCol).getTerrain();
-                totalSpendEnergy += terrains.get(terrain);
-            }
-            currentRow -= 1;
-        } else {
-            currentRow -= 1;
-            for (; currentRow >= endRow; currentRow--) {
-                terrain = grid.getCell(currentRow, currentCol).getTerrain();
-                totalSpendEnergy += terrains.get(terrain);
-            }
-            currentRow += 1;
-        }
-
-        if (currentCol <= endCol) {
-            currentCol += 1;
-            for (; currentCol <= endCol; currentCol++) {
-                terrain = grid.getCell(currentRow, currentCol).getTerrain();
-                totalSpendEnergy += terrains.get(terrain);
-            }
-            currentCol -= 1;
-        } else {
-            currentCol -= 1;
-            for (; currentCol >= endCol; currentCol--) {
-                terrain = grid.getCell(currentRow, currentCol).getTerrain();
-                totalSpendEnergy += terrains.get(terrain);
-            }
-            currentCol += 1;
-        }
-
-        return totalSpendEnergy;
-    }
-
 
     @Override
     public int getMovesUntilReadyToAttack() {

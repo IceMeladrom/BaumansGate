@@ -69,7 +69,7 @@ public class Main {
             row = random.nextInt(0, grid.getSize());
             col = random.nextInt(0, grid.getSize());
         } while (grid.isEntityAtCeil(row, col));
-        unit = UnitFactory.createUnit(UnitType.Swordsman, random.nextInt(0, grid.getSize()), random.nextInt(0, grid.getSize()), me);
+        unit = UnitFactory.createUnit(UnitType.Crossbowman, random.nextInt(0, grid.getSize()), random.nextInt(0, grid.getSize()), me);
         me.buyUnit(unit);
         grid.placeUnit(me, unit);
 

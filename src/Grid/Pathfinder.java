@@ -2,6 +2,7 @@ package Grid;
 
 import Entities.Units.Units.IUnit;
 import Utilities.Constants.GridSize;
+import Utilities.Pair;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -16,17 +17,18 @@ public class Pathfinder {
     private static final int[] dRow = {-1, 0, 1, 0};
     private static final int[] dCol = {0, 1, 0, -1};
 
-    private static final ArrayList<ArrayList<Double>> costs = new ArrayList<>() {{
+    private static final ArrayList<ArrayList<Pair>> costs = new ArrayList<>() {{
         for (int i = 0; i < size; i++) {
+            int finalI = i;
             add(new ArrayList<>() {{
-                for (int i = 0; i < size; i++) {
-                    add(null);
+                for (int j = 0; j < size; j++) {
+                    add(new Pair(finalI, j, null));
                 }
             }});
         }
     }};
 
-    public static ArrayList<ArrayList<Double>> getCosts() {
+    public static ArrayList<ArrayList<Pair>> getCosts() {
         return costs;
     }
 
@@ -64,14 +66,14 @@ public class Pathfinder {
         for (int i = 0; i < size; i++) {
             System.out.format(leftAlignment, i + 1, "");
             for (int j = 0; j < size; j++) {
-                if (costs.get(i).get(j) == null)
+                if (costs.get(i).get(j).getCost() == null)
                     System.out.format(space2Alignment, ANSI_RED + "??.?" + ANSI_RESET);
-                else if (costs.get(i).get(j) == 0)
-                    System.out.format(" " + space2Alignment, ANSI_GREEN + new DecimalFormat("0.0").format(costs.get(i).get(j)) + ANSI_RESET);
-                else if (costs.get(i).get(j) / 10 >= 1)
-                    System.out.format(space2Alignment, new DecimalFormat("0.0").format(costs.get(i).get(j)));
+                else if (costs.get(i).get(j).getCost() == 0)
+                    System.out.format(" " + space2Alignment, ANSI_GREEN + new DecimalFormat("0.0").format(costs.get(i).get(j).getCost()) + ANSI_RESET);
+                else if (costs.get(i).get(j).getCost() / 10 >= 1)
+                    System.out.format(space2Alignment, new DecimalFormat("0.0").format(costs.get(i).get(j).getCost()));
                 else
-                    System.out.format(" " + space2Alignment, new DecimalFormat("0.0").format(costs.get(i).get(j)));
+                    System.out.format(" " + space2Alignment, new DecimalFormat("0.0").format(costs.get(i).get(j).getCost()));
 
             }
             System.out.println();
@@ -85,8 +87,12 @@ public class Pathfinder {
 
 
     public static void reset() {
-        for (ArrayList<Double> i : costs)
-            i.replaceAll(ignored -> null);
+        for (ArrayList<Pair> i : costs) {
+            for(Pair j: i) {
+                j.setCost(0.0);
+                j.setPrevious(null);
+            }
+        }
     }
 
     public static void availableCells(IUnit unit) {
@@ -94,7 +100,8 @@ public class Pathfinder {
         Queue<Cell> queue = new LinkedList<>();
         Cell startCell = grid.getCell(unit.getRow(), unit.getCol());
 
-        costs.get(unit.getRow()).set(unit.getCol(), 0.0);
+        costs.get(unit.getRow()).get(unit.getCol()).setCost(0.0);
+        costs.get(unit.getRow()).get(unit.getCol()).setPrevious(costs.get(unit.getRow()).get(unit.getCol()));
         queue.add(startCell);
 
 
@@ -105,32 +112,16 @@ public class Pathfinder {
             for (int i = 0; i < 4; i++) {
                 int nextRow = currentCell.getRow() + dRow[i];
                 int nextCol = currentCell.getCol() + dCol[i];
-                if (isCoordsValid(nextRow, nextCol) && !grid.isEntityAtCeil(nextRow, nextCol)) {
-                    if ((costs.get(nextRow).get(nextCol) == null) ||
-                            ((costs.get(curRow).get(curCol) + unit.getTerrains().get(currentCell.getTerrain())) < costs.get(nextRow).get(nextCol))) {
+                if (isCoordsValid(nextRow, nextCol)) {
+                    if ((costs.get(nextRow).get(nextCol).getPrevious() == null) ||
+                            ((costs.get(curRow).get(curCol).getCost() + unit.getTerrains().get(currentCell.getTerrain())) < costs.get(nextRow).get(nextCol).getCost())) {
                         Cell nextCell = grid.getCell(nextRow, nextCol);
-                        costs.get(nextRow).set(nextCol, costs.get(curRow).get(curCol) + unit.getTerrains().get(nextCell.getTerrain()));
+                        costs.get(nextRow).get(nextCol).setCost(costs.get(curRow).get(curCol).getCost() + unit.getTerrains().get(nextCell.getTerrain()));
+                        costs.get(nextRow).get(nextCol).setPrevious(costs.get(curRow).get(curCol));
                         queue.add(nextCell);
                     }
                 }
             }
         }
-    }
-
-    public static Cell nearestNeighbour(Cell endCell) {
-        Grid grid = Grid.getInstance();
-        int endRow = endCell.getRow();
-        int endCol = endCell.getCol();
-        Double minCost = costs.get(endRow).get(endCol);
-        Cell nearestCell = null;
-        for (int i = 0; i < 4; i++) {
-            int nextRow = endRow + dRow[i];
-            int nextCol = endCol + dCol[i];
-            if (costs.get(nextRow).get(nextCol) < minCost) {
-                minCost = costs.get(nextRow).get(nextCol);
-                nearestCell = grid.getCell(nextRow, nextCol);
-            }
-        }
-        return nearestCell;
     }
 }

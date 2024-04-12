@@ -7,7 +7,7 @@ import Players.Player;
 import java.util.HashMap;
 
 public interface IUnit {
-    HashMap<String, Float> getTerrains();
+    public HashMap<String, Float> getTerrains();
 
     public Player getPlayer();
 
@@ -35,9 +35,9 @@ public interface IUnit {
 
     public void setDefence(int defence);
 
-    public float getEnergy();
+    public Double getEnergy();
 
-    public void setEnergy(float energy);
+    public void setEnergy(Double energy);
 
     public int getCost();
 
@@ -59,9 +59,9 @@ public interface IUnit {
 
     public void setSymbol(String symbol);
 
-    public float getMaxEnergy();
+    public Double getMaxEnergy();
 
-    public void setMaxEnergy(float maxEnergy);
+    public void setMaxEnergy(Double maxEnergy);
 
     public void energyRecharge();
 
@@ -75,9 +75,9 @@ public interface IUnit {
 
     public void attack(IUnit enemy) throws UnitHasAlreadyAttacked, UnitHasNotPreparedAnAttack;
 
-    int getMovesToPrepareAnAttack();
+    public int getMovesToPrepareAnAttack();
 
-    void setMovesToPrepareAnAttack(int movesToPrepareAnAttack);
+    public void setMovesToPrepareAnAttack(int movesToPrepareAnAttack);
 
     public void prepareAttack();
 
@@ -85,9 +85,9 @@ public interface IUnit {
 
     public void setDidAttack(boolean didAttack);
 
-    boolean getIsAttackPrepared();
+    public boolean getIsAttackPrepared();
 
-    void setAttackPrepared(boolean attackPrepared);
+    public void setAttackPrepared(boolean attackPrepared);
 
     public void preparing();
 }

@@ -4,13 +4,13 @@ import Entities.Builds.Town;
 import Entities.Units.Units.IUnit;
 import Players.Player;
 import Utilities.Constants.GridSize;
+import Utilities.Pair;
 
 import java.util.ArrayList;
 import java.util.Random;
 
 import static Utilities.Constants.Colors.*;
 import static Utilities.Utils.clearConsole;
-import static Utilities.Utils.isCoordsValid;
 
 public class Grid {
     private int size;
@@ -105,7 +105,7 @@ public class Grid {
     public void showWithAvailablePaths(IUnit unit) {
         clearConsole();
 
-        ArrayList<ArrayList<Double>> costs = Pathfinder.getCosts();
+        ArrayList<ArrayList<Pair>> costs = Pathfinder.getCosts();
         String leftAlignment = "| %-3s | %-6s |";
         String space1Alignment = " %-1s |";
         String space2Alignment = " %-1s  |";
@@ -153,9 +153,9 @@ public class Grid {
             System.out.format(leftAlignment, i + 1, "");
             for (int j = 0; j < size; j++) {
                 if ((j + 1) / 10 == 0)
-                    System.out.format(space1Alignment, getCellWCheckForAvailable(grid.get(i).get(j), unit, costs.get(i).get(j)));
+                    System.out.format(space1Alignment, getCellWCheckForAvailable(grid.get(i).get(j), unit, costs.get(i).get(j).getCost()));
                 else
-                    System.out.format(space2Alignment, getCellWCheckForAvailable(grid.get(i).get(j), unit, costs.get(i).get(j)));
+                    System.out.format(space2Alignment, getCellWCheckForAvailable(grid.get(i).get(j), unit, costs.get(i).get(j).getCost()));
 
             }
             System.out.println();
@@ -220,7 +220,7 @@ public class Grid {
             return cell.getTerrain();
         if (cell.getTown() != null && cell.getUnit() != null) {
             if (cell.getColor().equals(ANSI_GREEN))
-                return ANSI_PURPLE_BRIGHT + cell.getUnit().getSymbol() + ANSI_RESET;
+                return ANSI_GREEN_UNDERLINED + cell.getUnit().getSymbol() + ANSI_RESET;
             else
                 return ANSI_RED_UNDERLINED + cell.getUnit().getSymbol() + ANSI_RESET;
         }

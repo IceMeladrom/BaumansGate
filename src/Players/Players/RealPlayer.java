@@ -202,6 +202,7 @@ public class RealPlayer implements Player {
                     unit = grid.getUnit(row, col);
                     Pathfinder.reset();
                     Pathfinder.availableCells(unit);
+                    Pathfinder.show();
                     grid.showWithAvailablePaths(unit);
 
                     System.out.println("Enter the coordinates where you want to go");

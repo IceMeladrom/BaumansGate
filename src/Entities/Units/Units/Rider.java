@@ -18,7 +18,7 @@ import static Utilities.Constants.Colors.ANSI_RESET;
 
 public class Rider extends Unit implements IRider {
 
-    public Rider(String name, int hp, IDamage damage, int attackRange, int defence, float energy, int cost, String symbol, int row, int col, Player player) {
+    public Rider(String name, int hp, IDamage damage, int attackRange, int defence, double energy, int cost, String symbol, int row, int col, Player player) {
         super(name, hp, damage, attackRange, defence, energy, cost, symbol, row, col, player);
         getTerrains().put("*", 1F);
         getTerrains().put("#", 2.2F);

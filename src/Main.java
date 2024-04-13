@@ -18,8 +18,8 @@ public class Main {
         boolean DEBUG = true;
 
         Grid grid = Grid.getInstance();
-        RealPlayer me = new RealPlayer("Robert", 999999, ANSI_GREEN);
-        Bot bot = new Bot("Botinok", 50, ANSI_RED);
+        RealPlayer me = new RealPlayer("Robert", 999999, ANSI_GREEN, 9999, 9999);
+        Bot bot = new Bot("Botinok", 50, ANSI_RED, 10, 10);
 
         if (!DEBUG) {
             // Players place their towns;
@@ -44,6 +44,7 @@ public class Main {
             me.move();
             bot.move();
         }
+        grid.show();
         if (me.getUnits().isEmpty() && bot.getUnits().isEmpty())
             System.out.println("\n\nGAME IS OVER\nDRAW\n\n");
         else if (me.getUnits().isEmpty())
@@ -55,8 +56,10 @@ public class Main {
     private static void debug(Player me, Player bot) {
         Grid grid = Grid.getInstance();
         Random random = new Random();
-        grid.placeTown(me, new Town(me, "Whiterun", "T", random.nextInt(0, grid.getSize()), random.nextInt(0, grid.getSize())));
-        grid.placeTown(bot, new Town(bot, "Mordor", "E", random.nextInt(0, grid.getSize()), random.nextInt(0, grid.getSize())));
+        me.setTown(new Town(me, "Whiterun", "▲", random.nextInt(0, grid.getSize()), random.nextInt(0, grid.getSize())));
+        grid.placeTown(me, me.getTown());
+        bot.setTown(new Town(bot, "Mordor", "▲", random.nextInt(0, grid.getSize()), random.nextInt(0, grid.getSize())));
+        grid.placeTown(bot, bot.getTown());
         int row, col;
         IUnit unit;
         do {

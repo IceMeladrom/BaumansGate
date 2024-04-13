@@ -19,10 +19,12 @@ public class Bot implements Player {
     private Town town;
     private Integer wood, stone;
 
-    public Bot(String name, int coins, String color) {
+    public Bot(String name, int coins, String color, Integer wood, Integer stone) {
         this.name = name;
         this.coins = coins;
         this.color = color;
+        this.wood = wood;
+        this.stone = stone;
     }
 
     @Override
@@ -97,12 +99,12 @@ public class Bot implements Player {
 
     @Override
     public void setTown(Town town) {
-
+        this.town = town;
     }
 
     @Override
     public Town getTown() {
-        return null;
+        return town;
     }
 
 
@@ -125,22 +127,22 @@ public class Bot implements Player {
 
     @Override
     public Integer getStone() {
-        return null;
+        return stone;
     }
 
     @Override
     public void setStone(Integer stone) {
-
+        this.stone = stone;
     }
 
     @Override
     public Integer getWood() {
-        return null;
+        return wood;
     }
 
     @Override
     public void setWood(Integer wood) {
-
+        this.wood = wood;
     }
 
     public void move() {

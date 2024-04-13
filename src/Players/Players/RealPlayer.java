@@ -1,5 +1,6 @@
 package Players.Players;
 
+import Entities.Builds.Buildings;
 import Entities.Builds.Town;
 import Entities.Units.Units.IUnit;
 import Exceptions.*;
@@ -24,10 +25,12 @@ public class RealPlayer implements Player {
 
     private static final ArrayList<String> msg = new ArrayList<>();
 
-    public RealPlayer(String name, int coins, String color) {
+    public RealPlayer(String name, int coins, String color, Integer wood, Integer stone) {
         this.name = name;
         this.coins = coins;
         this.color = color;
+        this.wood = wood;
+        this.stone = stone;
     }
 
     public boolean needConsole() {
@@ -166,7 +169,7 @@ public class RealPlayer implements Player {
                 showInfo = false;
             }
 
-            System.out.println("1. Choose Unit to move.\n2. Prepare an attack\n3. Show info.\n4. End move");
+            System.out.println("1. Choose Unit to move.\n2. Prepare an attack\n3. Build a building in the town\n4. Show info.\n5. End move");
             System.out.print("I choose option: ");
             cmd = scanner.nextLine();
 
@@ -266,9 +269,14 @@ public class RealPlayer implements Player {
                     unit.prepareAttack();
                     break;
                 case "3":
-                    showInfo = true;
+                    getTown().buildBuilding(Buildings.Market);
+                    System.out.println("Wood: " + getWood());
+                    System.out.println("Stone: " + getStone());
                     break;
                 case "4":
+                    showInfo = true;
+                    break;
+                case "5":
                     endOfMove = true;
                     break;
                 default:

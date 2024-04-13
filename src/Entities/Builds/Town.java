@@ -13,7 +13,7 @@ public class Town {
     private int row, col;
     private String name, symbol, color;
 
-    private HashMap<Buildings, ArrayList<IBuilding>> buildings;
+    private final HashMap<Buildings, ArrayList<IBuilding>> buildings;
 
     public Town(Player player, String name, String symbol, int row, int col) {
         this.name = name;
@@ -23,6 +23,7 @@ public class Town {
         this.col = col;
         this.player = player;
 
+        buildings = new HashMap<>();
         buildings.put(Buildings.WitchHouse, new ArrayList<>(1));
         buildings.put(Buildings.Tavern, new ArrayList<>(1));
         buildings.put(Buildings.Forge, new ArrayList<>(1));
@@ -88,30 +89,57 @@ public class Town {
 
 
     public void buildBuilding(Buildings building) {
+        boolean hasBuilt = false;
         if (building.hasEnoughMaterials(getPlayer())) {
             switch (building) {
                 case WitchHouse -> {
-                    if (buildings.get(building).isEmpty()) buildings.get(building).add(new WitchHouse());
+                    if (buildings.get(building).isEmpty()) {
+                        buildings.get(building).add(new WitchHouse());
+                        hasBuilt = true;
+                    }
                 }
                 case Tavern -> {
-                    if (buildings.get(building).isEmpty()) buildings.get(building).add(new Tavern());
+                    if (buildings.get(building).isEmpty()) {
+                        buildings.get(building).add(new Tavern());
+                        hasBuilt = true;
+                    }
                 }
                 case Forge -> {
-                    if (buildings.get(building).isEmpty()) buildings.get(building).add(new Forge());
+                    if (buildings.get(building).isEmpty()) {
+                        buildings.get(building).add(new Forge());
+                        hasBuilt = true;
+                    }
                 }
                 case Academy -> {
-                    if (buildings.get(building).isEmpty()) buildings.get(building).add(new Academy());
+                    if (buildings.get(building).isEmpty()) {
+                        buildings.get(building).add(new Academy());
+                        hasBuilt = true;
+                    }
                 }
                 case Arsenal -> {
-                    if (buildings.get(building).isEmpty()) buildings.get(building).add(new Arsenal());
+                    if (buildings.get(building).isEmpty()) {
+                        buildings.get(building).add(new Arsenal());
+                        hasBuilt = true;
+                    }
                 }
                 case Market -> {
-                    if (buildings.get(building).isEmpty()) buildings.get(building).add(new Market());
+                    if (buildings.get(building).isEmpty()) {
+                        buildings.get(building).add(new Market());
+                        hasBuilt = true;
+                    }
                 }
                 case Workshop -> {
-                    if (buildings.get(building).size() < 4) buildings.get(building).add(new Workshop());
+                    if (buildings.get(building).size() < 4) {
+                        buildings.get(building).add(new Workshop());
+                        hasBuilt = true;
+                    }
                 }
             }
+            if (hasBuilt) {
+                getPlayer().setWood(getPlayer().getWood() - building.getWood());
+                getPlayer().setStone(getPlayer().getStone() - building.getStone());
+            }
+
         }
     }
 }

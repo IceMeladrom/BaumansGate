@@ -59,8 +59,8 @@ public class Main {
     private static void debug(Player me, Player bot) {
         Grid grid = Grid.getInstance();
         Random random = new Random();
-        grid.placeTown(me, new Town(me, "Whiterun", "T", random.nextInt(0, grid.getSize()), random.nextInt(0, grid.getSize())));
-        grid.placeTown(bot, new Town(bot, "Mordor", "E", random.nextInt(0, grid.getSize()), random.nextInt(0, grid.getSize())));
+        grid.placeTown(me, new Town(me, "Whiterun", "▲", random.nextInt(0, grid.getSize()), random.nextInt(0, grid.getSize())));
+        grid.placeTown(bot, new Town(bot, "Mordor", "▲", random.nextInt(0, grid.getSize()), random.nextInt(0, grid.getSize())));
         int row, col;
         IUnit unit;
         do {

@@ -47,4 +47,11 @@ public interface Player {
 
     public void showPlayerInfo();
 
+    public Integer getStone();
+
+    public void setStone(Integer stone);
+
+    public Integer getWood();
+
+    public void setWood(Integer wood);
 }

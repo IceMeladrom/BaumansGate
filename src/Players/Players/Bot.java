@@ -17,6 +17,7 @@ public class Bot implements Player {
     private String name, color;
     private static final Random random = MyRandom.getRandom();
     private Town town;
+    private Integer wood, stone;
 
     public Bot(String name, int coins, String color) {
         this.name = name;
@@ -120,6 +121,26 @@ public class Bot implements Player {
 
     @Override
     public void showPlayerInfo() {
+    }
+
+    @Override
+    public Integer getStone() {
+        return null;
+    }
+
+    @Override
+    public void setStone(Integer stone) {
+
+    }
+
+    @Override
+    public Integer getWood() {
+        return null;
+    }
+
+    @Override
+    public void setWood(Integer wood) {
+
     }
 
     public void move() {

@@ -47,7 +47,12 @@ public class Main {
             me.move();
             bot.move();
         }
-        System.out.println("\n\nGAME IS OVER\n\n");
+        if (me.getUnits().isEmpty() && bot.getUnits().isEmpty())
+            System.out.println("\n\nGAME IS OVER\nDRAW\n\n");
+        else if (me.getUnits().isEmpty())
+            System.out.println("\n\nGAME IS OVER\nYOU DEFEAT\n\n");
+        else
+            System.out.println("\n\nGAME IS OVER\nYOU WIN\n\n");
     }
 
     private static void debug(Player me, Player bot) {

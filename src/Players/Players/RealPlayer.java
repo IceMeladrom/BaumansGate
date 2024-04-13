@@ -16,12 +16,13 @@ import static Utilities.Constants.Colors.*;
 import static Utilities.Utils.isCoordsValid;
 
 public class RealPlayer implements Player {
-    private ArrayList<IUnit> units = new ArrayList<>();
+    private final ArrayList<IUnit> units = new ArrayList<>();
     private Town town;
     private int coins;
-    private String name;
-    private String color;
-    private static ArrayList<String> msg = new ArrayList<>();
+    private String name, color;
+    private Integer stone, wood;
+
+    private static final ArrayList<String> msg = new ArrayList<>();
 
     public RealPlayer(String name, int coins, String color) {
         this.name = name;
@@ -155,7 +156,7 @@ public class RealPlayer implements Player {
             }
 
             if (!msg.isEmpty()) {
-                for (String s: msg)
+                for (String s : msg)
                     System.out.println(s);
                 msg.clear();
             }
@@ -287,5 +288,22 @@ public class RealPlayer implements Player {
 
     public static void log(String msgtmp) {
         msg.add(msgtmp);
+    }
+
+    @Override
+    public Integer getStone() {
+        return stone;
+    }
+    @Override
+    public void setStone(Integer stone) {
+        this.stone = stone;
+    }
+    @Override
+    public Integer getWood() {
+        return wood;
+    }
+    @Override
+    public void setWood(Integer wood) {
+        this.wood = wood;
     }
 }

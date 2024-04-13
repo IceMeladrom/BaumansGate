@@ -3,11 +3,17 @@ package Entities.Builds;
 import Entities.Units.Units.IUnit;
 import Players.Player;
 
-public class Town {
-    private String name, symbol, color;
-    private int row, col;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.HashMap;
 
+public class Town {
     private Player player;
+    private int row, col;
+    private String name, symbol, color;
+
+    private HashMap<Buildings, ArrayList<IBuilding>> buildings;
 
     public Town(Player player, String name, String symbol, int row, int col) {
         this.name = name;
@@ -16,6 +22,15 @@ public class Town {
         this.row = row;
         this.col = col;
         this.player = player;
+
+        buildings.put(Buildings.WitchHouse, new ArrayList<>(1));
+        buildings.put(Buildings.Tavern, new ArrayList<>(1));
+        buildings.put(Buildings.Forge, new ArrayList<>(1));
+        buildings.put(Buildings.Arsenal, new ArrayList<>(1));
+        buildings.put(Buildings.Academy, new ArrayList<>(1));
+        buildings.put(Buildings.Market, new ArrayList<>(1));
+        buildings.put(Buildings.Workshop, new ArrayList<>(4));
+
     }
 
     public Player getPlayer() {
@@ -69,5 +84,20 @@ public class Town {
     public void healUnit(IUnit unit) {
         unit.heal();
         unit.energyRecharge();
+    }
+
+
+    public void buildBuilding(Buildings building) {
+        if (building.hasEnoughMaterials(getPlayer())) {
+            try {
+                Class<?> cls = Class.forName("Entities.Builds." + building.name());
+                Constructor<?> constructor = cls.getConstructor();
+                Object obj = constructor.newInstance();
+
+            } catch (ClassNotFoundException | NoSuchMethodException | InstantiationException | IllegalAccessException |
+                     InvocationTargetException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
 }

@@ -17,7 +17,7 @@ public class Main {
     public static void main(String[] args) {
 
 
-        boolean DEBUG = false;
+        boolean DEBUG = true;
 
 
         Grid grid = Grid.getInstance();
@@ -47,6 +47,7 @@ public class Main {
             me.move();
             bot.move();
         }
+        grid.show();
         if (me.getUnits().isEmpty() && bot.getUnits().isEmpty())
             System.out.println("\n\nGAME IS OVER\nDRAW\n\n");
         else if (me.getUnits().isEmpty())

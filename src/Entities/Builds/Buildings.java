@@ -19,6 +19,14 @@ public enum Buildings {
         this.stone = stone;
     }
 
+    public Integer getStone() {
+        return stone;
+    }
+
+    public Integer getWood() {
+        return wood;
+    }
+
     public boolean hasEnoughMaterials(Player player) {
         return player.getWood() >= wood && player.getStone() >= stone;
     }

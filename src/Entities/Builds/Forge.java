@@ -4,7 +4,7 @@ import Players.Player;
 
 import java.util.HashMap;
 
-public class WitchHouse implements IBuilding {
+public class Forge  implements IBuilding{
     private Integer level;
     private final HashMap<Integer, HashMap<String, Integer>> cost = new HashMap<>() {{
         for (int i = 1; i <= 3; i++) {
@@ -16,7 +16,7 @@ public class WitchHouse implements IBuilding {
         }
     }};
 
-    public WitchHouse() {
+    public Forge(){
         level = 1;
     }
 

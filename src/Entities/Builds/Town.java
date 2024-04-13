@@ -89,14 +89,28 @@ public class Town {
 
     public void buildBuilding(Buildings building) {
         if (building.hasEnoughMaterials(getPlayer())) {
-            try {
-                Class<?> cls = Class.forName("Entities.Builds." + building.name());
-                Constructor<?> constructor = cls.getConstructor();
-                Object obj = constructor.newInstance();
-
-            } catch (ClassNotFoundException | NoSuchMethodException | InstantiationException | IllegalAccessException |
-                     InvocationTargetException e) {
-                throw new RuntimeException(e);
+            switch (building) {
+                case WitchHouse -> {
+                    if (buildings.get(building).isEmpty()) buildings.get(building).add(new WitchHouse());
+                }
+                case Tavern -> {
+                    if (buildings.get(building).isEmpty()) buildings.get(building).add(new Tavern());
+                }
+                case Forge -> {
+                    if (buildings.get(building).isEmpty()) buildings.get(building).add(new Forge());
+                }
+                case Academy -> {
+                    if (buildings.get(building).isEmpty()) buildings.get(building).add(new Academy());
+                }
+                case Arsenal -> {
+                    if (buildings.get(building).isEmpty()) buildings.get(building).add(new Arsenal());
+                }
+                case Market -> {
+                    if (buildings.get(building).isEmpty()) buildings.get(building).add(new Market());
+                }
+                case Workshop -> {
+                    if (buildings.get(building).size() < 4) buildings.get(building).add(new Workshop());
+                }
             }
         }
     }

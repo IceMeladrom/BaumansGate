@@ -15,10 +15,7 @@ import static Utilities.Constants.Colors.ANSI_RED;
 
 public class Main {
     public static void main(String[] args) {
-
-
         boolean DEBUG = true;
-
 
         Grid grid = Grid.getInstance();
         RealPlayer me = new RealPlayer("Robert", 999999, ANSI_GREEN);

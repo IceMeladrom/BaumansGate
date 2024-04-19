@@ -12,7 +12,7 @@ public class UnitFactory {
     public static IUnit createUnit(UnitType unitType, int row, int col, Player player) throws IllegalArgumentException {
         switch (unitType) {
             case Swordsman -> {
-                return new Warrior("Swordsman", 50, DamageFactory.createDamage(DamageType.Cold, 5), 1, 8, 3, 10, "S", row, col, player);
+                return new Warrior(UnitType.Swordsman.getName(), UnitType.Swordsman.getHp(), UnitType.Swordsman.getDamage(), 1, 8, 3, 10, "S", row, col, player);
             }
             case Spearman -> {
                 return new Warrior("Spearman", 35, DamageFactory.createDamage(DamageType.Cold, 3), 1, 4, 6, 15, "P", row, col, player);

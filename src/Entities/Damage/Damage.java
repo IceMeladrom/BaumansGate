@@ -2,9 +2,9 @@ package Entities.Damage;
 
 public class Damage implements IDamage {
     private DamageType damageType;
-    private int value;
+    private Double value;
 
-    public Damage(DamageType damageType, int value) {
+    public Damage(DamageType damageType, Double value) {
         this.damageType = damageType;
         this.value = value;
     }
@@ -13,7 +13,7 @@ public class Damage implements IDamage {
         return damageType;
     }
 
-    public int getValue() {
+    public Double getValue() {
         return value;
     }
 
@@ -21,7 +21,7 @@ public class Damage implements IDamage {
         this.damageType = damageType;
     }
 
-    public void setValue(int value) {
+    public void setValue(Double value) {
         this.value = value;
     }
 }

@@ -12,13 +12,14 @@ import Utilities.Pair;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-abstract public class Unit implements IUnit {
-    public Unit(String name, int hp, IDamage damage, int attackRange, int defence, Double energy, int cost, String symbol, int row, int col, Player player) {
+public abstract class Unit implements IUnit {
+    public Unit(String name, Double hp, IDamage damage, Integer attackRange, Double defence, Double energy, Double cost, String symbol, int row, int col, Player player) {
         this.hp = hp;
+        maxHp = hp;
         this.damage = damage;
-//        this.movesToPrepareAnAttack = movesToPrepareAnAttack;
         this.attackRange = attackRange;
         this.defence = defence;
+        maxDefence = defence;
         this.energy = energy;
         this.maxEnergy = energy;
         this.cost = cost;
@@ -26,25 +27,21 @@ abstract public class Unit implements IUnit {
         this.row = row;
         this.col = col;
         this.symbol = symbol;
-        maxHp = hp;
-        maxDefence = defence;
         this.player = player;
         didAttack = false;
         terrains = new HashMap<>();
         isAttackPrepared = false;
     }
 
-    private IDamage damage;
-    private HashMap<String, Float> terrains;
-    private int movesToPrepareAnAttack, movesUntilReadyToAttack;
-    private boolean isAttackPrepared;
-    private int hp, attackRange, defence, cost;
-    private int row, col;
-    private final int maxHp, maxDefence;
-    private Double energy, maxEnergy;
-    private String name, symbol;
     private Player player;
-    private boolean didAttack;
+    private String name, symbol;
+    private Double hp, maxHp, defence, maxDefence, cost, energy, maxEnergy;
+    private IDamage damage;
+    private Integer attackRange;
+    private int row, col;
+    private final HashMap<String, Float> terrains;
+    private int movesToPrepareAnAttack, movesUntilReadyToAttack;
+    private boolean isAttackPrepared, didAttack;
 
     @Override
     public HashMap<String, Float> getTerrains() {
@@ -62,12 +59,12 @@ abstract public class Unit implements IUnit {
     }
 
     @Override
-    public int getHp() {
+    public Double getHp() {
         return hp;
     }
 
     @Override
-    public int getMaxHp() {
+    public Double getMaxHp() {
         return maxHp;
     }
 
@@ -76,7 +73,7 @@ abstract public class Unit implements IUnit {
     }
 
     @Override
-    public void setHp(int hp) {
+    public void setHp(Double hp) {
         this.hp = hp;
     }
 
@@ -91,26 +88,26 @@ abstract public class Unit implements IUnit {
     }
 
     @Override
-    public int getAttackRange() {
+    public Integer getAttackRange() {
         return attackRange;
     }
 
     @Override
-    public void setAttackRange(int attackRange) {
+    public void setAttackRange(Integer attackRange) {
         this.attackRange = attackRange;
     }
 
     @Override
-    public int getDefence() {
+    public Double getDefence() {
         return defence;
     }
 
-    public int getMaxDefence() {
+    public Double getMaxDefence() {
         return maxDefence;
     }
 
     @Override
-    public void setDefence(int defence) {
+    public void setDefence(Double defence) {
         this.defence = defence;
     }
 
@@ -125,12 +122,12 @@ abstract public class Unit implements IUnit {
     }
 
     @Override
-    public int getCost() {
+    public Double getCost() {
         return cost;
     }
 
     @Override
-    public void setCost(int cost) {
+    public void setCost(Double cost) {
         this.cost = cost;
     }
 

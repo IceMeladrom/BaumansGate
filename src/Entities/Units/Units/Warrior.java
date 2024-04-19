@@ -12,7 +12,7 @@ import static Utilities.Constants.Colors.ANSI_RESET;
 
 public class Warrior extends Unit implements IWarrior {
 
-    public Warrior(String name, int hp, IDamage damage, int attackRange, int defence, double energy, int cost, String symbol, int row, int col, Player player) {
+    public Warrior(String name, Double hp, IDamage damage, Integer attackRange, Double  defence, Double  energy, Double cost, String symbol, int row, int col, Player player) {
         super(name, hp, damage, attackRange, defence, energy, cost, symbol, row, col, player);
         getTerrains().put("*", 1F);
         getTerrains().put("#", 1.5F);

@@ -1,35 +1,39 @@
 package Entities.Units.Units;
 
-import java.util.Map;
+import Entities.Damage.DamageFactory;
+import Entities.Damage.DamageType;
+import Entities.Damage.IDamage;
+import Utilities.Constants.MyRandom;
+
 import java.util.Random;
 
 public enum UnitType {
-    Swordsman("Swordsman", 50, 5, 1, 8, 3, 10),
+    Swordsman("Swordsman", 50.0, DamageFactory.createDamage(DamageType.Physical, 5.0), 1, 8.0, 3.0, 10.0),
 
-    Spearman("Spearman", 35, 3, 1, 4, 6, 15),
+    Spearman("Spearman", 35.0, DamageFactory.createDamage(DamageType.Cold, 3.0), 1, 4.0, 6.0, 15.0),
 
-    Axeman("Axeman", 45, 9, 1, 3, 4, 20),
+    Axeman("Axeman", 45.0, DamageFactory.createDamage(DamageType.Cold,9.0), 1, 3.0, 4.0, 20.0),
 
-    ArcherLongBow("ArcherLongBow", 30, 6, 5, 8, 2, 15),
+    ArcherLongBow("ArcherLongBow", 30.0, DamageFactory.createDamage(DamageType.Acid,6.0), 5, 8.0, 2.0, 15.0),
 
-    ArcherShortBow("ArcherShortBow", 25, 3, 3, 4, 4, 19),
+    ArcherShortBow("ArcherShortBow", 25.0, DamageFactory.createDamage(DamageType.Acid,3.0), 3, 4.0, 4.0, 19.0),
 
-    Crossbowman("Crossbowman", 40, 7, 6, 3, 2, 23),
+    Crossbowman("Crossbowman", 40.0, DamageFactory.createDamage(DamageType.Fire,7.0), 6, 3.0, 2.0, 23.0),
 
-    Knight("Knight", 30, 5, 1, 3, 6, 20),
+    Knight("Knight", 30.0, DamageFactory.createDamage(DamageType.Physical,5.0), 1, 3.0, 6.0, 20.0),
 
-    Cuirassier("Cuirassier", 50, 2, 1, 7, 5, 23),
+    Cuirassier("Cuirassier", 50.0, DamageFactory.createDamage(DamageType.Cold,2.0), 1, 7.0, 5.0, 23.0),
 
-    HorseArcher("HorseArcher", 25, 3, 3, 2, 5, 25),
-    Mage("Mage", 15, 9, 3, 4, 3, 30),
-    GodMelee("GodMelee", 999, 999, 1, 999, 999, 999),
-    GodRange("GodRange", 999, 999, 999, 999, 999, 999);
+    HorseArcher("HorseArcher", 25.0, DamageFactory.createDamage(DamageType.Acid,3.0), 3, 2.0, 5.0, 25.0),
+    Mage("Mage", 15.0, DamageFactory.createDamage(DamageType.Fire,9.0), 3, 4.0, 3.0, 30.0),
+    GodMelee("GodMelee", 999.0, DamageFactory.createDamage(DamageType.Cold,999.0), 1, 999.0, 999.0, 999.0),
+    GodRange("GodRange", 999.0, DamageFactory.createDamage(DamageType.Acid,999.0), 999, 999.0, 999.0, 999.0);
 
-    public final String name;
-    public final int hp, damage, attackRange, defence, cost;
-    public final double energy;
-
-    UnitType(String name, int hp, int damage, int attackRange, int defence, float energy, int cost) {
+    private final String name;
+    private Double hp, defence, energy, cost;
+    private IDamage damage;
+    private Integer attackRange;
+    UnitType(String name, Double hp, IDamage  damage, Integer attackRange, Double defence, Double energy, Double cost) {
         this.hp = hp;
         this.damage = damage;
         this.attackRange = attackRange;
@@ -39,7 +43,59 @@ public enum UnitType {
         this.name = name;
     }
 
-    private static final Random random = new Random();
+    public String getName() {
+        return name;
+    }
+
+    public Double getHp() {
+        return hp;
+    }
+
+    public void setHp(Double hp) {
+        this.hp = hp;
+    }
+
+    public IDamage getDamage() {
+        return damage;
+    }
+
+    public void setDamage(IDamage damage) {
+        this.damage = damage;
+    }
+
+    public Integer getAttackRange() {
+        return attackRange;
+    }
+
+    public void setAttackRange(Integer attackRange) {
+        this.attackRange = attackRange;
+    }
+
+    public Double getDefence() {
+        return defence;
+    }
+
+    public void setDefence(Double defence) {
+        this.defence = defence;
+    }
+
+    public Double getEnergy() {
+        return energy;
+    }
+
+    public void setEnergy(Double energy) {
+        this.energy = energy;
+    }
+
+    public Double getCost() {
+        return cost;
+    }
+
+    public void setCost(Double cost) {
+        this.cost = cost;
+    }
+
+    private static final Random random = MyRandom.getRandom();
 
     public static UnitType randomUnit() {
         UnitType[] units = values();

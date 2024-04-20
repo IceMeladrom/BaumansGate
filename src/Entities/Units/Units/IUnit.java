@@ -7,87 +7,86 @@ import Players.Player;
 import java.util.HashMap;
 
 public interface IUnit {
-    public HashMap<String, Float> getTerrains();
+    HashMap<String, Float> getTerrains();
 
-    public Player getPlayer();
+    Player getPlayer();
 
-    public void setPlayer(Player player);
+    void setPlayer(Player player);
 
-    public int getHp();
+    Double getHp();
 
-    public int getMaxHp();
+    Double getMaxHp();
 
-    public void heal();
+    void heal();
 
-    public void setHp(int hp);
+    void setHp(Double hp);
 
-    public IDamage getDamage();
+    IDamage getDamage();
 
-    public void setDamage(IDamage damage);
+    void setDamage(IDamage damage);
 
-    public int getAttackRange();
+    Integer getAttackRange();
 
-    public void setAttackRange(int attackRange);
+    void setAttackRange(Integer attackRange);
 
-    public int getDefence();
+    Double getDefence();
 
-    public int getMaxDefence();
+    Double getMaxDefence();
 
-    public void setDefence(int defence);
+    void setDefence(Double defence);
 
-    public Double getEnergy();
+    Double getEnergy();
 
-    public void setEnergy(Double energy);
+    void setEnergy(Double energy);
 
-    public int getCost();
+    Double getCost();
 
-    public void setCost(int cost);
+    void setCost(Double cost);
 
-    public int getCol();
+    int getCol();
 
-    public int getRow();
+    void setCol(int col);
 
-    public void setCol(int col);
+    int getRow();
 
-    public void setRow(int row);
+    void setRow(int row);
 
-    public String getName();
+    String getName();
 
-    public void setName(String name);
+    void setName(String name);
 
-    public String getSymbol();
+    String getSymbol();
 
-    public void setSymbol(String symbol);
+    void setSymbol(String symbol);
 
-    public Double getMaxEnergy();
+    Double getMaxEnergy();
 
-    public void setMaxEnergy(Double maxEnergy);
+    void setMaxEnergy(Double maxEnergy);
 
-    public void energyRecharge();
+    void energyRecharge();
 
-    public boolean isAlive();
+    boolean isAlive();
 
-    public int getMovesUntilReadyToAttack();
+    boolean getDidAttack();
 
-    public void setMovesUntilReadyToAttack(int movesUntilReadyToAttack);
+    void setDidAttack(boolean didAttack);
 
-    public void walk(int row, int col) throws NotEnoughEnergy, AlliedUnitAtTheCeil, UnitHasAlreadyAttacked, NotYourTown, UnitHasNotPreparedAnAttack;
+    void walk(int endRow, int endCol) throws NotEnoughEnergy, AlliedUnitAtTheCeil, UnitHasAlreadyAttacked, NotYourTown, UnitHasNotPreparedAnAttack;
+    void attack(IUnit enemy) throws UnitHasAlreadyAttacked, UnitHasNotPreparedAnAttack;
 
-    public void attack(IUnit enemy) throws UnitHasAlreadyAttacked, UnitHasNotPreparedAnAttack;
+    int getMovesUntilReadyToAttack();
 
-    public int getMovesToPrepareAnAttack();
+    void setMovesUntilReadyToAttack(int movesUntilReadyToAttack);
 
-    public void setMovesToPrepareAnAttack(int movesToPrepareAnAttack);
+    int getMovesToPrepareAnAttack();
 
-    public void prepareAttack();
+    void setMovesToPrepareAnAttack(int movesToPrepareAnAttack);
 
-    public boolean getDidAttack();
+    void prepareAttack();
 
-    public void setDidAttack(boolean didAttack);
+    boolean getIsAttackPrepared();
 
-    public boolean getIsAttackPrepared();
+    void setAttackPrepared(boolean attackPrepared);
 
-    public void setAttackPrepared(boolean attackPrepared);
-
-    public void preparing();
+    void preparing();
 }

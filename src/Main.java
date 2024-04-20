@@ -1,34 +1,24 @@
 import Entities.Builds.Town;
 import Entities.Units.Creator.UnitFactory;
 import Entities.Units.Units.IUnit;
-import Entities.Units.Units.Unit;
 import Entities.Units.Units.UnitType;
 import Grid.Grid;
-import Menu.Menu;
 import Players.Player;
-import Players.Players.Bot;
-import Players.Players.RealPlayer;
+import Players.Players.*;
+import Menu.Menu;
+import Utilities.Constants.MyScanner;
 
 import java.util.Random;
 
-import static Utilities.Constants.Colors.ANSI_GREEN;
-import static Utilities.Constants.Colors.ANSI_RED;
+import static Utilities.Constants.Colors.*;
 
 public class Main {
     public static void main(String[] args) {
-        RealPlayer me = new RealPlayer("Robert", 999999, ANSI_GREEN, 9999, 9999);
-        IUnit unit = UnitFactory.createUnit(UnitType.Swordsman, 0, 0, me);
-        System.out.println("Unit: " + unit.getName() + "\nMax HP: " + unit.getMaxHp() + "\nHP: " + unit.getHp() + "\n");
-        System.out.println(UnitType.Swordsman.hp);
-        UnitType.Swordsman.hp = UnitType.Swordsman.hp + 1;
-        System.out.println(UnitType.Swordsman.hp);
-        IUnit unit2 = UnitFactory.createUnit(UnitType.Swordsman, 0, 0, me);
-        System.out.println("Unit: " + unit2.getName() + "\nMax HP: " + unit2.getMaxHp() + "\nHP: " + unit2.getHp() + "\n");
-        /*boolean DEBUG = true;
+        boolean DEBUG = true;
 
         Grid grid = Grid.getInstance();
-        RealPlayer me = new RealPlayer("Robert", 999999, ANSI_GREEN, 9999, 9999);
-        Bot bot = new Bot("Botinok", 50, ANSI_RED, 10, 10);
+        Player me = new RealPlayer("Robert", 999999.0, ANSI_GREEN, 9999, 9999);
+        Player bot = new Bot("Botinok", 50.0, ANSI_RED, 10, 10);
 
         if (!DEBUG) {
             // Players place their towns;
@@ -59,7 +49,8 @@ public class Main {
         else if (me.getUnits().isEmpty())
             System.out.println("\n\nGAME IS OVER\nYOU DEFEAT\n\n");
         else
-            System.out.println("\n\nGAME IS OVER\nYOU WIN\n\n");*/
+            System.out.println("\n\nGAME IS OVER\nYOU WIN\n\n");
+        MyScanner.closeScanner();
     }
 
     private static void debug(Player me, Player bot) {

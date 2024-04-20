@@ -1,10 +1,10 @@
 package Entities.Builds;
 
 import Entities.Units.Units.IUnit;
+import Exceptions.CantBuildOrUpgradeHouse;
+import Exceptions.NotEnoughResources;
 import Players.Player;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -32,6 +32,26 @@ public class Town {
         buildings.put(Buildings.Market, new ArrayList<>(1));
         buildings.put(Buildings.Workshop, new ArrayList<>(4));
 
+    }
+
+    public HashMap<Buildings, ArrayList<IBuilding>> getBuildings() {
+        return buildings;
+    }
+
+    public void showBuildings() {
+        String leftAlignment = "| %-12s | %-14s | %-90s |%n";
+        System.out.printf("+--------------+----------------+--------------------------------------------------------------------------------------------+%n");
+        System.out.printf("|     Name     |     Number     |                                        Description                                         |%n");
+        System.out.printf("+--------------+----------------+--------------------------------------------------------------------------------------------+%n");
+        for (Buildings type : Buildings.values()) {
+            if (buildings.get(type).isEmpty())
+                System.out.printf(leftAlignment, type.name(), buildings.get(type).size(), type.getDescription());
+            else {
+                Integer level = buildings.get(type).getFirst().getLevel();
+                System.out.printf(leftAlignment, type.name(), "x" + buildings.get(type).size() + " --> " + level + " level", type.getDescription());
+            }
+            System.out.printf("+--------------+----------------+--------------------------------------------------------------------------------------------+%n");
+        }
     }
 
     public Player getPlayer() {
@@ -88,50 +108,80 @@ public class Town {
     }
 
 
-    public void buildBuilding(Buildings building) {
+    public void buildHouse(Buildings building) throws NotEnoughResources, CantBuildOrUpgradeHouse {
         boolean hasBuilt = false;
         if (building.hasEnoughMaterials(getPlayer())) {
             switch (building) {
                 case WitchHouse -> {
                     if (buildings.get(building).isEmpty()) {
                         buildings.get(building).add(new WitchHouse());
+                        buildings.get(building).getFirst().buff(player);
                         hasBuilt = true;
+                    } else if (buildings.get(building).getFirst().getLevel() < 3) {
+                        buildings.get(building).getFirst().upgrade(getPlayer());
+                        hasBuilt = true;
+                    } else {
+                        throw new CantBuildOrUpgradeHouse();
                     }
                 }
                 case Tavern -> {
                     if (buildings.get(building).isEmpty()) {
                         buildings.get(building).add(new Tavern());
+                        buildings.get(building).getFirst().buff(player);
                         hasBuilt = true;
+                    } else if (buildings.get(building).getFirst().getLevel() < 3) {
+                        buildings.get(building).getFirst().upgrade(getPlayer());
+                        hasBuilt = true;
+                    } else {
+                        throw new CantBuildOrUpgradeHouse();
                     }
                 }
                 case Forge -> {
                     if (buildings.get(building).isEmpty()) {
                         buildings.get(building).add(new Forge());
+                        buildings.get(building).getFirst().buff(player);
                         hasBuilt = true;
+                    } else if (buildings.get(building).getFirst().getLevel() < 3) {
+                        buildings.get(building).getFirst().upgrade(getPlayer());
+                        hasBuilt = true;
+                    } else {
+                        throw new CantBuildOrUpgradeHouse();
                     }
                 }
                 case Academy -> {
                     if (buildings.get(building).isEmpty()) {
                         buildings.get(building).add(new Academy());
                         hasBuilt = true;
+                    } else {
+                        throw new CantBuildOrUpgradeHouse();
                     }
                 }
                 case Arsenal -> {
                     if (buildings.get(building).isEmpty()) {
                         buildings.get(building).add(new Arsenal());
+                        buildings.get(building).getFirst().buff(player);
                         hasBuilt = true;
+                    } else if (buildings.get(building).getFirst().getLevel() < 3) {
+                        buildings.get(building).getFirst().upgrade(getPlayer());
+                        hasBuilt = true;
+                    } else {
+                        throw new CantBuildOrUpgradeHouse();
                     }
                 }
                 case Market -> {
                     if (buildings.get(building).isEmpty()) {
                         buildings.get(building).add(new Market());
                         hasBuilt = true;
+                    } else {
+                        throw new CantBuildOrUpgradeHouse();
                     }
                 }
                 case Workshop -> {
                     if (buildings.get(building).size() < 4) {
                         buildings.get(building).add(new Workshop());
                         hasBuilt = true;
+                    } else {
+                        throw new CantBuildOrUpgradeHouse();
                     }
                 }
             }
@@ -140,6 +190,8 @@ public class Town {
                 getPlayer().setStone(getPlayer().getStone() - building.getStone());
             }
 
+        } else {
+            throw new NotEnoughResources();
         }
     }
 }

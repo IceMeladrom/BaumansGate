@@ -8,6 +8,10 @@ import Players.Players.RealPlayer;
 import org.jetbrains.annotations.NotNull;
 
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.util.Locale;
+
 import static Utilities.Constants.Colors.ANSI_RESET;
 
 public class Warrior extends Unit implements IWarrior {
@@ -25,16 +29,20 @@ public class Warrior extends Unit implements IWarrior {
         if (!getDidAttack()) {
             float multiplier = DamageType.attackMultiplier(getDamage().getDamageType(), enemy.getDamage().getDamageType());
             if (enemy.getDefence() >= getDamage().getValue() * multiplier)
-                enemy.setDefence(enemy.getDefence() - (int) (getDamage().getValue() * multiplier));
+                enemy.setDefence(enemy.getDefence() - (getDamage().getValue() * multiplier));
             else {
-                enemy.setHp(enemy.getHp() - ((int) (getDamage().getValue() * multiplier) - enemy.getDefence()));
-                enemy.setDefence(0);
+                enemy.setHp(enemy.getHp() - ((getDamage().getValue() * multiplier) - enemy.getDefence()));
+                enemy.setDefence(0.0);
             }
             setDidAttack(true);
+            DecimalFormatSymbols otherSymbols = new DecimalFormatSymbols(Locale.ENGLISH);
+            otherSymbols.setDecimalSeparator('.');
+            otherSymbols.setGroupingSeparator('.');
+            DecimalFormat doubleFormat = new DecimalFormat("0.0", otherSymbols);
             RealPlayer.log("Unit " + this.getPlayer().getColor() + this.getName() + ANSI_RESET
                     + "(row: " + (getRow() + 1) + ", col: " + (getCol() + 1) + ") has attacked unit " + enemy.getPlayer().getColor() + enemy.getName() + ANSI_RESET
                     + "(row: " + (enemy.getRow() + 1) + ", col: " + (enemy.getCol() + 1) + ") and has dealt " +
-                    getDamage().getValue()*DamageType.attackMultiplier(getDamage().getDamageType(), enemy.getDamage().getDamageType()) + " " + getDamage().getDamageType() + " damage");
+                    doubleFormat.format(getDamage().getValue()*DamageType.attackMultiplier(getDamage().getDamageType(), enemy.getDamage().getDamageType())) + " " + getDamage().getColoredDamageType() + " damage");
         } else {
             throw new UnitHasAlreadyAttacked(this);
         }

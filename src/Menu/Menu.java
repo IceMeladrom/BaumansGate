@@ -1,18 +1,19 @@
 package Menu;
 
+import Entities.Builds.Buildings;
+import Entities.Builds.IBuilding;
 import Entities.Builds.Town;
 import Entities.Units.Creator.UnitFactory;
 import Entities.Units.Units.IUnit;
 import Entities.Units.Units.UnitType;
-import Exceptions.AnotherEntityAtTheCeil;
-import Exceptions.NoUnitAtTheCeil;
-import Exceptions.NotEnoughCoins;
-import Exceptions.UnitDoesNotExist;
+import Exceptions.*;
 import Grid.Grid;
 import Players.Player;
 import Utilities.Constants.MyRandom;
 import Utilities.Constants.MyScanner;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -53,7 +54,7 @@ public class Menu {
                 System.out.println("Enter the name of town.");
                 System.out.print("Town's name: ");
                 String townsName = scanner.nextLine();
-                Town town = new Town(player, townsName, "T", row, col);
+                Town town = new Town(player, townsName, "▲", row, col);
                 player.setTown(town);
                 grid.placeTown(player, town);
                 return;
@@ -71,7 +72,7 @@ public class Menu {
                     continue;
                 validCoords = true;
             }
-            Town town = new Town(player, "Mordor", "E", row, col);
+            Town town = new Town(player, "Mordor", "▲", row, col);
             player.setTown(town);
             grid.placeTown(player, town);
         }
@@ -227,7 +228,7 @@ public class Menu {
             IUnit unit;
             while (true) {
                 unitName = UnitType.randomUnit();
-                if (unitName.cost <= player.getCoins()) {
+                if (unitName.getCost() <= player.getCoins()) {
                     unit = UnitFactory.createUnit(unitName, row, col, player);
                     break;
                 }
@@ -262,4 +263,45 @@ public class Menu {
         return unit.getName();
     }
 
+
+    public static void townManagementMenu(Player player) throws InvalidOption, NotEnoughResources, CantBuildOrUpgradeHouse {
+        if (player.needConsole()) {
+            boolean leave = false;
+            while (!leave) {
+//                clearConsole();
+                Scanner scanner = MyScanner.getScanner();
+
+                Town town = player.getTown();
+                HashMap<Buildings, ArrayList<IBuilding>> buildings = town.getBuildings();
+
+                System.out.format("Welcome to the %s town!%n", town.getName());
+                System.out.format("Choose the option:%n1. Show player info%n2. Build/Upgrade building%n3. Leave town's menu%n");
+                System.out.format("Enter the option: ");
+                String option = scanner.nextLine();
+                switch (option) {
+                    case "1" -> {
+                        System.out.format("%nPlayer's name: %s%n", player.getName());
+                        System.out.format("Coins: %f%nWood: %d%nStone: %d%n", player.getCoins(), player.getWood(), player.getStone());
+                        town.showBuildings();
+                    }
+                    case "2" -> {
+                        Buildings.showBuildingsShop(player);
+                        System.out.format("Enter the option: ");
+                        String houseName = scanner.nextLine();
+                        try {
+                            town.buildHouse(Buildings.valueOf(houseName));
+                        } catch (IllegalArgumentException e) {
+                            throw new InvalidOption();
+                        }
+                    }
+                    case "3" -> {
+                        leave = true;
+                    }
+                    default -> throw new InvalidOption();
+                }
+            }
+        } else {
+
+        }
+    }
 }

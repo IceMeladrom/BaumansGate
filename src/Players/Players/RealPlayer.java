@@ -1,16 +1,19 @@
 package Players.Players;
 
-import Entities.Builds.Buildings;
 import Entities.Builds.Town;
 import Entities.Units.Units.IUnit;
 import Exceptions.*;
 import Grid.Grid;
 import Grid.Pathfinder;
+import Menu.Menu;
 import Players.Player;
 import org.jetbrains.annotations.NotNull;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
+import java.util.Locale;
 import java.util.Scanner;
 
 import static Utilities.Constants.Colors.*;
@@ -19,13 +22,13 @@ import static Utilities.Utils.isCoordsValid;
 public class RealPlayer implements Player {
     private final ArrayList<IUnit> units = new ArrayList<>();
     private Town town;
-    private int coins;
+    private Double coins;
     private String name, color;
     private Integer stone, wood;
 
     private static final ArrayList<String> msg = new ArrayList<>();
 
-    public RealPlayer(String name, int coins, String color, Integer wood, Integer stone) {
+    public RealPlayer(String name, Double coins, String color, Integer wood, Integer stone) {
         this.name = name;
         this.coins = coins;
         this.color = color;
@@ -70,11 +73,11 @@ public class RealPlayer implements Player {
         this.name = name;
     }
 
-    public int getCoins() {
+    public Double getCoins() {
         return coins;
     }
 
-    public void setCoins(int coins) {
+    public void setCoins(Double coins) {
         this.coins = coins;
         checkCoins();
     }
@@ -87,19 +90,19 @@ public class RealPlayer implements Player {
         this.color = color;
     }
 
-    public void addCoins(int coins) {
+    public void addCoins(Double coins) {
         this.coins += coins;
         checkCoins();
     }
 
-    public void spendCoins(int coins) {
+    public void spendCoins(Double coins) {
         this.coins -= coins;
         checkCoins();
     }
 
     public void checkCoins() {
         if (coins < 0)
-            coins = 0;
+            coins = 0.0;
     }
 
     public Town getTown() {
@@ -121,15 +124,20 @@ public class RealPlayer implements Player {
         if (getUnits().isEmpty())
             return;
         System.out.println();
+
+        DecimalFormatSymbols otherSymbols = new DecimalFormatSymbols(Locale.ENGLISH);
+        otherSymbols.setDecimalSeparator('.');
+        otherSymbols.setGroupingSeparator('.');
+        DecimalFormat doubleFormat = new DecimalFormat("0.0", otherSymbols);
         for (int i = 0; i < getUnits().size(); i++) {
             IUnit unitTemp = getUnits().get(i);
             System.out.println(i + 1 + ". " + unitTemp.getName() + "(" + getColor() + unitTemp.getSymbol() + ANSI_RESET + ")");
             System.out.println("\tCoords: row: " + (unitTemp.getRow() + 1) + " col: " + (unitTemp.getCol() + 1));
-            System.out.println("\tHP: " + unitTemp.getHp() + "/" + unitTemp.getMaxHp());
-            System.out.println("\tDefence: " + unitTemp.getDefence() + "/" + unitTemp.getMaxDefence());
-            System.out.println("\tDamage: " + unitTemp.getDamage().getValue() + " " + unitTemp.getDamage().getDamageType());
+            System.out.println("\tHP: " + doubleFormat.format(unitTemp.getHp()) + "/" + doubleFormat.format(unitTemp.getMaxHp()));
+            System.out.println("\tDefence: " + doubleFormat.format(unitTemp.getDefence()) + "/" + doubleFormat.format(unitTemp.getMaxDefence()));
+            System.out.println("\tDamage: " + doubleFormat.format(unitTemp.getDamage().getValue()) + " " + unitTemp.getDamage().getColoredDamageType());
             System.out.println("\tAttack Range: " + unitTemp.getAttackRange());
-            System.out.println("\tEnergy: " + unitTemp.getEnergy() + "/" + unitTemp.getMaxEnergy());
+            System.out.println("\tEnergy: " + doubleFormat.format(unitTemp.getEnergy()) + "/" + doubleFormat.format(unitTemp.getMaxEnergy()));
             System.out.println("\tHas attack ability: " + (unitTemp.getDidAttack() ? (ANSI_RED + "NO") : (ANSI_GREEN + "YES")) + ANSI_RESET);
             if (!unitTemp.getIsAttackPrepared()) {
                 if (unitTemp.getMovesUntilReadyToAttack() != -1)
@@ -142,6 +150,7 @@ public class RealPlayer implements Player {
         System.out.println();
     }
 
+    @Override
     public void move() {
         Grid grid = Grid.getInstance();
         Scanner scanner = new Scanner(System.in);
@@ -169,7 +178,7 @@ public class RealPlayer implements Player {
                 showInfo = false;
             }
 
-            System.out.println("1. Choose Unit to move.\n2. Prepare an attack\n3. Build a building in the town\n4. Show info.\n5. End move");
+            System.out.println("1. Choose Unit to move\n2. Prepare an attack\n3. Enter to town's menu\n4. Show info\n5. End move");
             System.out.print("I choose option: ");
             cmd = scanner.nextLine();
 
@@ -269,9 +278,12 @@ public class RealPlayer implements Player {
                     unit.prepareAttack();
                     break;
                 case "3":
-                    getTown().buildBuilding(Buildings.Market);
-                    System.out.println("Wood: " + getWood());
-                    System.out.println("Stone: " + getStone());
+                    try {
+                        Menu.townManagementMenu(this);
+                    } catch (InvalidOption | NotEnoughResources | CantBuildOrUpgradeHouse e) {
+                        err = e.getMessage();
+                        continue;
+                    }
                     break;
                 case "4":
                     showInfo = true;

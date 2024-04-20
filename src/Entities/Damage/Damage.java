@@ -1,5 +1,7 @@
 package Entities.Damage;
 
+import static Utilities.Constants.Colors.ANSI_RESET;
+
 public class Damage implements IDamage {
     private DamageType damageType;
     private Double value;
@@ -11,6 +13,9 @@ public class Damage implements IDamage {
 
     public DamageType getDamageType() {
         return damageType;
+    }
+    public String getColoredDamageType() {
+        return damageType.getColor() + damageType + ANSI_RESET;
     }
 
     public Double getValue() {

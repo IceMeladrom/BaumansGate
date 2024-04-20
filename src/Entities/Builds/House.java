@@ -13,7 +13,6 @@ public abstract class House implements IBuilding {
             for (int i = 1; i <= 3; i++) {
                 int finalI = i;
                 put(i, new HashMap<>() {{
-                    System.out.println(this.getClass().getName());
                     put("wood", building.getWood() + (5 * (finalI - 1)));
                     put("stone", building.getStone() + (5 * (finalI - 1)));
                 }});
@@ -24,8 +23,8 @@ public abstract class House implements IBuilding {
 
     @Override
     public void upgrade(Player player) {
-        if (player.getWood() >= cost.get(level + 1).get("wood") && player.getStone() >= cost.get(level + 1).get("stone"))
-            level += 1;
+        level += 1;
+        buff(player);
     }
 
     public Integer getLevel() {

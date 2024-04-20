@@ -4,7 +4,6 @@ import Entities.Builds.Town;
 import Entities.Damage.IDamage;
 import Exceptions.*;
 import Grid.Grid;
-import Grid.Cell;
 import Grid.Pathfinder;
 import Players.Player;
 import Utilities.Pair;
@@ -16,12 +15,15 @@ public abstract class Unit implements IUnit {
     public Unit(String name, Double hp, IDamage damage, Integer attackRange, Double defence, Double energy, Double cost, String symbol, int row, int col, Player player) {
         this.hp = hp;
         maxHp = hp;
+        maxTempHp = hp;
         this.damage = damage;
         this.attackRange = attackRange;
         this.defence = defence;
         maxDefence = defence;
+        maxTempDefence = defence;
         this.energy = energy;
-        this.maxEnergy = energy;
+        maxEnergy = energy;
+        maxTempEnergy = energy;
         this.cost = cost;
         this.name = name;
         this.row = row;
@@ -35,7 +37,8 @@ public abstract class Unit implements IUnit {
 
     private Player player;
     private String name, symbol;
-    private Double hp, maxHp, defence, maxDefence, cost, energy, maxEnergy;
+    private Double hp, defence, cost, energy, maxTempHp, maxTempDefence, maxTempEnergy;
+    private final Double maxHp, maxDefence, maxEnergy;
     private IDamage damage;
     private Integer attackRange;
     private int row, col;
@@ -68,6 +71,7 @@ public abstract class Unit implements IUnit {
         return maxHp;
     }
 
+    @Override
     public void heal() {
         hp = maxHp;
     }
@@ -102,6 +106,7 @@ public abstract class Unit implements IUnit {
         return defence;
     }
 
+    @Override
     public Double getMaxDefence() {
         return maxDefence;
     }
@@ -178,8 +183,8 @@ public abstract class Unit implements IUnit {
     }
 
     @Override
-    public void setMaxEnergy(Double maxEnergy) {
-        this.maxEnergy = maxEnergy;
+    public void setMaxEnergy(Double maxTempEnergy) {
+        this.maxTempEnergy = maxTempEnergy;
     }
 
     @Override
@@ -202,6 +207,7 @@ public abstract class Unit implements IUnit {
         this.didAttack = didAttack;
     }
 
+    @Override
     public void walk(int endRow, int endCol) throws NotEnoughEnergy, AlliedUnitAtTheCeil, UnitHasAlreadyAttacked, NotYourTown, UnitHasNotPreparedAnAttack {
         Grid grid = Grid.getInstance();
         ArrayList<ArrayList<Pair>> costs = Pathfinder.getCosts();

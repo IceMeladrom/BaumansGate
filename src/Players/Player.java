@@ -23,17 +23,17 @@ public interface Player {
 
     public void setName(String name);
 
-    public int getCoins();
+    public Double getCoins();
 
-    public void setCoins(int coins);
+    public void setCoins(Double coins);
 
     public String getColor();
 
     public void setColor(String color);
 
-    public void addCoins(int coins);
+    public void addCoins(Double coins);
 
-    public void spendCoins(int coins);
+    public void spendCoins(Double coins);
 
     public void checkCoins();
 
@@ -42,6 +42,8 @@ public interface Player {
     public Town getTown();
 
     public boolean canUnitMove(Grid grid, int row, int col);
+
+    void move();
 
     public void energize();
 

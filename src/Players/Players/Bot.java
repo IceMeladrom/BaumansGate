@@ -13,13 +13,13 @@ import java.util.Random;
 
 public class Bot implements Player {
     private ArrayList<IUnit> units = new ArrayList<>();
-    private int coins;
+    private Double coins;
     private String name, color;
     private static final Random random = MyRandom.getRandom();
     private Town town;
     private Integer wood, stone;
 
-    public Bot(String name, int coins, String color, Integer wood, Integer stone) {
+    public Bot(String name, Double coins, String color, Integer wood, Integer stone) {
         this.name = name;
         this.coins = coins;
         this.color = color;
@@ -65,11 +65,11 @@ public class Bot implements Player {
         this.name = name;
     }
 
-    public int getCoins() {
+    public Double getCoins() {
         return coins;
     }
 
-    public void setCoins(int coins) {
+    public void setCoins(Double coins) {
         this.coins = coins;
         checkCoins();
     }
@@ -82,19 +82,19 @@ public class Bot implements Player {
         this.color = color;
     }
 
-    public void addCoins(int coins) {
+    public void addCoins(Double coins) {
         this.coins += coins;
         checkCoins();
     }
 
-    public void spendCoins(int coins) {
+    public void spendCoins(Double coins) {
         this.coins -= coins;
         checkCoins();
     }
 
     public void checkCoins() {
         if (coins < 0)
-            coins = 0;
+            coins = 0.0;
     }
 
     @Override
@@ -145,6 +145,7 @@ public class Bot implements Player {
         this.wood = wood;
     }
 
+    @Override
     public void move() {
         int row, col;
         for (IUnit unit : units) {

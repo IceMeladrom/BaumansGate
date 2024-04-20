@@ -1,9 +1,6 @@
 package Entities.Builds;
 
-import Entities.Units.Units.Unit;
 import Players.Player;
-
-import java.util.HashMap;
 
 public class WitchHouse extends House implements IBuilding {
     public WitchHouse() {
@@ -12,6 +9,6 @@ public class WitchHouse extends House implements IBuilding {
 
     @Override
     public void buff(Player player) {
-
+        System.out.println("WitchHouse buff");
     }
 }

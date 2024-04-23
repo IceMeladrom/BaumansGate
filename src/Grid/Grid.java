@@ -215,7 +215,7 @@ public class Grid {
 
     private String getCellWCheckForAvailable(Cell cell, IUnit unit, Double cost) {
         if (cell.getUnit() == null && cell.getTown() == null && cost != null && unit.getEnergy() >= cost)
-            return ANSI_YELLOW + cell.getTerrain() + ANSI_RESET;
+            return ANSI_BLUE_BRIGHT + cell.getTerrain() + ANSI_RESET;
         if (cell.getUnit() == null && cell.getTown() == null)
             return cell.getTerrain();
         if (cell.getTown() != null && cell.getUnit() != null) {

@@ -37,17 +37,16 @@ public abstract class Unit implements IUnit {
 
     private Player player;
     private String name, symbol;
-    private Double hp, defence, cost, energy, maxTempHp, maxTempDefence, maxTempEnergy;
-    private final Double maxHp, maxDefence, maxEnergy;
+    private Double hp, defence, cost, energy, maxTempHp, maxTempDefence, maxTempEnergy, maxHp, maxDefence, maxEnergy;
     private IDamage damage;
     private Integer attackRange;
     private int row, col;
-    private final HashMap<String, Float> terrains;
+    private final HashMap<String, Double> terrains;
     private int movesToPrepareAnAttack, movesUntilReadyToAttack;
     private boolean isAttackPrepared, didAttack;
 
     @Override
-    public HashMap<String, Float> getTerrains() {
+    public HashMap<String, Double> getTerrains() {
         return terrains;
     }
 
@@ -72,13 +71,29 @@ public abstract class Unit implements IUnit {
     }
 
     @Override
+    public Double getMaxTempHp() {
+        return maxTempHp;
+    }
+
+    @Override
     public void heal() {
-        hp = maxHp;
+        setHp(getMaxTempHp());
     }
 
     @Override
     public void setHp(Double hp) {
         this.hp = hp;
+    }
+
+    @Override
+    public void setMaxTempHp(Double maxTempHp) {
+        this.maxTempHp = maxTempHp;
+    }
+
+    @Override
+    public void setMaxHp(Double maxHp) {
+        this.maxHp = maxHp;
+        setMaxTempHp(maxHp);
     }
 
     @Override
@@ -106,6 +121,10 @@ public abstract class Unit implements IUnit {
         return defence;
     }
 
+    public Double getMaxTempDefence() {
+        return maxTempDefence;
+    }
+
     @Override
     public Double getMaxDefence() {
         return maxDefence;
@@ -117,13 +136,45 @@ public abstract class Unit implements IUnit {
     }
 
     @Override
+    public void setMaxTempDefence(Double maxTempDefence) {
+        this.maxTempDefence = maxTempDefence;
+    }
+
+    @Override
+    public void setMaxDefence(Double maxDefence) {
+        this.maxDefence = maxDefence;
+        setMaxTempDefence(maxDefence);
+    }
+
+    @Override
     public Double getEnergy() {
         return energy;
     }
 
     @Override
+    public Double getMaxTempEnergy() {
+        return maxTempEnergy;
+    }
+
+    @Override
+    public Double getMaxEnergy() {
+        return maxEnergy;
+    }
+
+    @Override
     public void setEnergy(Double energy) {
         this.energy = energy;
+    }
+
+    @Override
+    public void setMaxTempEnergy(Double maxTempEnergy) {
+        this.maxTempEnergy = maxTempEnergy;
+    }
+
+    @Override
+    public void setMaxEnergy(Double maxEnergy) {
+        this.maxEnergy = maxEnergy;
+        setMaxTempEnergy(maxEnergy);
     }
 
     @Override
@@ -175,16 +226,6 @@ public abstract class Unit implements IUnit {
     @Override
     public void setSymbol(String symbol) {
         this.symbol = symbol;
-    }
-
-    @Override
-    public Double getMaxEnergy() {
-        return maxEnergy;
-    }
-
-    @Override
-    public void setMaxEnergy(Double maxTempEnergy) {
-        this.maxTempEnergy = maxTempEnergy;
     }
 
     @Override

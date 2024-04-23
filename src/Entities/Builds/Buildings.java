@@ -1,5 +1,6 @@
 package Entities.Builds;
 
+import Exceptions.CantBuildOrUpgradeHouse;
 import Players.Player;
 
 import java.util.ArrayList;
@@ -7,7 +8,7 @@ import java.util.HashMap;
 
 public enum Buildings {
     WitchHouse(10, 5, "+1 per level to max HP."),
-    Tavern(15, 5, "+0.5 per level to max energy or -0.5 per level to reduce movement penalties."),
+    Tavern(15, 5, "+0.5 per level to max energy or -0.2 per level to reduce movement penalties."),
     Forge(5, 15, "+1 per level to max damage."),
     Arsenal(5, 15, "+1 per level to max defense."),
     Academy(10, 10, "Military research. Design new unit."),
@@ -30,8 +31,12 @@ public enum Buildings {
         return wood;
     }
 
-    public boolean hasEnoughMaterials(Player player) {
+    public boolean hasEnoughMaterials(Player player) throws CantBuildOrUpgradeHouse {
         HashMap<Buildings, ArrayList<IBuilding>> buildings = player.getTown().getBuildings();
+
+        if (!buildings.get(this).isEmpty() && buildings.get(this).getFirst().getLevel() == 3)
+            throw new CantBuildOrUpgradeHouse();
+
         if (buildings.get(this).isEmpty())
             return player.getWood() >= wood && player.getStone() >= stone;
         else {
@@ -59,9 +64,28 @@ public enum Buildings {
                 System.out.printf(leftAlignment, type.name(), buildings.get(type).size(), type.getWood(), type.getStone(), type.getDescription());
             else {
                 level = buildings.get(type).getFirst().getLevel();
-                wood = buildings.get(type).getFirst().getCost().get(level + 1).get("wood");
-                stone = buildings.get(type).getFirst().getCost().get(level + 1).get("stone");
-                System.out.printf(leftAlignment, type.name(), "x" + buildings.get(type).size() + " --> " + level + " level", wood, stone, type.getDescription());
+                switch (type) {
+                    case Academy, Market ->
+                            System.out.printf(leftAlignment, type.name(), "x" + buildings.get(type).size() + " --> " + level + " level", "-", "-", type.getDescription());
+                    case Workshop -> {
+                        if (buildings.get(type).size() == 4)
+                            System.out.printf(leftAlignment, type.name(), "x" + buildings.get(type).size() + " --> " + level + " level", "-", "-", type.getDescription());
+                        else {
+                            wood = buildings.get(type).getFirst().getCost().get(level + 1).get("wood");
+                            stone = buildings.get(type).getFirst().getCost().get(level + 1).get("stone");
+                            System.out.printf(leftAlignment, type.name(), "x" + buildings.get(type).size() + " --> " + level + " level", wood, stone, type.getDescription());
+                        }
+                    }
+                    default -> {
+                        if (level == 3)
+                            System.out.printf(leftAlignment, type.name(), "x" + buildings.get(type).size() + " --> " + level + " level", "-", "-", type.getDescription());
+                        else {
+                            wood = buildings.get(type).getFirst().getCost().get(level + 1).get("wood");
+                            stone = buildings.get(type).getFirst().getCost().get(level + 1).get("stone");
+                            System.out.printf(leftAlignment, type.name(), "x" + buildings.get(type).size() + " --> " + level + " level", wood, stone, type.getDescription());
+                        }
+                    }
+                }
             }
             System.out.printf("+--------------+----------------+------+-------+--------------------------------------------------------------------------------------------+%n");
         }

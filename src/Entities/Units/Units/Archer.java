@@ -17,10 +17,11 @@ public class Archer extends Unit implements IArcher {
 
     public Archer(String name, Double hp, IDamage damage, Integer attackRange, Double defence, Double energy, Double cost, String symbol, int row, int col, Player player) {
         super(name, hp, damage, attackRange, defence, energy, cost, symbol, row, col, player);
-        getTerrains().put("*", 1F);
-        getTerrains().put("#", 1.8F);
-        getTerrains().put("@", 2.2F);
-        getTerrains().put("!", 1F);
+        getTerrains().putAll(UnitType.ArcherShortBow.getTerrains());
+//        getTerrains().put("*", 1.0);
+//        getTerrains().put("#", 1.8);
+//        getTerrains().put("@", 2.2);
+//        getTerrains().put("!", 1.0);
     }
 
     @Override

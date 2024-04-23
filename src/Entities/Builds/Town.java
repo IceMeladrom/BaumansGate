@@ -171,6 +171,7 @@ public class Town {
                 case Market -> {
                     if (buildings.get(building).isEmpty()) {
                         buildings.get(building).add(new Market());
+
                         hasBuilt = true;
                     } else {
                         throw new CantBuildOrUpgradeHouse();

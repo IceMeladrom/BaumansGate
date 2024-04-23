@@ -178,7 +178,7 @@ public class RealPlayer implements Player {
                 showInfo = false;
             }
 
-            System.out.println("1. Choose Unit to move\n2. Prepare an attack\n3. Enter to town's menu\n4. Show info\n5. End move");
+            System.out.println("1. Choose Unit to move\n2. Prepare an attack\n3. Enter to town's menu\n4. Show info\n5. End move\n6. Buy unit");
             System.out.print("I choose option: ");
             cmd = scanner.nextLine();
 
@@ -278,18 +278,16 @@ public class RealPlayer implements Player {
                     unit.prepareAttack();
                     break;
                 case "3":
-                    try {
-                        Menu.townManagementMenu(this);
-                    } catch (InvalidOption | NotEnoughResources | CantBuildOrUpgradeHouse e) {
-                        err = e.getMessage();
-                        continue;
-                    }
+                    Menu.townManagementMenu(this);
                     break;
                 case "4":
                     showInfo = true;
                     break;
                 case "5":
                     endOfMove = true;
+                    break;
+                case "6":
+                    Menu.unitsPlacementMenu(this);
                     break;
                 default:
                     err = "You tried to enter invalid option!";

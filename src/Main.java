@@ -8,6 +8,7 @@ import Players.Players.*;
 import Menu.Menu;
 import Utilities.Constants.MyScanner;
 
+import java.util.HashMap;
 import java.util.Random;
 
 import static Utilities.Constants.Colors.*;
@@ -62,6 +63,13 @@ public class Main {
         grid.placeTown(bot, bot.getTown());
         int row, col;
         IUnit unit;
+        do {
+            row = random.nextInt(0, grid.getSize());
+            col = random.nextInt(0, grid.getSize());
+        } while (grid.isEntityAtCeil(row, col));
+        unit = UnitFactory.createUnit(UnitType.Swordsman, random.nextInt(0, grid.getSize()), random.nextInt(0, grid.getSize()), me);
+        me.buyUnit(unit);
+        grid.placeUnit(me, unit);
         do {
             row = random.nextInt(0, grid.getSize());
             col = random.nextInt(0, grid.getSize());

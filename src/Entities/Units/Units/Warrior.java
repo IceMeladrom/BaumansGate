@@ -18,10 +18,11 @@ public class Warrior extends Unit implements IWarrior {
 
     public Warrior(String name, Double hp, IDamage damage, Integer attackRange, Double  defence, Double  energy, Double cost, String symbol, int row, int col, Player player) {
         super(name, hp, damage, attackRange, defence, energy, cost, symbol, row, col, player);
-        getTerrains().put("*", 1F);
-        getTerrains().put("#", 1.5F);
-        getTerrains().put("@", 2F);
-        getTerrains().put("!", 1.2F);
+        getTerrains().putAll(UnitType.Swordsman.getTerrains());
+//        getTerrains().put("*", 1.0);
+//        getTerrains().put("#", 1.5);
+//        getTerrains().put("@", 2.0);
+//        getTerrains().put("!", 1.2);
     }
 
     @Override

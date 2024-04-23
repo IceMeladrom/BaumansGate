@@ -12,12 +12,12 @@ import Players.Player;
 import Utilities.Constants.MyRandom;
 import Utilities.Constants.MyScanner;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Random;
-import java.util.Scanner;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.util.*;
 
 import static Utilities.Constants.Colors.*;
+import static Utilities.Utils.clearConsole;
 import static Utilities.Utils.isCoordsValid;
 
 public class Menu {
@@ -264,40 +264,68 @@ public class Menu {
     }
 
 
-    public static void townManagementMenu(Player player) throws InvalidOption, NotEnoughResources, CantBuildOrUpgradeHouse {
+    public static void townManagementMenu(Player player) {
         if (player.needConsole()) {
-            boolean leave = false;
+            boolean leave = false, showInfo = false;
+            String err = "";
+            Scanner scanner = MyScanner.getScanner();
+            Town town = player.getTown();
+            HashMap<Buildings, ArrayList<IBuilding>> buildings = town.getBuildings();
             while (!leave) {
-//                clearConsole();
-                Scanner scanner = MyScanner.getScanner();
-
-                Town town = player.getTown();
-                HashMap<Buildings, ArrayList<IBuilding>> buildings = town.getBuildings();
-
+                clearConsole();
+                if (!err.isEmpty()) {
+                    System.out.println(ANSI_RED + err + " Try again!" + ANSI_RESET);
+                    err = "";
+                }
+                if (showInfo) {
+                    DecimalFormatSymbols otherSymbols = new DecimalFormatSymbols(Locale.ENGLISH);
+                    otherSymbols.setDecimalSeparator('.');
+                    otherSymbols.setGroupingSeparator('.');
+                    DecimalFormat doubleFormat = new DecimalFormat("0.0", otherSymbols);
+                    player.showPlayerInfo();
+                    System.out.format("%nPlayer's name: %s%n", player.getName());
+                    System.out.format("Coins: %s%nWood: %d%nStone: %d%n", doubleFormat.format(player.getCoins()), player.getWood(), player.getStone());
+                    town.showBuildings();
+                    showInfo = false;
+                }
                 System.out.format("Welcome to the %s town!%n", town.getName());
-                System.out.format("Choose the option:%n1. Show player info%n2. Build/Upgrade building%n3. Leave town's menu%n");
+                System.out.format("Choose the option:%n1. Show player info%n2. Build/Upgrade building%n3. Enter to the Market%n4. Enter to the Academy%n5. Leave town's menu%n");
                 System.out.format("Enter the option: ");
                 String option = scanner.nextLine();
                 switch (option) {
                     case "1" -> {
-                        System.out.format("%nPlayer's name: %s%n", player.getName());
-                        System.out.format("Coins: %f%nWood: %d%nStone: %d%n", player.getCoins(), player.getWood(), player.getStone());
-                        town.showBuildings();
+                        showInfo = true;
                     }
                     case "2" -> {
                         Buildings.showBuildingsShop(player);
-                        System.out.format("Enter the option: ");
+                        System.out.format("Enter the option or type %sExit%s: ", ANSI_RED, ANSI_RESET);
                         String houseName = scanner.nextLine();
+                        if (houseName.equals("Exit"))
+                            continue;
                         try {
                             town.buildHouse(Buildings.valueOf(houseName));
                         } catch (IllegalArgumentException e) {
-                            throw new InvalidOption();
+                            err = "Invalid option";
+                            break;
+                        } catch (CantBuildOrUpgradeHouse | NotEnoughResources e) {
+                            err = e.getMessage();
+                            break;
                         }
                     }
                     case "3" -> {
+                        if (town.getBuildings().get(Buildings.Market).isEmpty()) {
+                            err = "Market hasn't built yet!";
+                            break;
+                        }
+                        town.getBuildings().get(Buildings.Market).getFirst().buff(player);
+                    }
+                    case "4" -> {
+
+                    }
+                    case "5" -> {
                         leave = true;
                     }
-                    default -> throw new InvalidOption();
+                    default -> err = new InvalidOption().getMessage();
                 }
             }
         } else {

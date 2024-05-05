@@ -8,6 +8,7 @@ import Utilities.Constants.MyRandom;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Random;
@@ -106,6 +107,8 @@ public enum UnitType {
     private String symbol;
     private final HashMap<String, Double> terrains;
 
+    private static final HashMap<String, NewUnit> newUnitsTypes = new HashMap<>();
+
     UnitType(String name, Double hp, DamageType damageType, Double damageValue, Integer attackRange, Double defence, Double energy, Double cost, String symbol, HashMap<String, Double> terrains) {
         this.hp = hp;
         this.damageType = damageType;
@@ -185,6 +188,10 @@ public enum UnitType {
 
     public HashMap<String, Double> getTerrains() {
         return terrains;
+    }
+
+    public static HashMap<String, NewUnit> getNewUnitsTypes() {
+        return newUnitsTypes;
     }
 
     private static final Random random = MyRandom.getRandom();

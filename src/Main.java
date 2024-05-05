@@ -1,3 +1,5 @@
+import Entities.Builds.Buildings;
+import Entities.Builds.Market;
 import Entities.Builds.Town;
 import Entities.Units.Creator.UnitFactory;
 import Entities.Units.Units.IUnit;
@@ -44,6 +46,7 @@ public class Main {
             me.move();
             bot.move();
         }
+
         grid.show();
         if (me.getUnits().isEmpty() && bot.getUnits().isEmpty())
             System.out.println("\n\nGAME IS OVER\nDRAW\n\n");

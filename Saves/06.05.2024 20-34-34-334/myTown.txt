@@ -1,0 +1,2 @@
+Whiterun;;▲;;4;;0
+Workshop--2--1;;Market--0--0;;WitchHouse--0--0;;Tavern--1--2;;Forge--1--1;;Arsenal--0--0;;Academy--1--1;;

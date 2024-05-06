@@ -15,7 +15,7 @@ import static Utilities.Utils.clearConsole;
 public class Grid {
     private int size;
     private static Grid instance;
-    ArrayList<ArrayList<Cell>> grid = new ArrayList<>(size);
+    private ArrayList<ArrayList<Cell>> grid = new ArrayList<>(size);
 
     public static Grid getInstance() {
         if (instance == null) {
@@ -33,6 +33,14 @@ public class Grid {
                 grid.get(i).add(new Cell(i, j, null, generate(rand)));
             }
         }
+    }
+
+    public ArrayList<ArrayList<Cell>> getGrid() {
+        return grid;
+    }
+
+    public void setGrid(ArrayList<ArrayList<Cell>> grid) {
+        this.grid = grid;
     }
 
     public void show() {
@@ -261,5 +269,18 @@ public class Grid {
 
     public int getSize() {
         return size;
+    }
+
+    public String save() {
+        StringBuilder ret = new StringBuilder();
+        ret.append(grid.size()).append("\n");
+        for (ArrayList<Cell> arr : grid) {
+            for (Cell cell : arr) {
+                ret.append(cell.getTerrain());
+            }
+            ret.append("\n");
+        }
+        ret.deleteCharAt(ret.length()-1);
+        return String.valueOf(ret);
     }
 }

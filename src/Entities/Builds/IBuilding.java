@@ -10,5 +10,8 @@ public interface IBuilding {
     public void buff(Player player);
 
     public Integer getLevel();
+
+    public void setLevel(Integer level);
+
     public HashMap<Integer, HashMap<String, Integer>> getCost();
 }

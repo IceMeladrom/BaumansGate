@@ -1,12 +1,14 @@
 package Entities.Builds;
 
 import Entities.Units.Units.IUnit;
+import Entities.Units.Units.NewUnit;
 import Exceptions.CantBuildOrUpgradeHouse;
 import Exceptions.NotEnoughResources;
 import Players.Player;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 public class Town {
     private Player player;
@@ -194,5 +196,22 @@ public class Town {
         } else {
             throw new NotEnoughResources();
         }
+    }
+
+    public String save() {
+        StringBuilder ret = new StringBuilder();
+        ret.append(name).append(";;")
+                .append(symbol).append(";;")
+                .append(row).append(";;")
+                .append(col).append("\n");
+        for (Map.Entry<Buildings, ArrayList<IBuilding>> entry : buildings.entrySet()) {
+            ret.append(entry.getKey()).append("--").append(entry.getValue().size());
+            if (!entry.getValue().isEmpty())
+                ret.append("--").append(entry.getValue().getFirst().getLevel());
+            else
+                ret.append("--").append("0");
+            ret.append(";;");
+        }
+        return ret.toString();
     }
 }

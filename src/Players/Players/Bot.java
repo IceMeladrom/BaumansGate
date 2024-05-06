@@ -35,6 +35,9 @@ public class Bot implements Player {
     public ArrayList<IUnit> getUnits() {
         return units;
     }
+    public void setUnits(ArrayList<IUnit> units) {
+        this.units = units;
+    }
 
     public boolean buyUnit(@NotNull IUnit unit) {
         if (coins < unit.getCost())
@@ -162,5 +165,14 @@ public class Bot implements Player {
                 break;
             }
         }
+    }
+
+    public String save(){
+        StringBuilder ret = new StringBuilder();
+        ret.append(name).append(";;").append(coins).append(";;").append(color).append(";;").append(wood).append(";;").append(stone).append("\n");
+        ret.append(town.toString()).append("\n");
+        units.forEach(unit -> ret.append(unit).append(";;"));
+
+        return ret.toString();
     }
 }

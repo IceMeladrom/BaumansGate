@@ -21,6 +21,7 @@ import static Utilities.Utils.clearConsole;
 import static Utilities.Utils.isCoordsValid;
 
 public class Menu {
+    private static Player me, bot;
     public static void townPlacementMenu(Player player) {
         if (player.needConsole()) {
             Scanner scanner = MyScanner.getScanner();
@@ -292,7 +293,7 @@ public class Menu {
                     showInfo = false;
                 }
                 System.out.format("Welcome to the %s town!%n", town.getName());
-                System.out.format("Choose the option:%n1. Show player info%n2. Build/Upgrade building%n3. Enter to the Market%n4. Enter to the Academy%n5. Leave town's menu%n");
+                System.out.format("Choose the option:\n\t1. Show player info\n\t2. Build/Upgrade building\n\t3. Enter to the Market\n\t4. Enter to the Academy\n\t5. Leave town's menu\n");
                 System.out.format("Enter the option: ");
                 String option = scanner.nextLine();
                 switch (option) {
@@ -338,5 +339,21 @@ public class Menu {
         } else {
 
         }
+    }
+
+    public static Player getMe() {
+        return me;
+    }
+
+    public static void setMe(Player me) {
+        Menu.me = me;
+    }
+
+    public static Player getBot() {
+        return bot;
+    }
+
+    public static void setBot(Player bot) {
+        Menu.bot = bot;
     }
 }

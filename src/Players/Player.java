@@ -11,6 +11,8 @@ public interface Player {
 
     public ArrayList<IUnit> getUnits();
 
+    public void setUnits(ArrayList<IUnit> units);
+
     public boolean buyUnit(IUnit unit);
 
     public void sellUnit(IUnit unit);
@@ -43,7 +45,7 @@ public interface Player {
 
     public boolean canUnitMove(Grid grid, int row, int col);
 
-    void move();
+    public void move();
 
     public void energize();
 
@@ -56,4 +58,6 @@ public interface Player {
     public Integer getWood();
 
     public void setWood(Integer wood);
+
+    public String save();
 }

@@ -41,13 +41,18 @@ public abstract class Unit implements IUnit {
     private IDamage damage;
     private Integer attackRange;
     private int row, col;
-    private final HashMap<String, Double> terrains;
+    private HashMap<String, Double> terrains;
     private int movesToPrepareAnAttack, movesUntilReadyToAttack;
     private boolean isAttackPrepared, didAttack;
 
     @Override
     public HashMap<String, Double> getTerrains() {
         return terrains;
+    }
+
+    @Override
+    public void setTerrains(HashMap<String, Double> terrains) {
+        this.terrains = terrains;
     }
 
     @Override
@@ -340,8 +345,9 @@ public abstract class Unit implements IUnit {
         return isAttackPrepared;
     }
 
+
     @Override
-    public void setAttackPrepared(boolean attackPrepared) {
+    public void setIsAttackPrepared(boolean attackPrepared) {
         isAttackPrepared = attackPrepared;
     }
 
@@ -354,5 +360,38 @@ public abstract class Unit implements IUnit {
         } else {
             movesUntilReadyToAttack = -1;
         }
+    }
+
+    public String save() {
+        StringBuilder ret = new StringBuilder();
+        ret.append(getClass().getName()).append("\n");
+
+        ret.append(name).append(";;")
+                .append(hp).append(";;")
+                .append(maxHp).append(";;")
+                .append(maxTempHp).append(";;")
+                .append(damage.getDamageType().name()).append(";;")
+                .append(damage.getValue()).append(";;")
+                .append(attackRange).append(";;")
+                .append(defence).append(";;")
+                .append(maxDefence).append(";;")
+                .append(maxTempDefence).append(";;")
+                .append(energy).append(";;")
+                .append(maxEnergy).append(";;")
+                .append(maxTempEnergy).append(";;")
+                .append(cost).append(";;")
+                .append(row).append(";;")
+                .append(col).append(";;")
+                .append(symbol).append(";;")
+                .append(didAttack).append(";;")
+                .append(movesToPrepareAnAttack).append(";;")
+                .append(movesUntilReadyToAttack).append(";;")
+                .append(isAttackPrepared).append(";;\n");
+
+        ret.append("*--").append(terrains.get("*")).append(";;")
+                .append("#--").append(terrains.get("#")).append(";;")
+                .append("@--").append(terrains.get("@")).append(";;")
+                .append("!--").append(terrains.get("!")).append(";;\n");
+        return ret.toString();
     }
 }

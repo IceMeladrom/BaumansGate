@@ -40,4 +40,6 @@ public class UnitFactory {
             default -> throw new IllegalArgumentException("You tried to choose non existed unit!");
         }
     }
+
+
 }

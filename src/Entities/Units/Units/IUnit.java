@@ -9,6 +9,8 @@ import java.util.HashMap;
 public interface IUnit {
     public HashMap<String, Double> getTerrains();
 
+    void setTerrains(HashMap<String, Double> terrains);
+
     public Player getPlayer();
 
     public void setPlayer(Player player);
@@ -100,7 +102,9 @@ public interface IUnit {
 
     public boolean getIsAttackPrepared();
 
-    public void setAttackPrepared(boolean attackPrepared);
+    public void setIsAttackPrepared(boolean attackPrepared);
 
     public void preparing();
+
+    public String save();
 }

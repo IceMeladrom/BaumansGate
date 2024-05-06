@@ -40,7 +40,7 @@ public class Mage extends Unit implements IMage {
                 enemy.setDefence(0.0);
             }
             setDidAttack(true);
-            setAttackPrepared(false);
+            setIsAttackPrepared(false);
             DecimalFormatSymbols otherSymbols = new DecimalFormatSymbols(Locale.ENGLISH);
             otherSymbols.setDecimalSeparator('.');
             otherSymbols.setGroupingSeparator('.');

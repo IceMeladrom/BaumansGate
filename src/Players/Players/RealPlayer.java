@@ -7,6 +7,7 @@ import Grid.Grid;
 import Grid.Pathfinder;
 import Menu.Menu;
 import Players.Player;
+import Save.SaveGame;
 import org.jetbrains.annotations.NotNull;
 
 import java.text.DecimalFormat;
@@ -20,7 +21,7 @@ import static Utilities.Constants.Colors.*;
 import static Utilities.Utils.isCoordsValid;
 
 public class RealPlayer implements Player {
-    private final ArrayList<IUnit> units = new ArrayList<>();
+    private ArrayList<IUnit> units = new ArrayList<>();
     private Town town;
     private Double coins;
     private String name, color;
@@ -42,6 +43,10 @@ public class RealPlayer implements Player {
 
     public ArrayList<IUnit> getUnits() {
         return units;
+    }
+
+    public void setUnits(ArrayList<IUnit> units) {
+        this.units = units;
     }
 
     public boolean buyUnit(@NotNull IUnit unit) {
@@ -110,6 +115,7 @@ public class RealPlayer implements Player {
     }
 
     public void setTown(Town town) {
+
         this.town = town;
     }
 
@@ -178,7 +184,7 @@ public class RealPlayer implements Player {
                 showInfo = false;
             }
 
-            System.out.println("1. Choose Unit to move\n2. Prepare an attack\n3. Enter to town's menu\n4. Show info\n5. End move\n6. Buy unit");
+            System.out.println("1. Choose Unit to move\n2. Prepare an attack\n3. Enter to town's menu\n4. Show info\n5. Buy unit\n6. End move\n7. Save the game");
             System.out.print("I choose option: ");
             cmd = scanner.nextLine();
 
@@ -284,10 +290,13 @@ public class RealPlayer implements Player {
                     showInfo = true;
                     break;
                 case "5":
-                    endOfMove = true;
+                    Menu.unitsPlacementMenu(this);
                     break;
                 case "6":
-                    Menu.unitsPlacementMenu(this);
+                    endOfMove = true;
+                    break;
+                case "7":
+                    SaveGame.save();
                     break;
                 default:
                     err = "You tried to enter invalid option!";
@@ -312,16 +321,33 @@ public class RealPlayer implements Player {
     public Integer getStone() {
         return stone;
     }
+
     @Override
     public void setStone(Integer stone) {
         this.stone = stone;
     }
+
     @Override
     public Integer getWood() {
         return wood;
     }
+
     @Override
     public void setWood(Integer wood) {
         this.wood = wood;
+    }
+
+
+    public String save() {
+        StringBuilder ret = new StringBuilder();
+        ret.append(name).append(";;")
+                .append(coins).append(";;")
+                .append(color).append(";;")
+                .append(wood).append(";;")
+                .append(stone).append("\n");
+        ret.append(town.toString()).append("\n");
+        units.forEach(unit -> ret.append(unit).append(";;"));
+
+        return ret.toString();
     }
 }

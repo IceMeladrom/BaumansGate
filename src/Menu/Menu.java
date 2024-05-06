@@ -213,11 +213,14 @@ public class Menu {
                 cmd = scanner.nextLine();
                 if (cmd.equals("Exit"))
                     return null;
-
-                try {
+                // TODO realize buy from academy
+                if (UnitType.getEnums().contains(cmd)) {
                     unit = UnitFactory.createUnit(UnitType.valueOf(cmd), row, col, player);
                     unitSelected = true;
-                } catch (IllegalArgumentException e) {
+                } else if (UnitType.getNewUnitsTypes().containsKey(cmd)) {
+                    unit = UnitFactory.createUnit(UnitType.getNewUnitsTypes().get(cmd), row, col, player);
+                    unitSelected = true;
+                } else {
                     err = "You tried to choose non existed unit!";
                 }
             }
@@ -320,7 +323,11 @@ public class Menu {
                         town.getBuildings().get(Buildings.Market).getFirst().buff(player);
                     }
                     case "4" -> {
-
+                        if (town.getBuildings().get(Buildings.Academy).isEmpty()) {
+                            err = "Market hasn't built yet!";
+                            break;
+                        }
+                        town.getBuildings().get(Buildings.Academy).getFirst().buff(player);
                     }
                     case "5" -> {
                         leave = true;

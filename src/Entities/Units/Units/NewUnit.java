@@ -5,13 +5,14 @@ import Entities.Damage.DamageType;
 import java.util.HashMap;
 
 public class NewUnit {
-    private final String unitClass, symbol;
+    private final String name, unitClass, symbol;
     private Double hp, defence, energy, cost, damageValue;
     private DamageType damageType;
     private Integer attackRange;
     private final HashMap<String, Double> terrains;
 
-    public NewUnit(String unitClass, Double hp, DamageType damageType, Double damageValue, Integer attackRange, Double defence, Double energy, Double cost, String symbol) {
+    public NewUnit(String unitName, String unitClass, Double hp, DamageType damageType, Double damageValue, Integer attackRange, Double defence, Double energy, Double cost, String symbol) {
+        this.name = unitName;
         this.unitClass = unitClass;
         this.hp = hp;
         this.damageType = damageType;
@@ -122,5 +123,9 @@ public class NewUnit {
 
     public HashMap<String, Double> getTerrains() {
         return terrains;
+    }
+
+    public String getName() {
+        return name;
     }
 }

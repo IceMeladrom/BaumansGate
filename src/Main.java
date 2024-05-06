@@ -5,19 +5,20 @@ import Entities.Units.Creator.UnitFactory;
 import Entities.Units.Units.IUnit;
 import Entities.Units.Units.UnitType;
 import Grid.Grid;
-import Players.Player;
-import Players.Players.*;
 import Menu.Menu;
+import Players.Player;
+import Players.Players.Bot;
+import Players.Players.RealPlayer;
 import Utilities.Constants.MyScanner;
 
-import java.util.HashMap;
 import java.util.Random;
 
-import static Utilities.Constants.Colors.*;
+import static Utilities.Constants.Colors.ANSI_GREEN;
+import static Utilities.Constants.Colors.ANSI_RED;
 
 public class Main {
     public static void main(String[] args) {
-        boolean DEBUG = true;
+        boolean DEBUG = false;
 
         Grid grid = Grid.getInstance();
         Player me = new RealPlayer("Robert", 999999.0, ANSI_GREEN, 9999, 9999);

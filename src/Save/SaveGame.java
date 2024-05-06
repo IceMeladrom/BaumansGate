@@ -2,6 +2,7 @@ package Save;
 
 import Entities.Builds.Town;
 import Entities.Units.Units.IUnit;
+import Entities.Units.Units.UnitType;
 import Grid.Grid;
 import Menu.Menu;
 import Players.Player;
@@ -81,13 +82,15 @@ public class SaveGame {
 
         FileWriter meFile = new FileWriter(path + "/myUnits.txt");
         FileWriter botFile = new FileWriter(path + "/botUnits.txt");
-
+        FileWriter unitTypes = new FileWriter(path + "/unitTypes.txt");
         for (IUnit unit : myUnits)
             meFile.write(unit.save());
         for (IUnit unit : botUnits)
             botFile.write(unit.save());
+        unitTypes.write(UnitType.save());
 
         meFile.close();
         botFile.close();
+        unitTypes.close();
     }
 }

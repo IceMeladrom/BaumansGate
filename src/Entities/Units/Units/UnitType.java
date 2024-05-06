@@ -97,7 +97,7 @@ public enum UnitType {
     private Double damageValue;
     private Integer attackRange;
     private String symbol;
-    private final HashMap<String, Double> terrains;
+    private HashMap<String, Double> terrains;
     private static final HashMap<String, NewUnit> newUnitsTypes = new HashMap<>();
 
     UnitType(String name, Double hp, DamageType damageType, Double damageValue, Integer attackRange, Double defence, Double energy, Double cost, String symbol, HashMap<String, Double> terrains) {
@@ -184,8 +184,16 @@ public enum UnitType {
         return symbol;
     }
 
+    public void setSymbol(String symbol) {
+        this.symbol = symbol;
+    }
+
     public HashMap<String, Double> getTerrains() {
         return terrains;
+    }
+
+    public void setTerrains(HashMap<String, Double> terrains) {
+        this.terrains = terrains;
     }
 
     public static HashMap<String, NewUnit> getNewUnitsTypes() {
@@ -235,6 +243,44 @@ public enum UnitType {
                     doubleFormat.format(unitType.getCost()));
         }
         System.out.format("+------------------+----------+----------+---------------+----------------+-----------+----------+--------+%n");
+    }
+
+
+    public static String save() {
+        String ret = "";
+        for (UnitType unitType : values()) {
+            ret += "LoremIpsum" + ";;"
+                    + unitType.getName() + ";;"
+                    + unitType.getHp() + ";;"
+                    + unitType.getDamageType().name() + ";;"
+                    + unitType.getDamageValue() + ";;"
+                    + unitType.getAttackRange() + ";;"
+                    + unitType.getDefence() + ";;"
+                    + unitType.getEnergy() + ";;"
+                    + unitType.getCost() + ";;"
+                    + unitType.getSymbol() + ";;"
+                    + "*--" + unitType.getTerrains().get("*") + ";;"
+                    + "#--" + unitType.getTerrains().get("#") + ";;"
+                    + "@--" + unitType.getTerrains().get("@") + ";;"
+                    + "!--" + unitType.getTerrains().get("!") + "\n";
+        }
+        for (NewUnit unit : getNewUnitsTypes().values()) {
+            ret += unit.getUnitClass() + ";;"
+                    + unit.getName() + ";;"
+                    + unit.getHp() + ";;"
+                    + unit.getDamageType().name() + ";;"
+                    + unit.getDamageValue() + ";;"
+                    + unit.getAttackRange() + ";;"
+                    + unit.getDefence() + ";;"
+                    + unit.getEnergy() + ";;"
+                    + unit.getCost() + ";;"
+                    + unit.getSymbol() + ";;"
+                    + "*--" + unit.getTerrains().get("*") + ";;"
+                    + "#--" + unit.getTerrains().get("#") + ";;"
+                    + "@--" + unit.getTerrains().get("@") + ";;"
+                    + "!--" + unit.getTerrains().get("!") + "\n";
+        }
+        return ret;
     }
 
 }

@@ -1,3 +1,0 @@
-Robert;;999936.0;;[0;32m;;9999;;9999
-Entities.Builds.Town@28c97a5
-Entities.Units.Units.Warrior@2328c243;;Entities.Units.Units.Warrior@bebdb06;;Entities.Units.Units.Archer@7a4f0f29;;Entities.Units.Units.Rider@45283ce2;;

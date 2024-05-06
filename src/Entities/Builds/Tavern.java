@@ -20,7 +20,7 @@ public class Tavern extends House implements IBuilding {
         System.out.printf("%sTavern buff%s%n", ANSI_GREEN, ANSI_RESET);
 
         Scanner scanner = MyScanner.getScanner();
-        System.out.println("1. +0.5 to max energy\n2. -0.5 to reduce movement penalties");
+        System.out.println("1. +0.5 to max energy\n2. -0.2 to reduce movement penalties");
         while (true) {
             System.out.print("Enter the option: ");
             String option = scanner.nextLine();

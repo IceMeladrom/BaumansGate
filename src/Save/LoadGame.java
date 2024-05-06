@@ -8,7 +8,6 @@ import Grid.Cell;
 import Players.Player;
 import Players.Players.RealPlayer;
 
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
@@ -22,7 +21,8 @@ public class LoadGame {
         Town botTown = loadTown(path, "bot", bot);
         ArrayList<IUnit> myUnits = loadUnits(path, "my", me);
         ArrayList<IUnit> botUnits = loadUnits(path, "bot", bot);
-        return new LoadedFile(grid, me, bot, myTown, botTown, myUnits, botUnits);
+        ArrayList<NewUnit> unitTypes = loadUnitTypes(path);
+        return new LoadedFile(grid, me, bot, myTown, botTown, myUnits, botUnits, unitTypes);
     }
 
     private static ArrayList<ArrayList<Cell>> loadGrid(String path) throws IOException {
@@ -191,5 +191,35 @@ public class LoadGame {
         file.close();
         scanner.close();
         return units;
+    }
+
+    private static ArrayList<NewUnit> loadUnitTypes(String path) throws IOException {
+        FileReader file = new FileReader(path + "/unitTypes.txt");
+        Scanner scanner = new Scanner(file);
+        ArrayList<NewUnit> unitTypes = new ArrayList<>();
+        while (scanner.hasNextLine()) {
+            List<String> unitTypeParams = Arrays.asList(scanner.nextLine().split(";;"));
+            unitTypes.add(new NewUnit(
+                    unitTypeParams.get(1),
+                    unitTypeParams.get(0),
+                    Double.parseDouble(unitTypeParams.get(2)),
+                    DamageType.valueOf(unitTypeParams.get(3)),
+                    Double.parseDouble(unitTypeParams.get(4)),
+                    Integer.parseInt(unitTypeParams.get(5)),
+                    Double.parseDouble(unitTypeParams.get(6)),
+                    Double.parseDouble(unitTypeParams.get(7)),
+                    Double.parseDouble(unitTypeParams.get(8)),
+                    unitTypeParams.get(9)));
+            HashMap<String, Double> terrains = new HashMap<>() {{
+                for (int i = 10; i < 14; i++) {
+                    put(Arrays.asList(unitTypeParams.get(i).split("--")).getFirst(), Double.valueOf(Arrays.asList(unitTypeParams.get(10).split("--")).getLast()));
+                }
+            }};
+            unitTypes.getLast().setTerrains(terrains);
+        }
+
+        file.close();
+        scanner.close();
+        return unitTypes;
     }
 }

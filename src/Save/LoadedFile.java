@@ -2,6 +2,8 @@ package Save;
 
 import Entities.Builds.Town;
 import Entities.Units.Units.IUnit;
+import Entities.Units.Units.NewUnit;
+import Entities.Units.Units.UnitType;
 import Grid.Cell;
 import Grid.Grid;
 import Players.Player;
@@ -14,9 +16,10 @@ public class LoadedFile {
     private Player me, bot;
     private Town myTown, botTown;
     private ArrayList<IUnit> myUnits, botUnits;
+    private ArrayList<NewUnit> unitTypes;
 
 
-    public LoadedFile(ArrayList<ArrayList<Cell>> grid, Player me, Player bot, Town myTown, Town botTown, ArrayList<IUnit> myUnits, ArrayList<IUnit> botUnits) {
+    public LoadedFile(ArrayList<ArrayList<Cell>> grid, Player me, Player bot, Town myTown, Town botTown, ArrayList<IUnit> myUnits, ArrayList<IUnit> botUnits, ArrayList<NewUnit> unitTypes) {
         this.grid = grid;
         this.me = me;
         this.bot = bot;
@@ -24,6 +27,7 @@ public class LoadedFile {
         this.botTown = botTown;
         this.myUnits = myUnits;
         this.botUnits = botUnits;
+        this.unitTypes = unitTypes;
 
         GridSize.setSize(grid.size());
         Grid newGrid = Grid.getInstance();
@@ -35,12 +39,27 @@ public class LoadedFile {
         newGrid.getCell(botTown.getRow(), botTown.getCol()).setTown(botTown);
 
         me.setUnits(myUnits);
-        for(IUnit unit : myUnits)
+        for (IUnit unit : myUnits)
             newGrid.getCell(unit.getRow(), unit.getCol()).setUnit(unit);
         bot.setUnits(botUnits);
-        for(IUnit unit : botUnits)
+        for (IUnit unit : botUnits)
             newGrid.getCell(unit.getRow(), unit.getCol()).setUnit(unit);
 
+        for (NewUnit unitType : unitTypes) {
+            if (unitType.getUnitClass().equals("LoremIpsum")) {
+                UnitType.valueOf(unitType.getName()).setHp(unitType.getHp());
+                UnitType.valueOf(unitType.getName()).setDamageType(unitType.getDamageType());
+                UnitType.valueOf(unitType.getName()).setDamageValue(unitType.getDamageValue());
+                UnitType.valueOf(unitType.getName()).setAttackRange(unitType.getAttackRange());
+                UnitType.valueOf(unitType.getName()).setDefence(unitType.getDefence());
+                UnitType.valueOf(unitType.getName()).setEnergy(unitType.getEnergy());
+                UnitType.valueOf(unitType.getName()).setCost(unitType.getCost());
+                UnitType.valueOf(unitType.getName()).setSymbol(unitType.getSymbol());
+                UnitType.valueOf(unitType.getName()).setTerrains(unitType.getTerrains());
+            } else {
+                UnitType.getNewUnitsTypes().put(unitType.getName(), unitType);
+            }
+        }
     }
 
     public ArrayList<ArrayList<Cell>> getGrid() {
@@ -97,5 +116,13 @@ public class LoadedFile {
 
     public void setBotUnits(ArrayList<IUnit> botUnits) {
         this.botUnits = botUnits;
+    }
+
+    public ArrayList<NewUnit> getUnitTypes() {
+        return unitTypes;
+    }
+
+    public void setUnitTypes(ArrayList<NewUnit> unitTypes) {
+        this.unitTypes = unitTypes;
     }
 }

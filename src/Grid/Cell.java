@@ -68,6 +68,7 @@ public class Cell {
 
     public void setTown(Town town) {
         this.town = town;
+        this.player = town.getPlayer();
     }
 
     public Player getPlayer() {

@@ -4,7 +4,6 @@ import Entities.Builds.Town;
 import Entities.Damage.IDamage;
 import Exceptions.*;
 import Grid.Grid;
-import Grid.Cell;
 import Grid.Pathfinder;
 import Players.Player;
 import Utilities.Pair;
@@ -12,43 +11,48 @@ import Utilities.Pair;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-abstract public class Unit implements IUnit {
-    public Unit(String name, int hp, IDamage damage, int attackRange, int defence, Double energy, int cost, String symbol, int row, int col, Player player) {
+public abstract class Unit implements IUnit {
+    public Unit(String name, Double hp, IDamage damage, Integer attackRange, Double defence, Double energy, Double cost, String symbol, int row, int col, Player player) {
         this.hp = hp;
+        maxHp = hp;
+        maxTempHp = hp;
         this.damage = damage;
-//        this.movesToPrepareAnAttack = movesToPrepareAnAttack;
         this.attackRange = attackRange;
         this.defence = defence;
+        maxDefence = defence;
+        maxTempDefence = defence;
         this.energy = energy;
-        this.maxEnergy = energy;
+        maxEnergy = energy;
+        maxTempEnergy = energy;
         this.cost = cost;
         this.name = name;
         this.row = row;
         this.col = col;
         this.symbol = symbol;
-        maxHp = hp;
-        maxDefence = defence;
         this.player = player;
         didAttack = false;
         terrains = new HashMap<>();
         isAttackPrepared = false;
     }
 
-    private IDamage damage;
-    private HashMap<String, Float> terrains;
-    private int movesToPrepareAnAttack, movesUntilReadyToAttack;
-    private boolean isAttackPrepared;
-    private int hp, attackRange, defence, cost;
-    private int row, col;
-    private final int maxHp, maxDefence;
-    private Double energy, maxEnergy;
-    private String name, symbol;
     private Player player;
-    private boolean didAttack;
+    private String name, symbol;
+    private Double hp, defence, cost, energy, maxTempHp, maxTempDefence, maxTempEnergy, maxHp, maxDefence, maxEnergy;
+    private IDamage damage;
+    private Integer attackRange;
+    private int row, col;
+    private HashMap<String, Double> terrains;
+    private int movesToPrepareAnAttack, movesUntilReadyToAttack;
+    private boolean isAttackPrepared, didAttack;
 
     @Override
-    public HashMap<String, Float> getTerrains() {
+    public HashMap<String, Double> getTerrains() {
         return terrains;
+    }
+
+    @Override
+    public void setTerrains(HashMap<String, Double> terrains) {
+        this.terrains = terrains;
     }
 
     @Override
@@ -62,22 +66,39 @@ abstract public class Unit implements IUnit {
     }
 
     @Override
-    public int getHp() {
+    public Double getHp() {
         return hp;
     }
 
     @Override
-    public int getMaxHp() {
+    public Double getMaxHp() {
         return maxHp;
     }
 
-    public void heal() {
-        hp = maxHp;
+    @Override
+    public Double getMaxTempHp() {
+        return maxTempHp;
     }
 
     @Override
-    public void setHp(int hp) {
+    public void heal() {
+        setHp(getMaxTempHp());
+    }
+
+    @Override
+    public void setHp(Double hp) {
         this.hp = hp;
+    }
+
+    @Override
+    public void setMaxTempHp(Double maxTempHp) {
+        this.maxTempHp = maxTempHp;
+    }
+
+    @Override
+    public void setMaxHp(Double maxHp) {
+        this.maxHp = maxHp;
+        setMaxTempHp(maxHp);
     }
 
     @Override
@@ -91,27 +112,43 @@ abstract public class Unit implements IUnit {
     }
 
     @Override
-    public int getAttackRange() {
+    public Integer getAttackRange() {
         return attackRange;
     }
 
     @Override
-    public void setAttackRange(int attackRange) {
+    public void setAttackRange(Integer attackRange) {
         this.attackRange = attackRange;
     }
 
     @Override
-    public int getDefence() {
+    public Double getDefence() {
         return defence;
     }
 
-    public int getMaxDefence() {
+    public Double getMaxTempDefence() {
+        return maxTempDefence;
+    }
+
+    @Override
+    public Double getMaxDefence() {
         return maxDefence;
     }
 
     @Override
-    public void setDefence(int defence) {
+    public void setDefence(Double defence) {
         this.defence = defence;
+    }
+
+    @Override
+    public void setMaxTempDefence(Double maxTempDefence) {
+        this.maxTempDefence = maxTempDefence;
+    }
+
+    @Override
+    public void setMaxDefence(Double maxDefence) {
+        this.maxDefence = maxDefence;
+        setMaxTempDefence(maxDefence);
     }
 
     @Override
@@ -120,17 +157,38 @@ abstract public class Unit implements IUnit {
     }
 
     @Override
+    public Double getMaxTempEnergy() {
+        return maxTempEnergy;
+    }
+
+    @Override
+    public Double getMaxEnergy() {
+        return maxEnergy;
+    }
+
+    @Override
     public void setEnergy(Double energy) {
         this.energy = energy;
     }
 
     @Override
-    public int getCost() {
+    public void setMaxTempEnergy(Double maxTempEnergy) {
+        this.maxTempEnergy = maxTempEnergy;
+    }
+
+    @Override
+    public void setMaxEnergy(Double maxEnergy) {
+        this.maxEnergy = maxEnergy;
+        setMaxTempEnergy(maxEnergy);
+    }
+
+    @Override
+    public Double getCost() {
         return cost;
     }
 
     @Override
-    public void setCost(int cost) {
+    public void setCost(Double cost) {
         this.cost = cost;
     }
 
@@ -176,16 +234,6 @@ abstract public class Unit implements IUnit {
     }
 
     @Override
-    public Double getMaxEnergy() {
-        return maxEnergy;
-    }
-
-    @Override
-    public void setMaxEnergy(Double maxEnergy) {
-        this.maxEnergy = maxEnergy;
-    }
-
-    @Override
     public void energyRecharge() {
         energy = maxEnergy;
     }
@@ -205,6 +253,7 @@ abstract public class Unit implements IUnit {
         this.didAttack = didAttack;
     }
 
+    @Override
     public void walk(int endRow, int endCol) throws NotEnoughEnergy, AlliedUnitAtTheCeil, UnitHasAlreadyAttacked, NotYourTown, UnitHasNotPreparedAnAttack {
         Grid grid = Grid.getInstance();
         ArrayList<ArrayList<Pair>> costs = Pathfinder.getCosts();
@@ -296,8 +345,9 @@ abstract public class Unit implements IUnit {
         return isAttackPrepared;
     }
 
+
     @Override
-    public void setAttackPrepared(boolean attackPrepared) {
+    public void setIsAttackPrepared(boolean attackPrepared) {
         isAttackPrepared = attackPrepared;
     }
 
@@ -310,5 +360,38 @@ abstract public class Unit implements IUnit {
         } else {
             movesUntilReadyToAttack = -1;
         }
+    }
+
+    public String save() {
+        StringBuilder ret = new StringBuilder();
+        ret.append(getClass().getName()).append("\n");
+
+        ret.append(name).append(";;")
+                .append(hp).append(";;")
+                .append(maxHp).append(";;")
+                .append(maxTempHp).append(";;")
+                .append(damage.getDamageType().name()).append(";;")
+                .append(damage.getValue()).append(";;")
+                .append(attackRange).append(";;")
+                .append(defence).append(";;")
+                .append(maxDefence).append(";;")
+                .append(maxTempDefence).append(";;")
+                .append(energy).append(";;")
+                .append(maxEnergy).append(";;")
+                .append(maxTempEnergy).append(";;")
+                .append(cost).append(";;")
+                .append(row).append(";;")
+                .append(col).append(";;")
+                .append(symbol).append(";;")
+                .append(didAttack).append(";;")
+                .append(movesToPrepareAnAttack).append(";;")
+                .append(movesUntilReadyToAttack).append(";;")
+                .append(isAttackPrepared).append(";;\n");
+
+        ret.append("*--").append(terrains.get("*")).append(";;")
+                .append("#--").append(terrains.get("#")).append(";;")
+                .append("@--").append(terrains.get("@")).append(";;")
+                .append("!--").append(terrains.get("!")).append(";;\n");
+        return ret.toString();
     }
 }

@@ -1,3 +1,6 @@
+import Entities.Builds.Buildings;
+import Entities.Builds.IBuilding;
+import Entities.Builds.Market;
 import Entities.Builds.Town;
 import Entities.Units.Creator.UnitFactory;
 import Entities.Units.Units.IUnit;
@@ -7,34 +10,87 @@ import Menu.Menu;
 import Players.Player;
 import Players.Players.Bot;
 import Players.Players.RealPlayer;
+import Save.LoadGame;
+import Save.LoadedFile;
+import Utilities.Constants.MyScanner;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.Objects;
 import java.util.Random;
+import java.util.Scanner;
 
 import static Utilities.Constants.Colors.ANSI_GREEN;
 import static Utilities.Constants.Colors.ANSI_RED;
 
 public class Main {
     public static void main(String[] args) {
+        boolean DEBUG = true, loading = false;
 
+        Scanner scanner = MyScanner.getScanner();
+        while (true) {
+            System.out.println("1. Start new game\n2. Load the game");
+            System.out.print("Enter the option: ");
+            String cmd = scanner.nextLine();
+            if (!(cmd.equals("1") || cmd.equals("2"))) {
+                System.out.println("Invalid option");
+                continue;
+            }
+            if (cmd.equals("2"))
+                loading = true;
+            break;
+        }
+        Player me, bot;
 
-        boolean DEBUG = true;
+        if (loading && Objects.requireNonNull(new File("Saves/").listFiles()).length > 1) {
+            File file = new File("Saves/");
+            int counter = 0;
+            for (File curFile : Objects.requireNonNull(file.listFiles())) {
+                counter++;
+                if (counter == Objects.requireNonNull(file.listFiles()).length)
+                    break;
+                System.out.println(counter + ". " + curFile);
+            }
+            int numOfSave = 0;
+            while(true) {
+                System.out.print("Enter the option: ");
+                try {
+                    numOfSave = Integer.parseInt(scanner.nextLine()) - 1;
+                } catch (NumberFormatException e){
+                    System.out.println("Invalid option");
+                    continue;
+                }
+                if (numOfSave > 0 && numOfSave < Objects.requireNonNull(file.listFiles()).length)
+                    break;
+            }
+            try {
+                LoadedFile options = LoadGame.load(String.valueOf(Arrays.asList(Objects.requireNonNull(file.listFiles())).get(numOfSave)));
+                me = options.getMe();
+                bot = options.getBot();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
 
-
-        Grid grid = Grid.getInstance();
-        RealPlayer me = new RealPlayer("Robert", 999999, ANSI_GREEN);
-        Bot bot = new Bot("Botinok", 50, ANSI_RED);
-
-        if (!DEBUG) {
-            // Players place their towns;
-            Menu.townPlacementMenu(me);
-            Menu.townPlacementMenu(bot);
-            // Players buy their units and place them.
-            Menu.unitsPlacementMenu(me);
-            Menu.unitsPlacementMenu(bot);
         } else {
-            debug(me, bot);
+            me = new RealPlayer("Robert", 999999.0, ANSI_GREEN, 9999, 9999);
+            bot = new Bot("Botinok", 50.0, ANSI_RED, 10, 10);
+
+            if (!DEBUG) {
+                // Players place their towns;
+                Menu.townPlacementMenu(me);
+                Menu.townPlacementMenu(bot);
+                // Players buy their units and place them.
+                Menu.unitsPlacementMenu(me);
+                Menu.unitsPlacementMenu(bot);
+            } else {
+                debug(me, bot);
+            }
         }
 
+        Grid grid = Grid.getInstance();
+        Menu.setMe(me);
+        Menu.setBot(bot);
 
         // The game starts.
         while (!me.getUnits().isEmpty() && !bot.getUnits().isEmpty()) {
@@ -46,7 +102,12 @@ public class Main {
             grid.show();
             me.move();
             bot.move();
+            for (IBuilding workshop : me.getTown().getBuildings().get(Buildings.Workshop))
+                workshop.buff(me);
+            for (IBuilding workshop : bot.getTown().getBuildings().get(Buildings.Workshop))
+                workshop.buff(bot);
         }
+
         grid.show();
         if (me.getUnits().isEmpty() && bot.getUnits().isEmpty())
             System.out.println("\n\nGAME IS OVER\nDRAW\n\n");
@@ -54,15 +115,25 @@ public class Main {
             System.out.println("\n\nGAME IS OVER\nYOU DEFEAT\n\n");
         else
             System.out.println("\n\nGAME IS OVER\nYOU WIN\n\n");
+        MyScanner.closeScanner();
     }
 
     private static void debug(Player me, Player bot) {
         Grid grid = Grid.getInstance();
         Random random = new Random();
-        grid.placeTown(me, new Town(me, "Whiterun", "▲", random.nextInt(0, grid.getSize()), random.nextInt(0, grid.getSize())));
-        grid.placeTown(bot, new Town(bot, "Mordor", "▲", random.nextInt(0, grid.getSize()), random.nextInt(0, grid.getSize())));
+        me.setTown(new Town(me, "Whiterun", "▲", random.nextInt(0, grid.getSize()), random.nextInt(0, grid.getSize())));
+        grid.placeTown(me, me.getTown());
+        bot.setTown(new Town(bot, "Mordor", "▲", random.nextInt(0, grid.getSize()), random.nextInt(0, grid.getSize())));
+        grid.placeTown(bot, bot.getTown());
         int row, col;
         IUnit unit;
+        do {
+            row = random.nextInt(0, grid.getSize());
+            col = random.nextInt(0, grid.getSize());
+        } while (grid.isEntityAtCeil(row, col));
+        unit = UnitFactory.createUnit(UnitType.Swordsman, random.nextInt(0, grid.getSize()), random.nextInt(0, grid.getSize()), me);
+        me.buyUnit(unit);
+        grid.placeUnit(me, unit);
         do {
             row = random.nextInt(0, grid.getSize());
             col = random.nextInt(0, grid.getSize());

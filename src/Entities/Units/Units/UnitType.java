@@ -1,61 +1,286 @@
 package Entities.Units.Units;
 
-import java.util.Map;
-import java.util.Random;
+import Entities.Damage.DamageType;
+import Utilities.Constants.MyRandom;
+
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.util.*;
+
+import static Utilities.Constants.Colors.ANSI_RESET;
 
 public enum UnitType {
-    Swordsman("Swordsman", 50, 5, 1, 8, 3, 10),
+    Swordsman("Swordsman", 50.0, DamageType.Physical, 5.0, 1, 8.0, 3.0, 10.0, "S", new HashMap<>() {{
+        put("*", 1.0);
+        put("#", 1.5);
+        put("@", 2.0);
+        put("!", 1.2);
+    }}),
 
-    Spearman("Spearman", 35, 3, 1, 4, 6, 15),
+    Spearman("Spearman", 35.0, DamageType.Cold, 3.0, 1, 4.0, 6.0, 15.0, "P", new HashMap<>() {{
+        put("*", 1.0);
+        put("#", 1.5);
+        put("@", 2.0);
+        put("!", 1.2);
+    }}),
 
-    Axeman("Axeman", 45, 9, 1, 3, 4, 20),
+    Axeman("Axeman", 45.0, DamageType.Cold, 9.0, 1, 3.0, 4.0, 20.0, "A", new HashMap<>() {{
+        put("*", 1.0);
+        put("#", 1.5);
+        put("@", 2.0);
+        put("!", 1.2);
+    }}),
 
-    ArcherLongBow("ArcherLongBow", 30, 6, 5, 8, 2, 15),
+    ArcherLongBow("ArcherLongBow", 30.0, DamageType.Acid, 6.0, 5, 8.0, 2.0, 15.0, "L", new HashMap<>() {{
+        put("*", 1.0);
+        put("#", 1.8);
+        put("@", 2.2);
+        put("!", 1.0);
+    }}),
 
-    ArcherShortBow("ArcherShortBow", 25, 3, 3, 4, 4, 19),
+    ArcherShortBow("ArcherShortBow", 25.0, DamageType.Acid, 3.0, 3, 4.0, 4.0, 19.0, "Q", new HashMap<>() {{
+        put("*", 1.0);
+        put("#", 1.8);
+        put("@", 2.2);
+        put("!", 1.0);
+    }}),
 
-    Crossbowman("Crossbowman", 40, 7, 6, 3, 2, 23),
+    Crossbowman("Crossbowman", 40.0, DamageType.Fire, 7.0, 6, 3.0, 2.0, 23.0, "B", new HashMap<>() {{
+        put("*", 1.0);
+        put("#", 1.8);
+        put("@", 2.2);
+        put("!", 1.0);
+    }}),
 
-    Knight("Knight", 30, 5, 1, 3, 6, 20),
+    Knight("Knight", 30.0, DamageType.Physical, 5.0, 1, 3.0, 6.0, 20.0, "K", new HashMap<>() {{
+        put("*", 1.0);
+        put("#", 2.2);
+        put("@", 1.2);
+        put("!", 1.5);
+    }}),
 
-    Cuirassier("Cuirassier", 50, 2, 1, 7, 5, 23),
+    Cuirassier("Cuirassier", 50.0, DamageType.Cold, 2.0, 1, 7.0, 5.0, 23.0, "C", new HashMap<>() {{
+        put("*", 1.0);
+        put("#", 2.2);
+        put("@", 1.2);
+        put("!", 1.5);
+    }}),
 
-    HorseArcher("HorseArcher", 25, 3, 3, 2, 5, 25),
-    Mage("Mage", 15, 9, 3, 4, 3, 30),
-    GodMelee("GodMelee", 999, 999, 1, 999, 999, 999),
-    GodRange("GodRange", 999, 999, 999, 999, 999, 999);
+    HorseArcher("HorseArcher", 25.0, DamageType.Acid, 3.0, 3, 2.0, 5.0, 25.0, "H", new HashMap<>() {{
+        put("*", 1.0);
+        put("#", 2.2);
+        put("@", 1.2);
+        put("!", 1.5);
+    }}),
+    Mage("Mage", 15.0, DamageType.Fire, 9.0, 3, 4.0, 3.0, 30.0, "M", new HashMap<>() {{
+        put("*", 1.5);
+        put("#", 2.0);
+        put("@", 2.5);
+        put("!", 1.8);
+    }}),
+    GodMelee("GodMelee", 999.0, DamageType.Cold, 999.0, 1, 999.0, 999.0, 999.0, "G", new HashMap<>() {{
+        put("*", 1.0);
+        put("#", 1.5);
+        put("@", 2.0);
+        put("!", 1.2);
+    }}),
+    GodRange("GodRange", 999.0, DamageType.Acid, 999.0, 999, 999.0, 999.0, 999.0, "G", new HashMap<>() {{
+        put("*", 1.0);
+        put("#", 1.5);
+        put("@", 2.0);
+        put("!", 1.2);
+    }});
 
-    public final String name;
-    public final int hp, damage, attackRange, defence, cost;
-    public final double energy;
+    private final String name;
+    private Double hp, defence, energy, cost;
+    private DamageType damageType;
+    private Double damageValue;
+    private Integer attackRange;
+    private String symbol;
+    private HashMap<String, Double> terrains;
+    private static final HashMap<String, NewUnit> newUnitsTypes = new HashMap<>();
 
-    UnitType(String name, int hp, int damage, int attackRange, int defence, float energy, int cost) {
+    UnitType(String name, Double hp, DamageType damageType, Double damageValue, Integer attackRange, Double defence, Double energy, Double cost, String symbol, HashMap<String, Double> terrains) {
         this.hp = hp;
-        this.damage = damage;
+        this.damageType = damageType;
+        this.damageValue = damageValue;
         this.attackRange = attackRange;
         this.defence = defence;
         this.energy = energy;
         this.cost = cost;
         this.name = name;
+        this.symbol = symbol;
+        this.terrains = terrains;
     }
 
-    private static final Random random = new Random();
+    public static HashSet<String> getEnums() {
+        HashSet<String> enums = new HashSet<>();
+        for (UnitType unitType : values())
+            enums.add(unitType.name());
+        return enums;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public Double getHp() {
+        return hp;
+    }
+
+    public void setHp(Double hp) {
+        this.hp = hp;
+    }
+
+    public DamageType getDamageType() {
+        return damageType;
+    }
+
+    public void setDamageType(DamageType damageType) {
+        this.damageType = damageType;
+    }
+
+    public Double getDamageValue() {
+        return damageValue;
+    }
+
+    public void setDamageValue(Double damageValue) {
+        this.damageValue = damageValue;
+    }
+
+    public Integer getAttackRange() {
+        return attackRange;
+    }
+
+    public void setAttackRange(Integer attackRange) {
+        this.attackRange = attackRange;
+    }
+
+    public Double getDefence() {
+        return defence;
+    }
+
+    public void setDefence(Double defence) {
+        this.defence = defence;
+    }
+
+    public Double getEnergy() {
+        return energy;
+    }
+
+    public void setEnergy(Double energy) {
+        this.energy = energy;
+    }
+
+    public Double getCost() {
+        return cost;
+    }
+
+    public void setCost(Double cost) {
+        this.cost = cost;
+    }
+
+    public String getSymbol() {
+        return symbol;
+    }
+
+    public void setSymbol(String symbol) {
+        this.symbol = symbol;
+    }
+
+    public HashMap<String, Double> getTerrains() {
+        return terrains;
+    }
+
+    public void setTerrains(HashMap<String, Double> terrains) {
+        this.terrains = terrains;
+    }
+
+    public static HashMap<String, NewUnit> getNewUnitsTypes() {
+        return newUnitsTypes;
+    }
+
+    private static final Random random = MyRandom.getRandom();
 
     public static UnitType randomUnit() {
         UnitType[] units = values();
         return units[random.nextInt(units.length)];
     }
 
+
     public static void showUnitsShop() {
-        String leftAlignment = "| %-14s | %-6s | %-6s | %-12s | %-7s | %-6s | %-4s |%n";
-        System.out.format("+----------------+--------+--------+--------------+---------+--------+------+%n");
-        System.out.format("|      Name      | Health | Attack | Attack Range | Defence | Energy | Cost |%n");
-        System.out.format("+----------------+--------+--------+--------------+---------+--------+------+%n");
+        DecimalFormatSymbols otherSymbols = new DecimalFormatSymbols(Locale.ENGLISH);
+        otherSymbols.setDecimalSeparator('.');
+        otherSymbols.setGroupingSeparator('.');
+        DecimalFormat doubleFormat = new DecimalFormat("0.0", otherSymbols);
+
+        String leftAlignment = "| %-16s | %-8s | %-8s | %-24s | %-14s | %-9s | %-8s | %-6s |%n";
+        System.out.format("+------------------+----------+----------+---------------+----------------+-----------+----------+--------+%n");
+        System.out.format("|       Name       |  Health  |  Damage  |  Damage Type  |  Attack Range  |  Defence  |  Energy  |  Cost  |%n");
+        System.out.format("+------------------+----------+----------+---------------+----------------+-----------+----------+--------+%n");
         for (UnitType unitType : UnitType.values()) {
-            System.out.format(leftAlignment, unitType.name, unitType.hp, unitType.damage,
-                    unitType.attackRange, unitType.defence, unitType.energy, unitType.cost);
+            System.out.format(leftAlignment,
+                    unitType.getName(),
+                    doubleFormat.format(unitType.getHp()),
+                    doubleFormat.format(unitType.getDamageValue()),
+                    unitType.getDamageType().getColor() + unitType.getDamageType() + ANSI_RESET,
+                    unitType.getAttackRange(),
+                    doubleFormat.format(unitType.getDefence()),
+                    doubleFormat.format(unitType.getEnergy()),
+                    doubleFormat.format(unitType.getCost()));
         }
-        System.out.format("+----------------+--------+--------+--------------+---------+--------+------+%n");
+        for (Map.Entry<String, NewUnit> entry : getNewUnitsTypes().entrySet()) {
+            String unitName = entry.getKey();
+            NewUnit unitType = entry.getValue();
+            System.out.format(leftAlignment,
+                    unitType.getName(),
+                    doubleFormat.format(unitType.getHp()),
+                    doubleFormat.format(unitType.getDamageValue()),
+                    unitType.getDamageType().getColor() + unitType.getDamageType() + ANSI_RESET,
+                    unitType.getAttackRange(),
+                    doubleFormat.format(unitType.getDefence()),
+                    doubleFormat.format(unitType.getEnergy()),
+                    doubleFormat.format(unitType.getCost()));
+        }
+        System.out.format("+------------------+----------+----------+---------------+----------------+-----------+----------+--------+%n");
+    }
+
+
+    public static String save() {
+        String ret = "";
+        for (UnitType unitType : values()) {
+            ret += "LoremIpsum" + ";;"
+                    + unitType.getName() + ";;"
+                    + unitType.getHp() + ";;"
+                    + unitType.getDamageType().name() + ";;"
+                    + unitType.getDamageValue() + ";;"
+                    + unitType.getAttackRange() + ";;"
+                    + unitType.getDefence() + ";;"
+                    + unitType.getEnergy() + ";;"
+                    + unitType.getCost() + ";;"
+                    + unitType.getSymbol() + ";;"
+                    + "*--" + unitType.getTerrains().get("*") + ";;"
+                    + "#--" + unitType.getTerrains().get("#") + ";;"
+                    + "@--" + unitType.getTerrains().get("@") + ";;"
+                    + "!--" + unitType.getTerrains().get("!") + "\n";
+        }
+        for (NewUnit unit : getNewUnitsTypes().values()) {
+            ret += unit.getUnitClass() + ";;"
+                    + unit.getName() + ";;"
+                    + unit.getHp() + ";;"
+                    + unit.getDamageType().name() + ";;"
+                    + unit.getDamageValue() + ";;"
+                    + unit.getAttackRange() + ";;"
+                    + unit.getDefence() + ";;"
+                    + unit.getEnergy() + ";;"
+                    + unit.getCost() + ";;"
+                    + unit.getSymbol() + ";;"
+                    + "*--" + unit.getTerrains().get("*") + ";;"
+                    + "#--" + unit.getTerrains().get("#") + ";;"
+                    + "@--" + unit.getTerrains().get("@") + ";;"
+                    + "!--" + unit.getTerrains().get("!") + "\n";
+        }
+        return ret;
     }
 
 }

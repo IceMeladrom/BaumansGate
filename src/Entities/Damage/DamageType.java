@@ -1,7 +1,18 @@
 package Entities.Damage;
 
+import static Utilities.Constants.Colors.*;
+
 public enum DamageType {
-    Physical, Fire, Cold, Acid;
+    Physical(ANSI_BLACK_BRIGHT), Fire(ANSI_RED_BOLD), Cold(ANSI_CYAN_BOLD), Acid(ANSI_YELLOW_BOLD);
+
+    private final String color;
+    DamageType(String color){
+        this.color = color;
+    }
+
+    public String getColor() {
+        return color;
+    }
 
     public static float attackMultiplier(DamageType myDamageType, DamageType enemyDamageType) {
         float koef = 1.0F;

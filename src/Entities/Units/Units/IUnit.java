@@ -7,47 +7,59 @@ import Players.Player;
 import java.util.HashMap;
 
 public interface IUnit {
-    public HashMap<String, Float> getTerrains();
+    public HashMap<String, Double> getTerrains();
+
+    void setTerrains(HashMap<String, Double> terrains);
 
     public Player getPlayer();
 
     public void setPlayer(Player player);
 
-    public int getHp();
+    public Double getHp();
 
-    public int getMaxHp();
+    public Double getMaxHp();
+
+    public Double getMaxTempHp();
 
     public void heal();
 
-    public void setHp(int hp);
+    public void setHp(Double hp);
+
+    public void setMaxTempHp(Double maxTempHp);
+
+    public void setMaxHp(Double maxHp);
 
     public IDamage getDamage();
 
     public void setDamage(IDamage damage);
 
-    public int getAttackRange();
+    public Integer getAttackRange();
 
-    public void setAttackRange(int attackRange);
+    public void setAttackRange(Integer attackRange);
 
-    public int getDefence();
+    public Double getDefence();
 
-    public int getMaxDefence();
+    public Double getMaxDefence();
 
-    public void setDefence(int defence);
+    public void setDefence(Double defence);
+
+    public void setMaxTempDefence(Double maxTempDefence);
+
+    public void setMaxDefence(Double maxDefence);
 
     public Double getEnergy();
 
     public void setEnergy(Double energy);
 
-    public int getCost();
+    public Double getCost();
 
-    public void setCost(int cost);
+    public void setCost(Double cost);
 
     public int getCol();
 
-    public int getRow();
-
     public void setCol(int col);
+
+    public int getRow();
 
     public void setRow(int row);
 
@@ -59,7 +71,11 @@ public interface IUnit {
 
     public void setSymbol(String symbol);
 
+    public Double getMaxTempEnergy();
+
     public Double getMaxEnergy();
+
+    public void setMaxTempEnergy(Double maxTempEnergy);
 
     public void setMaxEnergy(Double maxEnergy);
 
@@ -67,13 +83,16 @@ public interface IUnit {
 
     public boolean isAlive();
 
+    public boolean getDidAttack();
+
+    public void setDidAttack(boolean didAttack);
+
+    public void walk(int endRow, int endCol) throws NotEnoughEnergy, AlliedUnitAtTheCeil, UnitHasAlreadyAttacked, NotYourTown, UnitHasNotPreparedAnAttack;
+    public void attack(IUnit enemy) throws UnitHasAlreadyAttacked, UnitHasNotPreparedAnAttack;
+
     public int getMovesUntilReadyToAttack();
 
     public void setMovesUntilReadyToAttack(int movesUntilReadyToAttack);
-
-    public void walk(int row, int col) throws NotEnoughEnergy, AlliedUnitAtTheCeil, UnitHasAlreadyAttacked, NotYourTown, UnitHasNotPreparedAnAttack;
-
-    public void attack(IUnit enemy) throws UnitHasAlreadyAttacked, UnitHasNotPreparedAnAttack;
 
     public int getMovesToPrepareAnAttack();
 
@@ -81,13 +100,11 @@ public interface IUnit {
 
     public void prepareAttack();
 
-    public boolean getDidAttack();
-
-    public void setDidAttack(boolean didAttack);
-
     public boolean getIsAttackPrepared();
 
-    public void setAttackPrepared(boolean attackPrepared);
+    public void setIsAttackPrepared(boolean attackPrepared);
 
     public void preparing();
+
+    public String save();
 }

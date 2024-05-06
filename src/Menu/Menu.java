@@ -1,25 +1,27 @@
 package Menu;
 
+import Entities.Builds.Buildings;
+import Entities.Builds.IBuilding;
 import Entities.Builds.Town;
 import Entities.Units.Creator.UnitFactory;
 import Entities.Units.Units.IUnit;
 import Entities.Units.Units.UnitType;
-import Exceptions.AnotherEntityAtTheCeil;
-import Exceptions.NoUnitAtTheCeil;
-import Exceptions.NotEnoughCoins;
-import Exceptions.UnitDoesNotExist;
+import Exceptions.*;
 import Grid.Grid;
 import Players.Player;
 import Utilities.Constants.MyRandom;
 import Utilities.Constants.MyScanner;
 
-import java.util.Random;
-import java.util.Scanner;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.util.*;
 
 import static Utilities.Constants.Colors.*;
+import static Utilities.Utils.clearConsole;
 import static Utilities.Utils.isCoordsValid;
 
 public class Menu {
+    private static Player me, bot;
     public static void townPlacementMenu(Player player) {
         if (player.needConsole()) {
             Scanner scanner = MyScanner.getScanner();
@@ -53,7 +55,7 @@ public class Menu {
                 System.out.println("Enter the name of town.");
                 System.out.print("Town's name: ");
                 String townsName = scanner.nextLine();
-                Town town = new Town(player, townsName, "T", row, col);
+                Town town = new Town(player, townsName, "▲", row, col);
                 player.setTown(town);
                 grid.placeTown(player, town);
                 return;
@@ -71,7 +73,7 @@ public class Menu {
                     continue;
                 validCoords = true;
             }
-            Town town = new Town(player, "Mordor", "E", row, col);
+            Town town = new Town(player, "Mordor", "▲", row, col);
             player.setTown(town);
             grid.placeTown(player, town);
         }
@@ -212,11 +214,14 @@ public class Menu {
                 cmd = scanner.nextLine();
                 if (cmd.equals("Exit"))
                     return null;
-
-                try {
+                // TODO realize buy from academy
+                if (UnitType.getEnums().contains(cmd)) {
                     unit = UnitFactory.createUnit(UnitType.valueOf(cmd), row, col, player);
                     unitSelected = true;
-                } catch (IllegalArgumentException e) {
+                } else if (UnitType.getNewUnitsTypes().containsKey(cmd)) {
+                    unit = UnitFactory.createUnit(UnitType.getNewUnitsTypes().get(cmd), row, col, player);
+                    unitSelected = true;
+                } else {
                     err = "You tried to choose non existed unit!";
                 }
             }
@@ -227,7 +232,7 @@ public class Menu {
             IUnit unit;
             while (true) {
                 unitName = UnitType.randomUnit();
-                if (unitName.cost <= player.getCoins()) {
+                if (unitName.getCost() <= player.getCoins()) {
                     unit = UnitFactory.createUnit(unitName, row, col, player);
                     break;
                 }
@@ -262,4 +267,93 @@ public class Menu {
         return unit.getName();
     }
 
+
+    public static void townManagementMenu(Player player) {
+        if (player.needConsole()) {
+            boolean leave = false, showInfo = false;
+            String err = "";
+            Scanner scanner = MyScanner.getScanner();
+            Town town = player.getTown();
+            HashMap<Buildings, ArrayList<IBuilding>> buildings = town.getBuildings();
+            while (!leave) {
+                clearConsole();
+                if (!err.isEmpty()) {
+                    System.out.println(ANSI_RED + err + " Try again!" + ANSI_RESET);
+                    err = "";
+                }
+                if (showInfo) {
+                    DecimalFormatSymbols otherSymbols = new DecimalFormatSymbols(Locale.ENGLISH);
+                    otherSymbols.setDecimalSeparator('.');
+                    otherSymbols.setGroupingSeparator('.');
+                    DecimalFormat doubleFormat = new DecimalFormat("0.0", otherSymbols);
+                    player.showPlayerInfo();
+                    System.out.format("%nPlayer's name: %s%n", player.getName());
+                    System.out.format("Coins: %s%nWood: %d%nStone: %d%n", doubleFormat.format(player.getCoins()), player.getWood(), player.getStone());
+                    town.showBuildings();
+                    showInfo = false;
+                }
+                System.out.format("Welcome to the %s town!%n", town.getName());
+                System.out.format("Choose the option:\n\t1. Show player info\n\t2. Build/Upgrade building\n\t3. Enter to the Market\n\t4. Enter to the Academy\n\t5. Leave town's menu\n");
+                System.out.format("Enter the option: ");
+                String option = scanner.nextLine();
+                switch (option) {
+                    case "1" -> {
+                        showInfo = true;
+                    }
+                    case "2" -> {
+                        Buildings.showBuildingsShop(player);
+                        System.out.format("Enter the option or type %sExit%s: ", ANSI_RED, ANSI_RESET);
+                        String houseName = scanner.nextLine();
+                        if (houseName.equals("Exit"))
+                            continue;
+                        try {
+                            town.buildHouse(Buildings.valueOf(houseName));
+                        } catch (IllegalArgumentException e) {
+                            err = "Invalid option";
+                            break;
+                        } catch (CantBuildOrUpgradeHouse | NotEnoughResources e) {
+                            err = e.getMessage();
+                            break;
+                        }
+                    }
+                    case "3" -> {
+                        if (town.getBuildings().get(Buildings.Market).isEmpty()) {
+                            err = "Market hasn't built yet!";
+                            break;
+                        }
+                        town.getBuildings().get(Buildings.Market).getFirst().buff(player);
+                    }
+                    case "4" -> {
+                        if (town.getBuildings().get(Buildings.Academy).isEmpty()) {
+                            err = "Market hasn't built yet!";
+                            break;
+                        }
+                        town.getBuildings().get(Buildings.Academy).getFirst().buff(player);
+                    }
+                    case "5" -> {
+                        leave = true;
+                    }
+                    default -> err = new InvalidOption().getMessage();
+                }
+            }
+        } else {
+
+        }
+    }
+
+    public static Player getMe() {
+        return me;
+    }
+
+    public static void setMe(Player me) {
+        Menu.me = me;
+    }
+
+    public static Player getBot() {
+        return bot;
+    }
+
+    public static void setBot(Player bot) {
+        Menu.bot = bot;
+    }
 }

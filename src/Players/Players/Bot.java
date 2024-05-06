@@ -13,15 +13,18 @@ import java.util.Random;
 
 public class Bot implements Player {
     private ArrayList<IUnit> units = new ArrayList<>();
-    private int coins;
+    private Double coins;
     private String name, color;
     private static final Random random = MyRandom.getRandom();
     private Town town;
+    private Integer wood, stone;
 
-    public Bot(String name, int coins, String color) {
+    public Bot(String name, Double coins, String color, Integer wood, Integer stone) {
         this.name = name;
         this.coins = coins;
         this.color = color;
+        this.wood = wood;
+        this.stone = stone;
     }
 
     @Override
@@ -31,6 +34,9 @@ public class Bot implements Player {
 
     public ArrayList<IUnit> getUnits() {
         return units;
+    }
+    public void setUnits(ArrayList<IUnit> units) {
+        this.units = units;
     }
 
     public boolean buyUnit(@NotNull IUnit unit) {
@@ -62,11 +68,11 @@ public class Bot implements Player {
         this.name = name;
     }
 
-    public int getCoins() {
+    public Double getCoins() {
         return coins;
     }
 
-    public void setCoins(int coins) {
+    public void setCoins(Double coins) {
         this.coins = coins;
         checkCoins();
     }
@@ -79,29 +85,29 @@ public class Bot implements Player {
         this.color = color;
     }
 
-    public void addCoins(int coins) {
+    public void addCoins(Double coins) {
         this.coins += coins;
         checkCoins();
     }
 
-    public void spendCoins(int coins) {
+    public void spendCoins(Double coins) {
         this.coins -= coins;
         checkCoins();
     }
 
     public void checkCoins() {
         if (coins < 0)
-            coins = 0;
+            coins = 0.0;
     }
 
     @Override
     public void setTown(Town town) {
-
+        this.town = town;
     }
 
     @Override
     public Town getTown() {
-        return null;
+        return town;
     }
 
 
@@ -122,6 +128,27 @@ public class Bot implements Player {
     public void showPlayerInfo() {
     }
 
+    @Override
+    public Integer getStone() {
+        return stone;
+    }
+
+    @Override
+    public void setStone(Integer stone) {
+        this.stone = stone;
+    }
+
+    @Override
+    public Integer getWood() {
+        return wood;
+    }
+
+    @Override
+    public void setWood(Integer wood) {
+        this.wood = wood;
+    }
+
+    @Override
     public void move() {
         int row, col;
         for (IUnit unit : units) {
@@ -138,5 +165,14 @@ public class Bot implements Player {
                 break;
             }
         }
+    }
+
+    public String save(){
+        StringBuilder ret = new StringBuilder();
+        ret.append(name).append(";;").append(coins).append(";;").append(color).append(";;").append(wood).append(";;").append(stone).append("\n");
+        ret.append(town.toString()).append("\n");
+        units.forEach(unit -> ret.append(unit).append(";;"));
+
+        return ret.toString();
     }
 }

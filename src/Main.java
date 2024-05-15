@@ -26,19 +26,24 @@ import static Utilities.Constants.Colors.ANSI_RED;
 
 public class Main {
     public static void main(String[] args) {
-        boolean DEBUG = true, loading = false;
-
+        boolean DEBUG = false, loading = false, loadingAndChange = false;
         Scanner scanner = MyScanner.getScanner();
         while (true) {
-            System.out.println("1. Start new game\n2. Load the game");
+            System.out.println("1. Start new game\n2. Load the game\n3. Create the map\n4. Change already existed map");
             System.out.print("Enter the option: ");
             String cmd = scanner.nextLine();
-            if (!(cmd.equals("1") || cmd.equals("2"))) {
+            if (!(cmd.equals("1") || cmd.equals("2") || cmd.equals("3") || cmd.equals("4"))) {
                 System.out.println("Invalid option");
                 continue;
             }
-            if (cmd.equals("2"))
-                loading = true;
+            switch (cmd) {
+                case "2" -> loading = true;
+                case "3" -> Grid.createGrid();
+                case "4" -> {
+                    loading = true;
+                    loadingAndChange = true;
+                }
+            }
             break;
         }
         Player me, bot;
@@ -53,19 +58,21 @@ public class Main {
                 System.out.println(counter + ". " + curFile);
             }
             int numOfSave = 0;
-            while(true) {
+            while (true) {
                 System.out.print("Enter the option: ");
                 try {
                     numOfSave = Integer.parseInt(scanner.nextLine()) - 1;
-                } catch (NumberFormatException e){
+                } catch (NumberFormatException e) {
                     System.out.println("Invalid option");
                     continue;
                 }
-                if (numOfSave > 0 && numOfSave < Objects.requireNonNull(file.listFiles()).length)
+                if (numOfSave >= 0 && numOfSave < Objects.requireNonNull(file.listFiles()).length)
                     break;
             }
             try {
                 LoadedFile options = LoadGame.load(String.valueOf(Arrays.asList(Objects.requireNonNull(file.listFiles())).get(numOfSave)));
+                if (loadingAndChange)
+                    Grid.createGrid();
                 me = options.getMe();
                 bot = options.getBot();
             } catch (IOException e) {

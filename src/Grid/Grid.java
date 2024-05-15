@@ -4,10 +4,10 @@ import Entities.Builds.Town;
 import Entities.Units.Units.IUnit;
 import Players.Player;
 import Utilities.Constants.GridSize;
+import Utilities.Constants.MyScanner;
 import Utilities.Pair;
 
-import java.util.ArrayList;
-import java.util.Random;
+import java.util.*;
 
 import static Utilities.Constants.Colors.*;
 import static Utilities.Utils.clearConsole;
@@ -280,7 +280,28 @@ public class Grid {
             }
             ret.append("\n");
         }
-        ret.deleteCharAt(ret.length()-1);
+        ret.deleteCharAt(ret.length() - 1);
         return String.valueOf(ret);
+    }
+
+    public static void createGrid() {
+        Grid tmpGrid = getInstance();
+        System.out.println("Enter the grid. " + GridSize.getSize() + " characters");
+        String rowTer = "";
+        for (int i = 0; i < GridSize.getSize(); i++) {
+            while (true) {
+                System.out.print("\nEnter " + (i + 1) + " row: ");
+                rowTer = MyScanner.getScanner().nextLine();
+                if (rowTer.length() == GridSize.getSize() && rowTer.matches("^[*#@!]+$")) {
+                    for (int j = 0; j < GridSize.getSize(); j++) {
+                        tmpGrid.grid.get(i).get(j).setTerrain(String.valueOf(rowTer.charAt(j)));
+                    }
+                    break;
+                }
+                System.out.println(ANSI_RED + "Error" + ANSI_RESET);
+
+            }
+
+        }
     }
 }

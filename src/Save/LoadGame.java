@@ -6,6 +6,7 @@ import Entities.Damage.DamageType;
 import Entities.Units.Units.*;
 import Grid.Cell;
 import Players.Player;
+import Players.Players.Bot;
 import Players.Players.RealPlayer;
 
 import java.io.FileReader;
@@ -50,7 +51,11 @@ public class LoadGame {
         FileReader file = new FileReader(path + "/" + who + ".txt");
         Scanner scanner = new Scanner(file);
         ArrayList<String> playerParams = new ArrayList<>(Arrays.asList(scanner.nextLine().split(";;")));
-        Player player = new RealPlayer(playerParams.get(0), Double.parseDouble(playerParams.get(1)), playerParams.get(2), Integer.parseInt(playerParams.get(3)), Integer.parseInt(playerParams.get(4)));
+        Player player;
+        if (who.equals("me"))
+            player = new RealPlayer(playerParams.get(0), Double.parseDouble(playerParams.get(1)), playerParams.get(2), Integer.parseInt(playerParams.get(3)), Integer.parseInt(playerParams.get(4)));
+        else
+            player = new Bot(playerParams.get(0), Double.parseDouble(playerParams.get(1)), playerParams.get(2), Integer.parseInt(playerParams.get(3)), Integer.parseInt(playerParams.get(4)));
         file.close();
         scanner.close();
         return player;

@@ -2,12 +2,14 @@ package Players.Players;
 
 import Entities.Builds.Town;
 import Entities.Units.Units.IUnit;
+import Entities.Units.Units.Mage;
 import Exceptions.*;
 import Grid.Grid;
 import Grid.Pathfinder;
 import Menu.Menu;
 import Players.Player;
 import Save.SaveGame;
+import Utilities.Constants.MyRandom;
 import org.jetbrains.annotations.NotNull;
 
 import java.text.DecimalFormat;
@@ -145,13 +147,16 @@ public class RealPlayer implements Player {
             System.out.println("\tAttack Range: " + unitTemp.getAttackRange());
             System.out.println("\tEnergy: " + doubleFormat.format(unitTemp.getEnergy()) + "/" + doubleFormat.format(unitTemp.getMaxEnergy()));
             System.out.println("\tHas attack ability: " + (unitTemp.getDidAttack() ? (ANSI_RED + "NO") : (ANSI_GREEN + "YES")) + ANSI_RESET);
-            if (!unitTemp.getIsAttackPrepared()) {
-                if (unitTemp.getMovesUntilReadyToAttack() != -1)
-                    System.out.println("\tSpecial attack will be prepared until: " + ANSI_RED + unitTemp.getMovesUntilReadyToAttack() + " moves" + ANSI_RESET);
-                else
-                    System.out.println("\tSpecial attack " + ANSI_RED + "is not preparing" + ANSI_RESET);
-            } else
-                System.out.println("\tSpecial attack " + ANSI_GREEN + "prepared" + ANSI_RESET);
+            if (unitTemp.getClass().equals(Mage.class)) {
+                if (!unitTemp.getIsAttackPrepared()) {
+                    if (unitTemp.getMovesUntilReadyToAttack() != -1)
+                        System.out.println("\tSpecial attack will be prepared until: " + ANSI_RED + unitTemp.getMovesUntilReadyToAttack() + " moves" + ANSI_RESET);
+                    else
+                        System.out.println("\tSpecial attack " + ANSI_RED + "is not preparing" + ANSI_RESET);
+                } else
+                    System.out.println("\tSpecial attack " + ANSI_GREEN + "prepared" + ANSI_RESET);
+                System.out.println("\tSpells: " + ((Mage) unitTemp).getSpells());
+            }
         }
         System.out.println();
     }
@@ -223,6 +228,34 @@ public class RealPlayer implements Player {
                     Pathfinder.availableCells(unit);
                     Pathfinder.show();
                     grid.showWithAvailablePaths(unit);
+                    boolean usedSpell = false;
+                    if (unit.getClass().equals(Mage.class) && ((Mage) unit).getSpells() > 0) {
+                        while (!usedSpell) {
+                            System.out.print("You want to use teleportation spell?\n\t1. Yes\n\t2. No\nEnter the option: ");
+                            cmd = scanner.nextLine();
+                            if (cmd.equals("1")) {
+                                ((Mage) unit).reduceSpell();
+                                int rndRow, rndCol;
+                                do {
+                                    rndRow = MyRandom.getRandom().nextInt(0, 15);
+                                    rndCol = MyRandom.getRandom().nextInt(0, 15);
+                                } while (Grid.getInstance().getCell(rndRow, rndCol).getPlayer() != null);
+                                log(ANSI_GREEN + "You teleported to row: " + (rndRow + 1) + " col: " + (rndCol + 1) + ANSI_RESET);
+                                grid.getCell(rndRow, rndCol).setUnit(null);
+                                unit.setRow(rndRow);
+                                unit.setCol(rndCol);
+                                grid.getCell(rndRow, rndCol).setUnit(unit);
+
+                                usedSpell = true;
+                            } else if (cmd.equals("2")) {
+                                break;
+                            } else {
+                                System.out.println(ANSI_RED + "Invalid option" + ANSI_RESET);
+                            }
+                        }
+                    }
+                    if (usedSpell)
+                        break;
 
                     System.out.println("Enter the coordinates where you want to go");
                     try {

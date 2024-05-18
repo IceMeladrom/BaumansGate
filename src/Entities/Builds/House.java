@@ -1,5 +1,7 @@
 package Entities.Builds;
 
+import Exceptions.MageAlreadyHasMinPreparationTime;
+import Exceptions.NotEnoughCoins;
 import Players.Player;
 
 import java.util.HashMap;
@@ -24,7 +26,11 @@ public abstract class House implements IBuilding {
     @Override
     public void upgrade(Player player) {
         level += 1;
-        buff(player);
+        try {
+            buff(player);
+        } catch (MageAlreadyHasMinPreparationTime | NotEnoughCoins e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public Integer getLevel() {

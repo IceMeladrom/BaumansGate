@@ -3,6 +3,8 @@ package Entities.Builds;
 import Entities.Units.Units.IUnit;
 import Entities.Units.Units.NewUnit;
 import Exceptions.CantBuildOrUpgradeHouse;
+import Exceptions.MageAlreadyHasMinPreparationTime;
+import Exceptions.NotEnoughCoins;
 import Exceptions.NotEnoughResources;
 import Players.Player;
 
@@ -25,15 +27,11 @@ public class Town {
         this.col = col;
         this.player = player;
 
-        buildings = new HashMap<>();
-        buildings.put(Buildings.WitchHouse, new ArrayList<>(1));
-        buildings.put(Buildings.Tavern, new ArrayList<>(1));
-        buildings.put(Buildings.Forge, new ArrayList<>(1));
-        buildings.put(Buildings.Arsenal, new ArrayList<>(1));
-        buildings.put(Buildings.Academy, new ArrayList<>(1));
-        buildings.put(Buildings.Market, new ArrayList<>(1));
-        buildings.put(Buildings.Workshop, new ArrayList<>(4));
-
+        buildings = new HashMap<>() {{
+            for (Buildings b : Buildings.values()) {
+                put(b, new ArrayList<>());
+            }
+        }};
     }
 
     public HashMap<Buildings, ArrayList<IBuilding>> getBuildings() {
@@ -110,7 +108,7 @@ public class Town {
     }
 
 
-    public void buildHouse(Buildings building) throws NotEnoughResources, CantBuildOrUpgradeHouse {
+    public void buildHouse(Buildings building) throws NotEnoughResources, CantBuildOrUpgradeHouse, MageAlreadyHasMinPreparationTime, NotEnoughCoins {
         boolean hasBuilt = false;
         if (building.hasEnoughMaterials(getPlayer())) {
             switch (building) {
@@ -182,6 +180,14 @@ public class Town {
                 case Workshop -> {
                     if (buildings.get(building).size() < 4) {
                         buildings.get(building).add(new Workshop());
+                        hasBuilt = true;
+                    } else {
+                        throw new CantBuildOrUpgradeHouse();
+                    }
+                }
+                case Tower -> {
+                    if (buildings.get(building).isEmpty()) {
+                        buildings.get(building).add(new Tower());
                         hasBuilt = true;
                     } else {
                         throw new CantBuildOrUpgradeHouse();

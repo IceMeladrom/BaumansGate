@@ -47,4 +47,13 @@ public enum DamageType {
 
         return koef;
     }
+
+    public static boolean contains(String test) {
+        for (DamageType c : DamageType.values()) {
+            if (c.name().equals(test)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

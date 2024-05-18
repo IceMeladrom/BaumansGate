@@ -1,10 +1,11 @@
 import Entities.Builds.Buildings;
 import Entities.Builds.IBuilding;
-import Entities.Builds.Market;
 import Entities.Builds.Town;
 import Entities.Units.Creator.UnitFactory;
 import Entities.Units.Units.IUnit;
 import Entities.Units.Units.UnitType;
+import Exceptions.MageAlreadyHasMinPreparationTime;
+import Exceptions.NotEnoughCoins;
 import Grid.Grid;
 import Menu.Menu;
 import Players.Player;
@@ -21,12 +22,11 @@ import java.util.Objects;
 import java.util.Random;
 import java.util.Scanner;
 
-import static Utilities.Constants.Colors.ANSI_GREEN;
-import static Utilities.Constants.Colors.ANSI_RED;
+import static Utilities.Constants.Colors.*;
 
 public class Main {
-    public static void main(String[] args) {
-        boolean DEBUG = false, loading = false, loadingAndChange = false;
+    public static void main(String[] args) throws MageAlreadyHasMinPreparationTime, NotEnoughCoins {
+        boolean DEBUG = true, loading = false, loadingAndChange = false;
         Scanner scanner = MyScanner.getScanner();
         while (true) {
             System.out.println("1. Start new game\n2. Load the game\n3. Create the map\n4. Change already existed map");
@@ -63,7 +63,7 @@ public class Main {
                 try {
                     numOfSave = Integer.parseInt(scanner.nextLine()) - 1;
                 } catch (NumberFormatException e) {
-                    System.out.println("Invalid option");
+                    System.out.println(ANSI_RED + "Invalid option" + ANSI_RESET);
                     continue;
                 }
                 if (numOfSave >= 0 && numOfSave < Objects.requireNonNull(file.listFiles()).length)
@@ -80,6 +80,8 @@ public class Main {
             }
 
         } else {
+            if (loading)
+                System.out.println(ANSI_RED + "No existed saves" + ANSI_RESET);
             me = new RealPlayer("Robert", 999999.0, ANSI_GREEN, 9999, 9999);
             bot = new Bot("Botinok", 50.0, ANSI_RED, 10, 10);
 

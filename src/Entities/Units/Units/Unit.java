@@ -386,8 +386,10 @@ public abstract class Unit implements IUnit {
                 .append(didAttack).append(";;")
                 .append(movesToPrepareAnAttack).append(";;")
                 .append(movesUntilReadyToAttack).append(";;")
-                .append(isAttackPrepared).append(";;\n");
-
+                .append(isAttackPrepared).append(";;");
+        if (getClass().equals(Mage.class))
+            ret.append(((Mage) this).getSpells()).append(";;");
+        ret.append("\n");
         ret.append("*--").append(terrains.get("*")).append(";;")
                 .append("#--").append(terrains.get("#")).append(";;")
                 .append("@--").append(terrains.get("@")).append(";;")

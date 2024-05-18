@@ -22,6 +22,8 @@ import static Utilities.Utils.isCoordsValid;
 
 public class Menu {
     private static Player me, bot;
+    private static final ArrayList<String> msg = new ArrayList<>();
+
     public static void townPlacementMenu(Player player) {
         if (player.needConsole()) {
             Scanner scanner = MyScanner.getScanner();
@@ -214,7 +216,6 @@ public class Menu {
                 cmd = scanner.nextLine();
                 if (cmd.equals("Exit"))
                     return null;
-                // TODO realize buy from academy
                 if (UnitType.getEnums().contains(cmd)) {
                     unit = UnitFactory.createUnit(UnitType.valueOf(cmd), row, col, player);
                     unitSelected = true;
@@ -281,6 +282,11 @@ public class Menu {
                     System.out.println(ANSI_RED + err + " Try again!" + ANSI_RESET);
                     err = "";
                 }
+                if (!msg.isEmpty()) {
+                    for (String s : msg)
+                        System.out.println(s);
+                    msg.clear();
+                }
                 if (showInfo) {
                     DecimalFormatSymbols otherSymbols = new DecimalFormatSymbols(Locale.ENGLISH);
                     otherSymbols.setDecimalSeparator('.');
@@ -293,7 +299,7 @@ public class Menu {
                     showInfo = false;
                 }
                 System.out.format("Welcome to the %s town!%n", town.getName());
-                System.out.format("Choose the option:\n\t1. Show player info\n\t2. Build/Upgrade building\n\t3. Enter to the Market\n\t4. Enter to the Academy\n\t5. Leave town's menu\n");
+                System.out.format("Choose the option:\n\t1. Show player info\n\t2. Build/Upgrade building\n\t3. Enter to the Market\n\t4. Enter to the Academy\n\t5. Enter to the Tower\n\t6. Leave town's menu\n");
                 System.out.format("Enter the option: ");
                 String option = scanner.nextLine();
                 switch (option) {
@@ -311,7 +317,8 @@ public class Menu {
                         } catch (IllegalArgumentException e) {
                             err = "Invalid option";
                             break;
-                        } catch (CantBuildOrUpgradeHouse | NotEnoughResources e) {
+                        } catch (CantBuildOrUpgradeHouse | NotEnoughResources | MageAlreadyHasMinPreparationTime |
+                                 NotEnoughCoins e) {
                             err = e.getMessage();
                             break;
                         }
@@ -321,16 +328,38 @@ public class Menu {
                             err = "Market hasn't built yet!";
                             break;
                         }
-                        town.getBuildings().get(Buildings.Market).getFirst().buff(player);
+                        try {
+                            town.getBuildings().get(Buildings.Market).getFirst().buff(player);
+                        } catch (MageAlreadyHasMinPreparationTime | NotEnoughCoins e) {
+                            err = e.getMessage();
+                            break;
+                        }
                     }
                     case "4" -> {
                         if (town.getBuildings().get(Buildings.Academy).isEmpty()) {
                             err = "Market hasn't built yet!";
                             break;
                         }
-                        town.getBuildings().get(Buildings.Academy).getFirst().buff(player);
+                        try {
+                            town.getBuildings().get(Buildings.Academy).getFirst().buff(player);
+                        } catch (MageAlreadyHasMinPreparationTime | NotEnoughCoins e) {
+                            err = e.getMessage();
+                            break;
+                        }
                     }
                     case "5" -> {
+                        if (town.getBuildings().get(Buildings.Tower).isEmpty()) {
+                            err = "Tower hasn't built yet!";
+                            break;
+                        }
+                        try {
+                            town.getBuildings().get(Buildings.Tower).getFirst().buff(player);
+                        } catch (MageAlreadyHasMinPreparationTime | NotEnoughCoins e) {
+                            err = e.getMessage();
+                            break;
+                        }
+                    }
+                    case "6" -> {
                         leave = true;
                     }
                     default -> err = new InvalidOption().getMessage();
@@ -355,5 +384,9 @@ public class Menu {
 
     public static void setBot(Player bot) {
         Menu.bot = bot;
+    }
+
+    public static void log(String msgtmp) {
+        msg.add(msgtmp);
     }
 }

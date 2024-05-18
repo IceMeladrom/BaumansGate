@@ -15,6 +15,8 @@ import java.util.Locale;
 import static Utilities.Constants.Colors.ANSI_RESET;
 
 public class Mage extends Unit implements IMage {
+    private int spells;
+
     public Mage(String name, Double hp, IDamage damage, Integer attackRange, Double defence, Double energy, Double cost, String symbol, int row, int col, Player player) {
         super(name, hp, damage, attackRange, defence, energy, cost, symbol, row, col, player);
         getTerrains().putAll(UnitType.Mage.getTerrains());
@@ -23,11 +25,13 @@ public class Mage extends Unit implements IMage {
 //        getTerrains().put("@", 2.5);
 //        getTerrains().put("!", 1.8);
         setMovesUntilReadyToAttack(-1);
+        setMovesToPrepareAnAttack(2);
+        spells = 0;
     }
 
     @Override
     public void attack(@NotNull IUnit enemy) throws UnitHasAlreadyAttacked, UnitHasNotPreparedAnAttack {
-        if (!getIsAttackPrepared())
+        if (!getIsAttackPrepared() && getMovesToPrepareAnAttack() != 0)
             throw new UnitHasNotPreparedAnAttack(this);
 
 
@@ -56,6 +60,23 @@ public class Mage extends Unit implements IMage {
 
     @Override
     public void prepareAttack() {
-        setMovesUntilReadyToAttack(2);
+        setMovesUntilReadyToAttack(getMovesToPrepareAnAttack());
+    }
+
+    public int getSpells() {
+        return spells;
+    }
+
+    public void addSpell() {
+        spells++;
+    }
+
+    public void reduceSpell() {
+        if (spells > 0)
+            spells--;
+    }
+
+    public void setSpells(int spells) {
+        this.spells = spells;
     }
 }

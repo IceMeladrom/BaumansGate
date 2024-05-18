@@ -6,6 +6,7 @@ import Entities.Damage.DamageType;
 import Entities.Units.Units.*;
 import Grid.Cell;
 import Players.Player;
+import Players.Players.Bot;
 import Players.Players.RealPlayer;
 
 import java.io.FileReader;
@@ -50,7 +51,11 @@ public class LoadGame {
         FileReader file = new FileReader(path + "/" + who + ".txt");
         Scanner scanner = new Scanner(file);
         ArrayList<String> playerParams = new ArrayList<>(Arrays.asList(scanner.nextLine().split(";;")));
-        Player player = new RealPlayer(playerParams.get(0), Double.parseDouble(playerParams.get(1)), playerParams.get(2), Integer.parseInt(playerParams.get(3)), Integer.parseInt(playerParams.get(4)));
+        Player player;
+        if (who.equals("me"))
+            player = new RealPlayer(playerParams.get(0), Double.parseDouble(playerParams.get(1)), playerParams.get(2), Integer.parseInt(playerParams.get(3)), Integer.parseInt(playerParams.get(4)));
+        else
+            player = new Bot(playerParams.get(0), Double.parseDouble(playerParams.get(1)), playerParams.get(2), Integer.parseInt(playerParams.get(3)), Integer.parseInt(playerParams.get(4)));
         file.close();
         scanner.close();
         return player;
@@ -111,6 +116,11 @@ public class LoadGame {
                             add(new Workshop());
                     }});
                 }
+                case Tower -> {
+                    if (buildingSize > 0) town.getBuildings().put(Buildings.valueOf(buildingName), new ArrayList<>() {{
+                        add(new Tower());
+                    }});
+                }
             }
         }
         file.close();
@@ -157,6 +167,9 @@ public class LoadGame {
             int movesToPrepareAnAttack = Integer.parseInt(unitParams.get(18));
             int movesUntilReadyToAttack = Integer.parseInt(unitParams.get(19));
             boolean isAttackPrepared = Boolean.parseBoolean(unitParams.get(20));
+            int spells = 0;
+            if (unitClass.equals("Mage"))
+                spells = Integer.parseInt(unitParams.get(21));
 
             HashMap<String, Double> terrains = new HashMap<>();
             ArrayList<String> terrainsParams = new ArrayList<>(Arrays.asList(scanner.nextLine().split(";;")));
@@ -186,6 +199,8 @@ public class LoadGame {
             units.getLast().setMovesUntilReadyToAttack(movesUntilReadyToAttack);
             units.getLast().setIsAttackPrepared(isAttackPrepared);
             units.getLast().setTerrains(terrains);
+            if (units.getLast().getClass().equals(Mage.class))
+                ((Mage) units.getLast()).setSpells(spells);
         }
 
         file.close();

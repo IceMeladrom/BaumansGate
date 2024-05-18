@@ -13,7 +13,8 @@ public enum Buildings {
     Arsenal(5, 15, "+1 per level to max defense."),
     Academy(10, 10, "Military research. Design new unit."),
     Market(15, 0, "Just a market. Exchange wood -> stone or stone -> wood."),
-    Workshop(15, 10, "Rent out to residents to earn coins.");
+    Workshop(15, 10, "Rent out to residents to earn coins."),
+    Tower(15, 25, "Only for mages!");
     private final Integer wood, stone;
     private final String description;
 
@@ -65,7 +66,7 @@ public enum Buildings {
             else {
                 level = buildings.get(type).getFirst().getLevel();
                 switch (type) {
-                    case Academy, Market ->
+                    case Academy, Market, Tower ->
                             System.out.printf(leftAlignment, type.name(), "x" + buildings.get(type).size() + " --> " + level + " level", "-", "-", type.getDescription());
                     case Workshop -> {
                         if (buildings.get(type).size() == 4)

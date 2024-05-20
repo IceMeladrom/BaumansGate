@@ -4,7 +4,6 @@ import Entities.Builds.Town;
 import Entities.Units.Creator.UnitFactory;
 import Entities.Units.Units.IUnit;
 import Entities.Units.Units.UnitType;
-import Exceptions.MageAlreadyHasMinPreparationTime;
 import Exceptions.NotEnoughCoins;
 import Grid.Grid;
 import Menu.Menu;
@@ -25,7 +24,7 @@ import java.util.Scanner;
 import static Utilities.Constants.Colors.*;
 
 public class Main {
-    public static void main(String[] args) throws MageAlreadyHasMinPreparationTime, NotEnoughCoins {
+    public static void main(String[] args) throws NotEnoughCoins {
         boolean DEBUG = true, loading = false, loadingAndChange = false;
         Scanner scanner = MyScanner.getScanner();
         while (true) {

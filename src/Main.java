@@ -1,10 +1,10 @@
 import Entities.Builds.Buildings;
 import Entities.Builds.IBuilding;
 import Entities.Builds.Town;
+import Entities.Builds.Workshop;
 import Entities.Units.Creator.UnitFactory;
 import Entities.Units.Units.IUnit;
 import Entities.Units.Units.UnitType;
-import Exceptions.NotEnoughCoins;
 import Grid.Grid;
 import Menu.Menu;
 import Players.Player;
@@ -24,7 +24,7 @@ import java.util.Scanner;
 import static Utilities.Constants.Colors.*;
 
 public class Main {
-    public static void main(String[] args) throws NotEnoughCoins {
+    public static void main(String[] args) {
         boolean DEBUG = true, loading = false, loadingAndChange = false;
         Scanner scanner = MyScanner.getScanner();
         while (true) {
@@ -111,9 +111,9 @@ public class Main {
             me.move();
             bot.move();
             for (IBuilding workshop : me.getTown().getBuildings().get(Buildings.Workshop))
-                workshop.buff(me);
+                ((Workshop) workshop).buff(me);
             for (IBuilding workshop : bot.getTown().getBuildings().get(Buildings.Workshop))
-                workshop.buff(bot);
+                ((Workshop) workshop).buff(bot);
         }
 
         grid.show();

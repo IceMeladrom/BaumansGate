@@ -6,7 +6,6 @@ import Grid.Grid;
 import Grid.Pathfinder;
 import Players.Player;
 import Utilities.Constants.MyRandom;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -39,7 +38,7 @@ public class Bot implements Player {
         this.units = units;
     }
 
-    public boolean buyUnit(@NotNull IUnit unit) {
+    public boolean buyUnit( IUnit unit) {
         if (coins < unit.getCost())
             return false;
         addUnit(unit);
@@ -47,7 +46,7 @@ public class Bot implements Player {
         return true;
     }
 
-    public void sellUnit(@NotNull IUnit unit) {
+    public void sellUnit( IUnit unit) {
         addCoins(unit.getCost());
         deleteUnit(unit);
     }
@@ -111,7 +110,7 @@ public class Bot implements Player {
     }
 
 
-    public boolean canUnitMove(@NotNull Grid grid, int row, int col) {
+    public boolean canUnitMove( Grid grid, int row, int col) {
         IUnit unit = grid.getUnit(row, col);
         return unit != null && units.contains(unit);
     }

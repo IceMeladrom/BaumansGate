@@ -5,7 +5,6 @@ import Entities.Damage.IDamage;
 import Exceptions.UnitHasAlreadyAttacked;
 import Players.Player;
 import Players.Players.RealPlayer;
-import org.jetbrains.annotations.NotNull;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -25,7 +24,7 @@ public class Archer extends Unit implements IArcher {
     }
 
     @Override
-    public void attack(@NotNull IUnit enemy) throws UnitHasAlreadyAttacked {
+    public void attack(IUnit enemy) throws UnitHasAlreadyAttacked {
         if (!getDidAttack()) {
             float multiplier = DamageType.attackMultiplier(getDamage().getDamageType(), enemy.getDamage().getDamageType());
             if (enemy.getDefence() >= getDamage().getValue() * multiplier)

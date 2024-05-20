@@ -10,7 +10,6 @@ import Menu.Menu;
 import Players.Player;
 import Save.SaveGame;
 import Utilities.Constants.MyRandom;
-import org.jetbrains.annotations.NotNull;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -51,7 +50,7 @@ public class RealPlayer implements Player {
         this.units = units;
     }
 
-    public boolean buyUnit(@NotNull IUnit unit) {
+    public boolean buyUnit(IUnit unit) {
         if (coins < unit.getCost())
             return false;
         addUnit(unit);
@@ -59,7 +58,7 @@ public class RealPlayer implements Player {
         return true;
     }
 
-    public void sellUnit(@NotNull IUnit unit) {
+    public void sellUnit(IUnit unit) {
         addCoins(unit.getCost());
         deleteUnit(unit);
     }
@@ -121,7 +120,7 @@ public class RealPlayer implements Player {
         this.town = town;
     }
 
-    public boolean canUnitMove(@NotNull Grid grid, int row, int col) {
+    public boolean canUnitMove(Grid grid, int row, int col) {
         IUnit unit = grid.getUnit(row, col);
         return unit != null && units.contains(unit);
     }

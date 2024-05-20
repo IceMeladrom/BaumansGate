@@ -6,7 +6,6 @@ import Exceptions.UnitHasAlreadyAttacked;
 import Exceptions.UnitHasNotPreparedAnAttack;
 import Players.Player;
 import Players.Players.RealPlayer;
-import org.jetbrains.annotations.NotNull;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -30,7 +29,7 @@ public class Mage extends Unit implements IMage {
     }
 
     @Override
-    public void attack(@NotNull IUnit enemy) throws UnitHasAlreadyAttacked, UnitHasNotPreparedAnAttack {
+    public void attack(IUnit enemy) throws UnitHasAlreadyAttacked, UnitHasNotPreparedAnAttack {
         if (!getIsAttackPrepared() && getMovesToPrepareAnAttack() != 0)
             throw new UnitHasNotPreparedAnAttack(this);
 

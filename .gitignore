@@ -16,6 +16,9 @@ Saves/*
 .idea/dictionaries
 .idea/shelf
 
+# Libraries
+!.idea/libraries/
+
 # AWS User-specific
 .idea/**/aws.xml
 

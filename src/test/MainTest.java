@@ -1,5 +1,3 @@
-package test;
-
 import main.Entities.Damage.DamageType;
 import main.Entities.Units.Creator.UnitFactory;
 import main.Entities.Units.Units.IUnit;

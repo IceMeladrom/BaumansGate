@@ -27,6 +27,9 @@ import static main.Utilities.Constants.Colors.*;
 
 public class Main {
     public static void main(String[] args) {
+        MyLogger myLogger = new MyLogger();
+        myLogger.getLogger().info("Hello, World!");
+
         boolean DEBUG = true, loading = false, loadingAndChange = false;
         Scanner scanner = MyScanner.getScanner();
         while (true) {

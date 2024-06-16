@@ -2,20 +2,17 @@ package main.Entities.Builds;
 
 import main.Entities.Damage.Damage;
 import main.Entities.Damage.DamageType;
-import main.Entities.Damage.IDamage;
 import main.Entities.Units.Units.IUnit;
 import main.Entities.Units.Units.Mage;
 import main.Exceptions.MageAlreadyHasMinPreparationTime;
 import main.Exceptions.NotEnoughCoins;
 import main.Menu.Menu;
+import main.MyLogger;
 import main.Players.Player;
-import main.Players.Players.RealPlayer;
 import main.Utilities.Constants.MyRandom;
 import main.Utilities.Constants.MyScanner;
 
 import java.util.ArrayList;
-import java.util.Random;
-import java.util.Scanner;
 
 import static main.Utilities.Constants.Colors.*;
 
@@ -67,7 +64,9 @@ public class Tower extends House implements IBuilding {
                         System.out.print("Enter new damage type: ");
                         dmgType = MyScanner.getScanner().nextLine();
                         if (DamageType.contains(dmgType)) {
+                            DamageType oldDmgType = mage.getDamage().getDamageType();
                             mage.setDamage(new Damage(DamageType.valueOf(dmgType), mage.getDamage().getValue()));
+                            MyLogger.getLogger().warning("Mage successfully changed damage type {" + oldDmgType + " -> " + dmgType + "}");
                             break;
                         }
                         System.out.println(ANSI_RED + "Invalid option" + ANSI_RESET);
@@ -84,6 +83,7 @@ public class Tower extends House implements IBuilding {
                                 player.spendCoins(100.0);
                                 if (mage.getMovesToPrepareAnAttack() > 0) {
                                     mage.setMovesToPrepareAnAttack(mage.getMovesToPrepareAnAttack() - 1);
+                                    MyLogger.getLogger().info("Player " + player.getName() + " successfully trained mage");
                                     break;
                                 } else
                                     throw new MageAlreadyHasMinPreparationTime();
@@ -106,10 +106,12 @@ public class Tower extends House implements IBuilding {
                                 if (player.getCoins() >= 5.0) {
                                     player.spendCoins(5.0);
                                     ((Mage) mage).addSpell();
+                                    MyLogger.getLogger().info("Player " + player.getName() + " successfully bought new potion\nNow " + player.getName() + " has " + ((Mage) mage).getSpells() + " spells");
                                 } else
                                     throw new NotEnoughCoins(player, 5.0);
                                 System.out.println(ANSI_GREEN + "You bought the spell" + ANSI_RESET);
                             } else {
+                                MyLogger.getLogger().severe(player.getName() + "'s tower has exploded");
                                 Menu.log(ANSI_RED + "Tower exploded" + ANSI_RESET);
                                 player.getTown().getBuildings().get(Buildings.Tower).clear();
                                 return;

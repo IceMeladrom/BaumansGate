@@ -9,18 +9,35 @@ import main.Players.Player;
 import main.Players.Players.Bot;
 import main.Players.Players.RealPlayer;
 import main.Utilities.Constants.GridSize;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.PrintStream;
 import java.util.HashMap;
+import java.util.logging.LogManager;
+import java.util.logging.Logger;
 
 import static main.Utilities.Constants.Colors.ANSI_GREEN;
 import static main.Utilities.Constants.Colors.ANSI_RED;
 import static org.junit.jupiter.api.Assertions.*;
 
 
-
 public class MainTest {
+    private static Logger logger;
+
+    @BeforeAll
+    public static void setUp() {
+        try {
+            LogManager.getLogManager().readConfiguration(MainTest.class.getResourceAsStream("/logging.properties"));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        logger = Logger.getLogger(MainTest.class.getName());
+    }
+
     @Test
     public void testMyVictory() {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
@@ -288,22 +305,27 @@ public class MainTest {
         System.setOut(new PrintStream(out));
         Grid.getInstance().show();
         String consoleOutput = out.toString().trim();
-        assertEquals("+-----+--------+---+---+---+---+---+\r\n" +
-                "|     | Column | 1 | 2 | 3 | 4 | 5 |\r\n" +
-                "+-----+--------+---+---+---+---+---+\r\n" +
-                "| Row |        |   |   |   |   |   |\r\n" +
-                "+-----+--------+---+---+---+---+---+\r\n" +
-                "| 1   |        | * | * | * | * | * |\r\n" +
-                "+-----+--------+---+---+---+---+---+\r\n" +
-                "| 2   |        | ! | ! | ! | ! | ! |\r\n" +
-                "+-----+--------+---+---+---+---+---+\r\n" +
-                "| 3   |        | @ | @ | @ | @ | @ |\r\n" +
-                "+-----+--------+---+---+---+---+---+\r\n" +
-                "| 4   |        | # | # | # | # | # |\r\n" +
-                "+-----+--------+---+---+---+---+---+\r\n" +
-                "| 5   |        | @ | * | ! | # | @ |\r\n" +
-                "+-----+--------+---+---+---+---+---+", consoleOutput);
-
+        try {
+            assertEquals("+-----+--------+---+---+---+---+---+\r\n" +
+                    "|     | Column | 1 | 2 | 3 | 4 | 5 |\r\n" +
+                    "+-----+--------+---+---+---+---+---+\r\n" +
+                    "| Row |        |   |   |   |   |   |\r\n" +
+                    "+-----+--------+---+---+---+---+---+\r\n" +
+                    "| 1   |        | * | * | * | * | * |\r\n" +
+                    "+-----+--------+---+---+---+---+---+\r\n" +
+                    "| 2   |        | ! | ! | ! | ! | ! |\r\n" +
+                    "+-----+--------+---+---+---+---+---+\r\n" +
+                    "| 3   |        | @ | @ | @ | @ | @ |\r\n" +
+                    "+-----+--------+---+---+---+---+---+\r\n" +
+                    "| 4   |        | # | # | # | # | # |\r\n" +
+                    "+-----+--------+---+---+---+---+---+\r\n" +
+                    "| 5   |        | @ | * | ! | # | @ |\r\n" +
+                    "+-----+--------+---+---+---+---+---+", consoleOutput);
+            logger.info("Passed");
+        } catch (AssertionError e){
+            logger.info(e.getMessage());
+            assert false;
+        }
         System.setIn(System.in);
         System.setOut(System.out);
 
